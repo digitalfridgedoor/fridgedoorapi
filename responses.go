@@ -6,6 +6,7 @@ import "github.com/aws/aws-lambda-go/events"
 func ResponseSuccessful(body string) events.APIGatewayProxyResponse {
 	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
 	resp.Headers["Access-Control-Allow-Origin"] = "*"
+	resp.Headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization,dfd-auth"
 	resp.Body = body
 	resp.StatusCode = 200
 	return resp
