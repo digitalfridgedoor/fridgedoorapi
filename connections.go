@@ -3,9 +3,8 @@ package fridgedoorapi
 import (
 	"errors"
 
-	"digitalfridgedoor/fridgedoordatabase/ingredient"
-
 	"github.com/digitalfridgedoor/fridgedoordatabase"
+	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/user"
 )
