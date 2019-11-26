@@ -11,8 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-var connection fridgedoordatabase.Connection
-
 // Connect connects to the database using parameter from Systems Manager parameter store
 func Connect() bool {
 	connectionString, err := getConnectionString()
@@ -36,11 +34,6 @@ func Disconnect() {
 		connection.Disconnect()
 		connection = nil
 	}
-}
-
-// Connected is true if connected to mongodb
-func Connected() bool {
-	return connection != nil
 }
 
 func getConnectionString() (string, error) {
