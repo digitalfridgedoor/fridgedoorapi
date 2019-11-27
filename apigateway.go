@@ -5,9 +5,9 @@ import "github.com/aws/aws-lambda-go/events"
 // ParseUsername attempts to parse the username from the Authorizer
 func ParseUsername(request *events.APIGatewayProxyRequest) (string, bool) {
 	if claims, ok := request.RequestContext.Authorizer["claims"]; ok {
-		c := claims.(map[string]string)
+		c := claims.(map[string]interface{})
 		username, ok := c["cognito:username"]
-		return username, ok
+		return username.(string), ok
 	}
 
 	return "", false
