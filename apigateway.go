@@ -2,6 +2,17 @@ package fridgedoorapi
 
 import "github.com/aws/aws-lambda-go/events"
 
+// ParseUsername attempts to parse the username from the Authorizer
+func ParseUsername(request *events.APIGatewayProxyRequest) (string, bool) {
+	if claims, ok := request.RequestContext.Authorizer["claims"]; ok {
+		c := claims.(map[string]string)
+		username, ok := c["cognito:username"]
+		return username, ok
+	}
+
+	return "", false
+}
+
 // ResponseSuccessful returns a 200 response for API Gateway that allows cors
 func ResponseSuccessful(body string) events.APIGatewayProxyResponse {
 	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
