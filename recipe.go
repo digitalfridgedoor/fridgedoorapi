@@ -49,3 +49,19 @@ func AddIngredient(ctx context.Context, recipeID string, ingredientID string) (*
 
 	return r.FindOne(ctx, recipeID)
 }
+
+// RemoveIngredient removes an ingredient to a recipe
+func RemoveIngredient(ctx context.Context, recipeID string, ingredientID string) (*recipe.Recipe, error) {
+
+	r, err := Recipe()
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.RemoveIngredient(ctx, recipeID, ingredientID)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.FindOne(ctx, recipeID)
+}
