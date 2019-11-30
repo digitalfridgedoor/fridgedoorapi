@@ -8,7 +8,7 @@ import (
 )
 
 // CreateRecipe creates a new recipe with given name
-func CreateRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, category string, name string) (*recipe.Recipe, error) {
+func CreateRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, collectionName string, name string) (*recipe.Recipe, error) {
 
 	userview, err := GetOrCreateUserView(ctx, request)
 	if err != nil {
@@ -17,7 +17,21 @@ func CreateRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, c
 
 	r, err := Recipe()
 
-	return r.Create(ctx, userview.ID, name)
+	recipe, err := r.Create(ctx, userview.ID, name)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := UserView()
+	if err != nil {
+		return nil, err
+	}
+	err = u.AddRecipe(ctx, userview.ID.Hex(), collectionName, recipe.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return recipe, nil
 }
 
 // AddIngredient adds an ingredient to a recipe

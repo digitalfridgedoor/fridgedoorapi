@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -30,4 +31,16 @@ func GetOrCreateUserView(ctx context.Context, request *events.APIGatewayProxyReq
 	}
 
 	return u.Create(ctx, username)
+}
+
+// GetCollectionRecipes gets the list of recipe descriptions for a collection
+func GetCollectionRecipes(ctx context.Context, collection *userview.RecipeCollection) ([]*recipe.Description, error) {
+
+	r, err := Recipe()
+	if err != nil {
+		return nil, err
+	}
+
+	recipes, err := r.FindByIds(ctx, collection.Recipes)
+	return recipes, err
 }
