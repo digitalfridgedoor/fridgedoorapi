@@ -11,10 +11,12 @@ import (
 
 func TestCreateAndAddIngredient(t *testing.T) {
 	ctx := context.Background()
-	userID := "5d8f7300a7888700270f7752"
+	username := "TestUser"
 	ingredientID := "5d8f739ba7888700270f775a"
+	categoryName := "public"
 	recipeName := "test-recipe"
-	r, err := CreateRecipe(ctx, userID, recipeName)
+	request := createTestRequest(username)
+	r, err := CreateRecipe(ctx, request, categoryName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -33,15 +35,21 @@ func TestCreateAndAddIngredient(t *testing.T) {
 
 	err = recipeCollection.Delete(ctx, r.ID)
 	assert.Nil(t, err)
+
+	u, err := UserView()
+	assert.Nil(t, err)
+	u.Delete(ctx, username)
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	ctx := context.Background()
-	userID := "5d8f7300a7888700270f7752"
+	username := "TestUser"
 	ingredientID := "5d8f739ba7888700270f775a"
 	anotherIngredientID := "5d8f746946106c8aee8cde38"
+	categoryName := "public"
 	recipeName := "test-recipe"
-	r, err := CreateRecipe(ctx, userID, recipeName)
+	request := createTestRequest(username)
+	r, err := CreateRecipe(ctx, request, categoryName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -69,6 +77,10 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 
 	err = recipeCollection.Delete(ctx, r.ID)
 	assert.Nil(t, err)
+
+	u, err := UserView()
+	assert.Nil(t, err)
+	u.Delete(ctx, username)
 }
 
 func contains(t *testing.T, ingredients []recipe.Ingredient, expected []string) {

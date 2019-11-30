@@ -6,7 +6,7 @@ import (
 	"github.com/digitalfridgedoor/fridgedoordatabase"
 	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
-	"github.com/digitalfridgedoor/fridgedoordatabase/user"
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 )
 
 var connection fridgedoordatabase.Connection
@@ -28,8 +28,8 @@ func Recipe() (*recipe.Collection, error) {
 	return recipe.New(connection), nil
 }
 
-// User connection
-func User() (*user.Collection, error) {
+// UserView connection
+func UserView() (*userview.Collection, error) {
 	if !Connected() {
 		connected := Connect()
 		if !connected {
@@ -37,7 +37,7 @@ func User() (*user.Collection, error) {
 		}
 	}
 
-	return user.New(connection), nil
+	return userview.New(connection), nil
 }
 
 // Ingredient connection
