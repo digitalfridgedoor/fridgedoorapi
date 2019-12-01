@@ -13,10 +13,10 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
 	ingredientID := "5d8f739ba7888700270f775a"
-	categoryName := "public"
+	collectionName := "public"
 	recipeName := "test-recipe"
 	request := createTestRequest(username)
-	r, err := CreateRecipe(ctx, request, categoryName, recipeName)
+	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -46,10 +46,10 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	username := "TestUser"
 	ingredientID := "5d8f739ba7888700270f775a"
 	anotherIngredientID := "5d8f746946106c8aee8cde38"
-	categoryName := "public"
+	collectionName := "public"
 	recipeName := "test-recipe"
 	request := createTestRequest(username)
-	r, err := CreateRecipe(ctx, request, categoryName, recipeName)
+	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)

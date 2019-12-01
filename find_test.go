@@ -10,10 +10,10 @@ import (
 func TestFindForUser(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
-	categoryName := "public"
+	collectionName := "public"
 	recipeName := "test-recipe"
 	request := createTestRequest(username)
-	r, err := CreateRecipe(ctx, request, categoryName, recipeName)
+	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -25,7 +25,7 @@ func TestFindForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, view)
 
-	coll, ok := view.Collections[categoryName]
+	coll, ok := view.Collections[collectionName]
 	assert.True(t, ok)
 	assert.Equal(t, 1, len(coll.Recipes))
 	recipeID := coll.Recipes[0]
