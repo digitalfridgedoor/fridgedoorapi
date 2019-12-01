@@ -12,7 +12,7 @@ func TestFindForUser(t *testing.T) {
 	username := "TestUser"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := createTestRequest(username)
+	request := CreateTestAuthorizedRequest(username)
 	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)

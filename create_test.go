@@ -15,7 +15,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	ingredientID := "5d8f739ba7888700270f775a"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := createTestRequest(username)
+	request := CreateTestAuthorizedRequest(username)
 	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
@@ -48,7 +48,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	anotherIngredientID := "5d8f746946106c8aee8cde38"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := createTestRequest(username)
+	request := CreateTestAuthorizedRequest(username)
 	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
