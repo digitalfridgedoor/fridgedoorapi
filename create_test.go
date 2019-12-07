@@ -21,13 +21,20 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, recipeName, r.Name)
-	assert.Equal(t, len(r.Ingredients), 0)
+	assert.Equal(t, len(r.Method), 0)
 	assert.Equal(t, len(r.Recipes), 0)
 
-	r, err = AddIngredient(ctx, r.ID.Hex(), ingredientID)
+	recipeID := r.ID.Hex()
+	r, err = AddMethodStep(ctx, recipeID, "Test action")
 	assert.Nil(t, err)
-	assert.Equal(t, len(r.Ingredients), 1)
-	ing := r.Ingredients[0]
+	assert.NotNil(t, r)
+
+	r, err = AddIngredient(ctx, recipeID, 0, ingredientID)
+	assert.Nil(t, err)
+	assert.Equal(t, len(r.Method), 1)
+	method := r.Method[0]
+	assert.Equal(t, len(method.Ingredients), 1)
+	ing := method.Ingredients[0]
 	assert.Equal(t, "Red onion", ing.Name)
 
 	// Cleanup
@@ -54,23 +61,33 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, recipeName, r.Name)
-	assert.Equal(t, len(r.Ingredients), 0)
+	assert.Equal(t, len(r.Method), 0)
 	assert.Equal(t, len(r.Recipes), 0)
 
-	r, err = AddIngredient(ctx, r.ID.Hex(), ingredientID)
+	recipeID := r.ID.Hex()
+	r, err = AddMethodStep(ctx, recipeID, "Test action")
 	assert.Nil(t, err)
-	assert.Equal(t, 1, len(r.Ingredients))
-	contains(t, r.Ingredients, []string{"Red onion"})
+	assert.NotNil(t, r)
 
-	r, err = AddIngredient(ctx, r.ID.Hex(), anotherIngredientID)
+	r, err = AddIngredient(ctx, recipeID, 0, ingredientID)
 	assert.Nil(t, err)
-	assert.Equal(t, 2, len(r.Ingredients))
-	contains(t, r.Ingredients, []string{"Red onion", "Red pepper"})
+	assert.Equal(t, len(r.Method), 1)
+	method := r.Method[0]
+	assert.Equal(t, len(method.Ingredients), 1)
+	contains(t, method.Ingredients, []string{"Red onion"})
 
-	r, err = RemoveIngredient(ctx, r.ID.Hex(), anotherIngredientID)
+	r, err = AddIngredient(ctx, recipeID, 0, anotherIngredientID)
 	assert.Nil(t, err)
-	assert.Equal(t, 1, len(r.Ingredients))
-	contains(t, r.Ingredients, []string{"Red onion"})
+	assert.Equal(t, len(r.Method), 1)
+	method = r.Method[0]
+	assert.Equal(t, 2, len(method.Ingredients))
+	contains(t, method.Ingredients, []string{"Red onion", "Red pepper"})
+
+	r, err = RemoveIngredient(ctx, recipeID, 0, anotherIngredientID)
+	assert.Nil(t, err)
+	method = r.Method[0]
+	assert.Equal(t, 1, len(method.Ingredients))
+	contains(t, method.Ingredients, []string{"Red onion"})
 
 	// Cleanup
 	recipeCollection, err := Recipe()
