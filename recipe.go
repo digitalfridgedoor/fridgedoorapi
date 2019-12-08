@@ -50,6 +50,22 @@ func AddMethodStep(ctx context.Context, recipeID string, action string) (*recipe
 	return r.FindOne(ctx, recipeID)
 }
 
+// UpdateMethodStep removes a method step
+func UpdateMethodStep(ctx context.Context, recipeID string, stepIdx int, updates map[string]string) (*recipe.Recipe, error) {
+
+	r, err := Recipe()
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.UpdateMethodStepByIndex(ctx, recipeID, stepIdx, updates)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.FindOne(ctx, recipeID)
+}
+
 // RemoveMethodStep removes a method step
 func RemoveMethodStep(ctx context.Context, recipeID string, stepIdx int) (*recipe.Recipe, error) {
 
