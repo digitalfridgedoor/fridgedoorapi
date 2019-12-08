@@ -92,6 +92,22 @@ func AddIngredient(ctx context.Context, recipeID string, stepIdx int, ingredient
 	return r.FindOne(ctx, recipeID)
 }
 
+// UpdateIngredient removes an ingredient to a recipe
+func UpdateIngredient(ctx context.Context, recipeID string, stepIdx int, ingredientID string, updates map[string]string) (*recipe.Recipe, error) {
+
+	r, err := Recipe()
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.UpdateIngredient(ctx, recipeID, stepIdx, ingredientID, updates)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.FindOne(ctx, recipeID)
+}
+
 // RemoveIngredient removes an ingredient to a recipe
 func RemoveIngredient(ctx context.Context, recipeID string, stepIdx int, ingredientID string) (*recipe.Recipe, error) {
 
