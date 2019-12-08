@@ -18,3 +18,11 @@ func TestGetIngredientTree(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 }
+
+func TestSearchIngredient(t *testing.T) {
+	ingredients, err := SearchIngredients("on")
+
+	assert.Nil(t, err)
+	assert.NotNil(t, ingredients)
+	assert.Greater(t, len(ingredients), 0)
+}
