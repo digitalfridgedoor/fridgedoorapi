@@ -15,6 +15,16 @@ type IngredientTreeNode struct {
 	Nodes []*IngredientTreeNode `json:"nodes"`
 }
 
+// CreateIngredient creates a new ingredient
+func CreateIngredient(name string) (*ingredient.Ingredient, error) {
+	i, err := Ingredient()
+	if err != nil {
+		return nil, err
+	}
+
+	return i.Create(context.Background(), name)
+}
+
 // SearchIngredients retrieves the ingredients matching the query
 func SearchIngredients(startsWith string) ([]*ingredient.Ingredient, error) {
 	i, err := Ingredient()
