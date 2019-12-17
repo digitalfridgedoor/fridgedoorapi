@@ -44,3 +44,13 @@ func GetCollectionRecipes(ctx context.Context, collection *userview.RecipeCollec
 	recipes, err := r.FindByIds(ctx, collection.Recipes)
 	return recipes, err
 }
+
+// GetOtherUsersRecipes returns a collection of user views for all users
+func GetOtherUsersRecipes(ctx context.Context) ([]*userview.View, error) {
+	u, err := UserView()
+	if err != nil {
+		return nil, err
+	}
+
+	return u.GetLinkedUserViews(ctx)
+}
