@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
@@ -18,7 +19,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	recipeName := "test-recipe"
 	request := CreateTestAuthorizedRequest(username)
 
-	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -27,11 +28,11 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Recipes), 0)
 
 	recipeID := r.ID.Hex()
-	r, err = AddMethodStep(ctx, recipeID, "Test action")
+	r, err = recipeapi.AddMethodStep(ctx, recipeID, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	r, err = AddIngredient(ctx, recipeID, 0, ingredientID)
+	r, err = recipeapi.AddIngredient(ctx, recipeID, 0, ingredientID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(r.Method), 1)
 	method := r.Method[0]
