@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,6 +17,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	collectionName := "public"
 	recipeName := "test-recipe"
 	request := CreateTestAuthorizedRequest(username)
+
 	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
@@ -38,14 +40,11 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Equal(t, "Red onion", ing.Name)
 
 	// Cleanup
-	recipeCollection, err := Recipe()
-
-	err = recipeCollection.Delete(ctx, r.ID)
+	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	u, err := UserView()
 	assert.Nil(t, err)
-	u.Delete(ctx, username)
+	userview.Delete(ctx, username)
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
@@ -90,14 +89,11 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	contains(t, method.Ingredients, []string{"Red onion"})
 
 	// Cleanup
-	recipeCollection, err := Recipe()
-
-	err = recipeCollection.Delete(ctx, r.ID)
+	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	u, err := UserView()
 	assert.Nil(t, err)
-	u.Delete(ctx, username)
+	userview.Delete(ctx, username)
 }
 
 func contains(t *testing.T, ingredients []recipe.Ingredient, expected []string) {

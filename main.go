@@ -22,18 +22,15 @@ func Connect() bool {
 	fmt.Printf("Got connection string: len=%v\n", len(connectionString))
 
 	fmt.Printf("Connecting...\n")
-	connection = fridgedoordatabase.Connect(context.Background(), connectionString)
-	fmt.Printf("Connected.\n")
+	connected := fridgedoordatabase.Connect(context.Background(), connectionString)
+	fmt.Printf("Connected - %v.\n", connected)
 
 	return true
 }
 
 // Disconnect disconnects if there is a connection
 func Disconnect() {
-	if Connected() {
-		connection.Disconnect()
-		connection = nil
-	}
+	fridgedoordatabase.Disconnect()
 }
 
 func getConnectionString() (string, error) {
@@ -64,4 +61,8 @@ func getConnectionString() (string, error) {
 	}
 
 	return *paramOutput.Parameter.Value, nil
+}
+
+func init() {
+	Connect()
 }

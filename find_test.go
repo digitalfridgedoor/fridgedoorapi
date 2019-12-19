@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,10 +20,7 @@ func TestFindForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	u, err := UserView()
-	assert.Nil(t, err)
-
-	view, err := u.GetByUsername(ctx, username)
+	view, err := userview.GetByUsername(ctx, username)
 	assert.Nil(t, err)
 	assert.NotNil(t, view)
 
@@ -40,10 +39,8 @@ func TestFindForUser(t *testing.T) {
 	assert.Equal(t, recipeName, collectionRecipe.Name)
 
 	// Cleanup
-	recipeCollection, err := Recipe()
-
-	err = recipeCollection.Delete(ctx, r.ID)
+	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	u.Delete(ctx, username)
+	userview.Delete(ctx, username)
 }
