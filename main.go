@@ -62,7 +62,3 @@ func getConnectionString() (string, error) {
 
 	return *paramOutput.Parameter.Value, nil
 }
-
-func init() {
-	Connect()
-}

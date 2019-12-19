@@ -1,9 +1,10 @@
-package fridgedoorapi
+package recipeapi
 
 import (
 	"context"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
@@ -12,7 +13,7 @@ import (
 // CreateRecipe creates a new recipe with given name
 func CreateRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, collectionName string, name string) (*recipe.Recipe, error) {
 
-	view, err := GetOrCreateUserView(ctx, request)
+	view, err := fridgedoorapi.GetOrCreateUserView(ctx, request)
 	if err != nil {
 		return nil, err
 	}

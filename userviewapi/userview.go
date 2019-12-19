@@ -1,9 +1,10 @@
-package fridgedoorapi
+package userviewapi
 
 import (
 	"context"
 	"errors"
 
+	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
@@ -15,7 +16,7 @@ var errNotLoggedIn = errors.New("No user logged in")
 // GetOrCreateUserView creates a new UserView for the logged in user
 func GetOrCreateUserView(ctx context.Context, request *events.APIGatewayProxyRequest) (*userview.View, error) {
 
-	username, ok := ParseUsername(request)
+	username, ok := fridgedoorapi.ParseUsername(request)
 	if !ok {
 		return nil, errNotLoggedIn
 	}
