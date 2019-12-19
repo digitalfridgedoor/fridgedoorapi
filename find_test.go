@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 	"github.com/stretchr/testify/assert"
@@ -15,7 +17,7 @@ func TestFindForUser(t *testing.T) {
 	collectionName := "public"
 	recipeName := "test-recipe"
 	request := CreateTestAuthorizedRequest(username)
-	r, err := CreateRecipe(ctx, request, collectionName, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -30,7 +32,7 @@ func TestFindForUser(t *testing.T) {
 	recipeID := coll.Recipes[0]
 	assert.Equal(t, r.ID, recipeID)
 
-	collectionRecipes, err := GetCollectionRecipes(ctx, coll)
+	collectionRecipes, err := userviewapi.GetCollectionRecipes(ctx, coll)
 	assert.Nil(t, err)
 
 	assert.Equal(t, 1, len(collectionRecipes))
