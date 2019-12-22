@@ -29,6 +29,19 @@ func GetOrCreateUserView(ctx context.Context, request *events.APIGatewayProxyReq
 	return userview.Create(ctx, username)
 }
 
+// GetUserViewByID gets a userview by id
+func GetUserViewByID(ctx context.Context, userviewID string) (*userview.View, error) {
+
+	// todo: auth?
+
+	view, err := userview.FindOne(ctx, userviewID)
+	if err == nil {
+		return view, nil
+	}
+
+	return view, nil
+}
+
 // GetCollectionRecipes gets the list of recipe descriptions for a collection
 func GetCollectionRecipes(ctx context.Context, collection *userview.RecipeCollection) ([]*recipe.Description, error) {
 	recipes, err := recipe.FindByIds(ctx, collection.Recipes)
