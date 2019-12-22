@@ -3,6 +3,7 @@ package userviewapi
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -22,11 +23,16 @@ func GetOrCreateUserView(ctx context.Context, request *events.APIGatewayProxyReq
 	}
 
 	view, err := userview.GetByUsername(ctx, username)
-	if err == nil {
-		return view, nil
+	if err != nil {
+		view, err = userview.Create(ctx, username)
 	}
 
-	return userview.Create(ctx, username)
+	nickname, ok := fridgedoorapi.ParseNickname(request)
+	if ok {
+		fmt.Printf("Got nickname: %v\n", nickname)
+		userview.SetNickname(ctx, view.ID, nickname)
+	}
+	return view, nil
 }
 
 // GetUserViewByID gets a userview by id
