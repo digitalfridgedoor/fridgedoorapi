@@ -25,8 +25,13 @@ func ParseNickname(request *events.APIGatewayProxyRequest) (string, bool) {
 			fmt.Printf("Claims has value: '%v' = '%v'.\n", k, v)
 		}
 		nickname, ok := c["cognito:nickname"]
-		fmt.Printf("Got nickname: %v.\n", nickname)
-		return nickname.(string), ok
+		if ok {
+			fmt.Printf("Got nickname: %v.\n", nickname)
+			return nickname.(string), true
+		}
+
+		fmt.Printf("Could not find nickname.\n")
+		return "", false
 	}
 
 	return "", false
