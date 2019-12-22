@@ -21,10 +21,7 @@ func ParseUsername(request *events.APIGatewayProxyRequest) (string, bool) {
 func ParseNickname(request *events.APIGatewayProxyRequest) (string, bool) {
 	if claims, ok := request.RequestContext.Authorizer["claims"]; ok {
 		c := claims.(map[string]interface{})
-		for k, v := range c {
-			fmt.Printf("Claims has value: '%v' = '%v'.\n", k, v)
-		}
-		nickname, ok := c["cognito:nickname"]
+		nickname, ok := c["nickname"]
 		if ok {
 			fmt.Printf("Got nickname: %v.\n", nickname)
 			return nickname.(string), true
