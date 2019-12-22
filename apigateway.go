@@ -1,6 +1,8 @@
 package fridgedoorapi
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-lambda-go/events"
 )
 
@@ -10,6 +12,21 @@ func ParseUsername(request *events.APIGatewayProxyRequest) (string, bool) {
 		c := claims.(map[string]interface{})
 		username, ok := c["cognito:username"]
 		return username.(string), ok
+	}
+
+	return "", false
+}
+
+// ParseNickname attempts to parse the username from the Authorizer
+func ParseNickname(request *events.APIGatewayProxyRequest) (string, bool) {
+	if claims, ok := request.RequestContext.Authorizer["claims"]; ok {
+		c := claims.(map[string]interface{})
+		for k, v := range c {
+			fmt.Printf("Claims has value: '%v' = '%v'.\n", k, v)
+		}
+		nickname, ok := c["cognito:nickname"]
+		fmt.Printf("Got nickname: %v.\n", nickname)
+		return nickname.(string), ok
 	}
 
 	return "", false
