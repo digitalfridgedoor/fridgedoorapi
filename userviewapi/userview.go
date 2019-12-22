@@ -30,7 +30,10 @@ func GetOrCreateUserView(ctx context.Context, request *events.APIGatewayProxyReq
 	nickname, ok := fridgedoorapi.ParseNickname(request)
 	if ok {
 		fmt.Printf("Got nickname: %v\n", nickname)
-		userview.SetNickname(ctx, view.ID, nickname)
+		err = userview.SetNickname(ctx, view, nickname)
+		if err != nil {
+			fmt.Printf("Error setting nickname: %v\n", err)
+		}
 	}
 	return view, nil
 }
