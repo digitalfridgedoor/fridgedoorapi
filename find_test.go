@@ -46,3 +46,26 @@ func TestFindForUser(t *testing.T) {
 
 	userview.Delete(ctx, username)
 }
+
+func TestFindByNameForUser(t *testing.T) {
+	ctx := context.Background()
+	username := "TestUser"
+	collectionName := "public"
+	recipeName := "test-recipe"
+	request := CreateTestAuthorizedRequest(username)
+	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, r)
+
+	recipes, err := recipeapi.FindByName(ctx, request, "test")
+	assert.Nil(t, err)
+	assert.NotNil(t, recipes)
+	assert.Equal(t, 1, len(recipes))
+
+	// Cleanup
+	err = recipe.Delete(ctx, r.ID)
+	assert.Nil(t, err)
+
+	userview.Delete(ctx, username)
+}
