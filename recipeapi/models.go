@@ -13,4 +13,5 @@ type Recipe struct {
 	Method    []recipe.MethodStep  `json:"method"`
 	Recipes   []recipe.SubRecipe   `json:"recipes"`
 	ParentIds []primitive.ObjectID `json:"parentIds"`
+	Image     bool                 `json:"image"`
 }
