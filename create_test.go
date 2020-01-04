@@ -28,20 +28,20 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Recipes), 0)
 
 	recipeID := r.ID.Hex()
-	r, err = recipeapi.AddMethodStep(ctx, recipeID, "Test action")
+	rv, err := recipeapi.AddMethodStep(ctx, request, recipeID, "Test action")
 	assert.Nil(t, err)
-	assert.NotNil(t, r)
+	assert.NotNil(t, rv)
 
-	r, err = recipeapi.AddIngredient(ctx, recipeID, 0, ingredientID)
+	rv, err = recipeapi.AddIngredient(ctx, request, recipeID, 0, ingredientID)
 	assert.Nil(t, err)
-	assert.Equal(t, len(r.Method), 1)
-	method := r.Method[0]
+	assert.Equal(t, len(rv.Method), 1)
+	method := rv.Method[0]
 	assert.Equal(t, len(method.Ingredients), 1)
 	ing := method.Ingredients[0]
 	assert.Equal(t, "Red onion", ing.Name)
 
 	// Cleanup
-	err = recipe.Delete(ctx, r.ID)
+	err = recipe.Delete(ctx, rv.ID)
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
@@ -65,27 +65,27 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Recipes), 0)
 
 	recipeID := r.ID.Hex()
-	r, err = recipeapi.AddMethodStep(ctx, recipeID, "Test action")
+	rv, err := recipeapi.AddMethodStep(ctx, request, recipeID, "Test action")
 	assert.Nil(t, err)
-	assert.NotNil(t, r)
+	assert.NotNil(t, rv)
 
-	r, err = recipeapi.AddIngredient(ctx, recipeID, 0, ingredientID)
+	rv, err = recipeapi.AddIngredient(ctx, request, recipeID, 0, ingredientID)
 	assert.Nil(t, err)
-	assert.Equal(t, len(r.Method), 1)
-	method := r.Method[0]
+	assert.Equal(t, len(rv.Method), 1)
+	method := rv.Method[0]
 	assert.Equal(t, len(method.Ingredients), 1)
 	contains(t, method.Ingredients, []string{"Red onion"})
 
-	r, err = recipeapi.AddIngredient(ctx, recipeID, 0, anotherIngredientID)
+	rv, err = recipeapi.AddIngredient(ctx, request, recipeID, 0, anotherIngredientID)
 	assert.Nil(t, err)
-	assert.Equal(t, len(r.Method), 1)
-	method = r.Method[0]
+	assert.Equal(t, len(rv.Method), 1)
+	method = rv.Method[0]
 	assert.Equal(t, 2, len(method.Ingredients))
 	contains(t, method.Ingredients, []string{"Red onion", "Red pepper"})
 
-	r, err = recipeapi.RemoveIngredient(ctx, recipeID, 0, anotherIngredientID)
+	rv, err = recipeapi.RemoveIngredient(ctx, request, recipeID, 0, anotherIngredientID)
 	assert.Nil(t, err)
-	method = r.Method[0]
+	method = rv.Method[0]
 	assert.Equal(t, 1, len(method.Ingredients))
 	contains(t, method.Ingredients, []string{"Red onion"})
 
