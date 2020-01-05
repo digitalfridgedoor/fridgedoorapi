@@ -2,7 +2,8 @@ package userviewapi
 
 import (
 	"context"
-	"digitalfridgedoor/fridgedoordatabase/userview"
+
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"github.com/aws/aws-lambda-go/events"
 )
