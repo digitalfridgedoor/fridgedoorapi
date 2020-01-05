@@ -74,6 +74,6 @@ func mapToDto(r *recipe.Recipe, view *userview.View) *Recipe {
 		Method:    r.Method,
 		Recipes:   r.Recipes,
 		ParentIds: r.ParentIds,
-		Image:     r.Image,
+		Metadata:  r.Metadata,
 	}
 }
