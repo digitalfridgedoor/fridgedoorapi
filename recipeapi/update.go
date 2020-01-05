@@ -3,6 +3,8 @@ package recipeapi
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -33,6 +35,10 @@ func UpdateMetadata(ctx context.Context, request *events.APIGatewayProxyRequest,
 	err = recipe.UpdateMetadata(ctx, view.ID, recipeID, updates)
 	if err != nil {
 		return nil, err
+	}
+
+	if update, ok := updates["tag_add"]; ok {
+		userview.AddTag(ctx, view.ID.Hex(), update)
 	}
 
 	return findOneAndMap(ctx, view, recipeID)
