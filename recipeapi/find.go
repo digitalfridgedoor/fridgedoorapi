@@ -41,6 +41,21 @@ func FindByName(ctx context.Context, request *events.APIGatewayProxyRequest, sea
 	return mapToDtos(recipes, view), nil
 }
 
+// FindByTags finds users recipes with tags
+func FindByTags(ctx context.Context, request *events.APIGatewayProxyRequest, tags []string, notTags []string) ([]*Recipe, error) {
+	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+	if err != nil {
+		return make([]*Recipe, 0), err
+	}
+
+	recipes, err := recipe.FindByTags(ctx, view.ID, tags, notTags)
+	if err != nil {
+		return nil, err
+	}
+
+	return mapToDtos(recipes, view), nil
+}
+
 func mapToDtos(r []*recipe.Recipe, view *userview.View) []*Recipe {
 	mapped := make([]*Recipe, len(r))
 	for idx, v := range r {
