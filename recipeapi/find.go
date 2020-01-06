@@ -67,13 +67,15 @@ func mapToDtos(r []*recipe.Recipe, view *userview.View) []*Recipe {
 
 func mapToDto(r *recipe.Recipe, view *userview.View) *Recipe {
 	canEdit := r.AddedBy == view.ID
+	ownedByUser := r.AddedBy == view.ID
 	return &Recipe{
-		ID:        r.ID,
-		Name:      r.Name,
-		CanEdit:   canEdit,
-		Method:    r.Method,
-		Recipes:   r.Recipes,
-		ParentIds: r.ParentIds,
-		Metadata:  r.Metadata,
+		ID:          r.ID,
+		Name:        r.Name,
+		CanEdit:     canEdit,
+		OwnedByUser: ownedByUser,
+		Method:      r.Method,
+		Recipes:     r.Recipes,
+		ParentIds:   r.ParentIds,
+		Metadata:    r.Metadata,
 	}
 }
