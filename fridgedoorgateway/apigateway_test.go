@@ -1,4 +1,4 @@
-package apigateway
+package fridgedoorgateway
 
 import "github.com/aws/aws-lambda-go/events"
 
