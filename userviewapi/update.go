@@ -11,10 +11,10 @@ import (
 // RemoveTag removes a tag from a recipe
 func RemoveTag(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, tag string) (*View, error) {
 
-	err = userview.RemoveTag(ctx, view.ID.Hex(), tag)
+	err := userview.RemoveTag(ctx, user.ViewID.Hex(), tag)
 	if err != nil {
 		return nil, err
 	}
 
-	return GetUserViewByID(ctx, view.ID.Hex())
+	return GetUserViewByID(ctx, user.ViewID.Hex())
 }
