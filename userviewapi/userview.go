@@ -2,7 +2,6 @@ package userviewapi
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
@@ -11,8 +10,6 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 )
-
-var errNotLoggedIn = errors.New("No user logged in")
 
 // GetOrCreateUserView creates a new UserView for the logged in user
 func GetOrCreateUserView(ctx context.Context, request *events.APIGatewayProxyRequest) (*userview.View, error) {
@@ -44,8 +41,8 @@ func GetUserViewByID(ctx context.Context, userviewID string) (*View, error) {
 	// todo: auth?
 
 	view, err := userview.FindOne(ctx, userviewID)
-	if err == nil {
-		return populateUserView(ctx, view), nil
+	if err != nil {
+		return nil, err
 	}
 
 	return populateUserView(ctx, view), nil
