@@ -38,6 +38,15 @@ func CreateTestAuthenticatedUser(username string) *fridgedoorgateway.Authenticat
 	return user
 }
 
+// DeleteUserForRequest deletes a userview for a test request
+func DeleteUserForRequest(request *events.APIGatewayProxyRequest) {
+	username, ok := fridgedoorgateway.ParseUsername(request)
+
+	if ok {
+		userview.Delete(context.TODO(), username)
+	}
+}
+
 // DeleteTestUser deletes a user
 func DeleteTestUser(user *fridgedoorgateway.AuthenticatedUser) {
 	userview.Delete(context.TODO(), user.Username)
