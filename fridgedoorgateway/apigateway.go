@@ -14,7 +14,7 @@ var errNotLoggedIn = errors.New("No user logged in")
 // GetOrCreateAuthenticatedUser creates a new UserView for the logged in user
 func GetOrCreateAuthenticatedUser(ctx context.Context, request *events.APIGatewayProxyRequest) (*AuthenticatedUser, error) {
 
-	username, ok := parseUsername(request)
+	username, ok := ParseUsername(request)
 	if !ok {
 		return nil, errNotLoggedIn
 	}
@@ -44,8 +44,8 @@ func GetOrCreateAuthenticatedUser(ctx context.Context, request *events.APIGatewa
 	return user, nil
 }
 
-// parseUsername attempts to parse the cognito username from the Authorizer
-func parseUsername(request *events.APIGatewayProxyRequest) (string, bool) {
+// ParseUsername attempts to parse the cognito username from the Authorizer
+func ParseUsername(request *events.APIGatewayProxyRequest) (string, bool) {
 	if claims, ok := request.RequestContext.Authorizer["claims"]; ok {
 		c := claims.(map[string]interface{})
 		username, ok := c["cognito:username"]
