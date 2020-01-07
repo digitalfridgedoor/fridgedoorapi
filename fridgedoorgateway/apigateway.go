@@ -39,6 +39,7 @@ func GetOrCreateAuthenticatedUser(ctx context.Context, request *events.APIGatewa
 
 	user := &AuthenticatedUser{
 		Username: view.Username,
+		ViewID:   view.ID,
 	}
 	return user, nil
 }

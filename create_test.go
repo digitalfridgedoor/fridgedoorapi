@@ -7,7 +7,6 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -95,7 +94,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	userview.Delete(ctx, username)
+	dfdtesting.DeleteTestUser(testUser)
 }
 
 func contains(t *testing.T, ingredients []recipe.Ingredient, expected []string) {

@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -16,8 +18,8 @@ func TestFindForUser(t *testing.T) {
 	username := "TestUser"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := CreateTestAuthorizedRequest(username)
-	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
+	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -44,7 +46,7 @@ func TestFindForUser(t *testing.T) {
 	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	userview.Delete(ctx, username)
+	dfdtesting.DeleteTestUser(testUser)
 }
 
 func TestFindByNameForUser(t *testing.T) {
@@ -52,13 +54,13 @@ func TestFindByNameForUser(t *testing.T) {
 	username := "TestUser"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := CreateTestAuthorizedRequest(username)
-	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
+	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	recipes, err := recipeapi.FindByName(ctx, request, "test")
+	recipes, err := recipeapi.FindByName(ctx, testUser, "test")
 	assert.Nil(t, err)
 	assert.NotNil(t, recipes)
 	assert.Equal(t, 1, len(recipes))
@@ -67,5 +69,5 @@ func TestFindByNameForUser(t *testing.T) {
 	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	userview.Delete(ctx, username)
+	dfdtesting.DeleteTestUser(testUser)
 }
