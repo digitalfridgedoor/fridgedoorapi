@@ -54,8 +54,8 @@ func populateUserView(ctx context.Context, view *userview.View) *View {
 	}
 
 	return &View{
-		ID:          view.ID,
-		Nickname:    view.Nickname,
-		Collections: collections,
+		ID:       view.ID,
+		Nickname: view.Nickname,
+		Tags:     view.Tags,
 	}
 }

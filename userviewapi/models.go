@@ -13,7 +13,7 @@ type RecipeCollection struct {
 
 // View represents a users set of lists
 type View struct {
-	ID          primitive.ObjectID           `json:"id" bson:"_id,omitempty"`
-	Nickname    string                       `json:"nickname"`
-	Collections map[string]*RecipeCollection `json:"collections"`
+	ID       primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Nickname string             `json:"nickname"`
+	Tags     []string           `json:"tags"`
 }
