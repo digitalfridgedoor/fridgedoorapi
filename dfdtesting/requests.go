@@ -2,8 +2,9 @@ package dfdtesting
 
 import (
 	"context"
-	"digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"digitalfridgedoor/fridgedoordatabase/userview"
+
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"github.com/aws/aws-lambda-go/events"
 )

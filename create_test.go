@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
@@ -17,9 +18,9 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	ingredientID := "5d8f739ba7888700270f775a"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := CreateTestAuthorizedRequest(username)
+	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
 
-	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -28,11 +29,11 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Recipes), 0)
 
 	recipeID := r.ID.Hex()
-	rv, err := recipeapi.AddMethodStep(ctx, request, recipeID, "Test action")
+	rv, err := recipeapi.AddMethodStep(ctx, testUser, recipeID, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
-	rv, err = recipeapi.AddIngredient(ctx, request, recipeID, 0, ingredientID)
+	rv, err = recipeapi.AddIngredient(ctx, testUser, recipeID, 0, ingredientID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method := rv.Method[0]
@@ -45,7 +46,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	userview.Delete(ctx, username)
+	dfdtesting.DeleteTestUser(testUser)
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
@@ -55,8 +56,8 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	anotherIngredientID := "5d8f746946106c8aee8cde38"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := CreateTestAuthorizedRequest(username)
-	r, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
+	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -65,25 +66,25 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Recipes), 0)
 
 	recipeID := r.ID.Hex()
-	rv, err := recipeapi.AddMethodStep(ctx, request, recipeID, "Test action")
+	rv, err := recipeapi.AddMethodStep(ctx, testUser, recipeID, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
-	rv, err = recipeapi.AddIngredient(ctx, request, recipeID, 0, ingredientID)
+	rv, err = recipeapi.AddIngredient(ctx, testUser, recipeID, 0, ingredientID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method := rv.Method[0]
 	assert.Equal(t, len(method.Ingredients), 1)
 	contains(t, method.Ingredients, []string{"Red onion"})
 
-	rv, err = recipeapi.AddIngredient(ctx, request, recipeID, 0, anotherIngredientID)
+	rv, err = recipeapi.AddIngredient(ctx, testUser, recipeID, 0, anotherIngredientID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method = rv.Method[0]
 	assert.Equal(t, 2, len(method.Ingredients))
 	contains(t, method.Ingredients, []string{"Red onion", "Red pepper"})
 
-	rv, err = recipeapi.RemoveIngredient(ctx, request, recipeID, 0, anotherIngredientID)
+	rv, err = recipeapi.RemoveIngredient(ctx, testUser, recipeID, 0, anotherIngredientID)
 	assert.Nil(t, err)
 	method = rv.Method[0]
 	assert.Equal(t, 1, len(method.Ingredients))
