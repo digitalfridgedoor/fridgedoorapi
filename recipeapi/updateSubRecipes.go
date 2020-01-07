@@ -3,37 +3,28 @@ package recipeapi
 import (
 	"context"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 
 // AddSubRecipe adds a link between the recipe and the subrecipe
-func AddSubRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, subRecipeID string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+func AddSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, subRecipeID string) (*Recipe, error) {
+
+	err := recipe.AddSubRecipe(ctx, user.ViewID, recipeID, subRecipeID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = recipe.AddSubRecipe(ctx, view.ID, recipeID, subRecipeID)
-	if err != nil {
-		return nil, err
-	}
-
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }
 
 // RemoveSubRecipe the link between the recipe/subrecipe
-func RemoveSubRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, subRecipeID string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+func RemoveSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, subRecipeID string) (*Recipe, error) {
+
+	err := recipe.RemoveSubRecipe(ctx, user.ViewID, recipeID, subRecipeID)
 	if err != nil {
 		return nil, err
 	}
 
-	err = recipe.RemoveSubRecipe(ctx, view.ID, recipeID, subRecipeID)
-	if err != nil {
-		return nil, err
-	}
-
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }

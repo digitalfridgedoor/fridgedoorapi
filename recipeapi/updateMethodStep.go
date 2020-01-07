@@ -3,52 +3,39 @@ package recipeapi
 import (
 	"context"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 
 // AddMethodStep adds a new method step to a recipe
-func AddMethodStep(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, action string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+func AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, action string) (*Recipe, error) {
+
+	err := recipe.AddMethodStep(ctx, user.ViewID, recipeID, action)
 	if err != nil {
 		return nil, err
 	}
 
-	err = recipe.AddMethodStep(ctx, view.ID, recipeID, action)
-	if err != nil {
-		return nil, err
-	}
-
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }
 
 // UpdateMethodStep removes a method step
-func UpdateMethodStep(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, stepIdx int, updates map[string]string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+func UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, updates map[string]string) (*Recipe, error) {
+
+	err := recipe.UpdateMethodStepByIndex(ctx, user.ViewID, recipeID, stepIdx, updates)
 	if err != nil {
 		return nil, err
 	}
 
-	err = recipe.UpdateMethodStepByIndex(ctx, view.ID, recipeID, stepIdx, updates)
-	if err != nil {
-		return nil, err
-	}
-
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }
 
 // RemoveMethodStep removes a method step
-func RemoveMethodStep(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, stepIdx int) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+func RemoveMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int) (*Recipe, error) {
+
+	err := recipe.RemoveMethodStepByIndex(ctx, user.ViewID, recipeID, stepIdx)
 	if err != nil {
 		return nil, err
 	}
 
-	err = recipe.RemoveMethodStepByIndex(ctx, view.ID, recipeID, stepIdx)
-	if err != nil {
-		return nil, err
-	}
-
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }

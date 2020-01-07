@@ -5,41 +5,32 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 
 // Rename updates the name of the recipe
-func Rename(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, name string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
+func Rename(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, name string) (*Recipe, error) {
+
+	err := recipe.Rename(ctx, user.ViewID, recipeID, name)
 	if err != nil {
 		return nil, err
 	}
 
-	err = recipe.Rename(ctx, view.ID, recipeID, name)
-	if err != nil {
-		return nil, err
-	}
-
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }
 
 // UpdateMetadata updates the recipes metadata property
-func UpdateMetadata(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string, updates map[string]string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
-	if err != nil {
-		return nil, err
-	}
+func UpdateMetadata(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, updates map[string]string) (*Recipe, error) {
 
-	err = recipe.UpdateMetadata(ctx, view.ID, recipeID, updates)
+	err := recipe.UpdateMetadata(ctx, user.ViewID, recipeID, updates)
 	if err != nil {
 		return nil, err
 	}
 
 	if update, ok := updates["tag_add"]; ok {
-		userview.AddTag(ctx, view.ID.Hex(), update)
+		userview.AddTag(ctx, user.ViewID.Hex(), update)
 	}
 
-	return findOneAndMap(ctx, view, recipeID)
+	return findOneAndMap(ctx, user, recipeID)
 }

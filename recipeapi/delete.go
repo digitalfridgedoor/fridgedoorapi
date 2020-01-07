@@ -6,26 +6,20 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 )
 
 // DeleteRecipe removes the recipe from the collection, and then removes the recipe
-func DeleteRecipe(ctx context.Context, request *events.APIGatewayProxyRequest, collectionName string, recipeID string) error {
-
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
-	if err != nil {
-		return err
-	}
+func DeleteRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, collectionName string, recipeID string) error {
 
 	rID, err := primitive.ObjectIDFromHex(recipeID)
 	if err != nil {
 		return err
 	}
 
-	err = userview.RemoveRecipe(ctx, view.ID.Hex(), collectionName, rID)
+	err = userview.RemoveRecipe(ctx, user.ViewID.Hex(), collectionName, rID)
 	if err != nil {
 		fmt.Printf("Error removing: %v.\n", err)
 		return err

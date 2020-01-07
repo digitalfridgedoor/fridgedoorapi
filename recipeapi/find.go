@@ -3,71 +3,55 @@ package recipeapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
-
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
-
-	"github.com/aws/aws-lambda-go/events"
 )
 
 // FindOne finds a recipe by id
-func FindOne(ctx context.Context, request *events.APIGatewayProxyRequest, recipeID string) (*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
-	if err != nil {
-		return nil, err
-	}
+func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string) (*Recipe, error) {
 
 	recipe, err := recipe.FindOne(ctx, recipeID)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToDto(recipe, view), nil
+	return mapToDto(recipe, user), nil
 }
 
 // FindByName finds users recipes by name
-func FindByName(ctx context.Context, request *events.APIGatewayProxyRequest, searchTerm string) ([]*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
-	if err != nil {
-		return make([]*Recipe, 0), err
-	}
+func FindByName(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, searchTerm string) ([]*Recipe, error) {
 
-	recipes, err := recipe.FindByName(ctx, searchTerm, view.ID)
+	recipes, err := recipe.FindByName(ctx, searchTerm, user.ViewID)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToDtos(recipes, view), nil
+	return mapToDtos(recipes, user), nil
 }
 
 // FindByTags finds users recipes with tags
-func FindByTags(ctx context.Context, request *events.APIGatewayProxyRequest, tags []string, notTags []string) ([]*Recipe, error) {
-	view, err := userviewapi.GetOrCreateUserView(ctx, request)
-	if err != nil {
-		return make([]*Recipe, 0), err
-	}
+func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, tags []string, notTags []string) ([]*Recipe, error) {
 
-	recipes, err := recipe.FindByTags(ctx, view.ID, tags, notTags)
+	recipes, err := recipe.FindByTags(ctx, user.ViewID, tags, notTags)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToDtos(recipes, view), nil
+	return mapToDtos(recipes, user), nil
 }
 
-func mapToDtos(r []*recipe.Recipe, view *userview.View) []*Recipe {
+func mapToDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*Recipe {
 	mapped := make([]*Recipe, len(r))
 	for idx, v := range r {
-		mapped[idx] = mapToDto(v, view)
+		mapped[idx] = mapToDto(v, user)
 	}
 
 	return mapped
 }
 
-func mapToDto(r *recipe.Recipe, view *userview.View) *Recipe {
-	canEdit := r.AddedBy == view.ID
-	ownedByUser := r.AddedBy == view.ID
+func mapToDto(r *recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
+	canEdit := r.AddedBy == user.ViewID
+	ownedByUser := r.AddedBy == user.ViewID
 	return &Recipe{
 		ID:          r.ID,
 		Name:        r.Name,

@@ -3,16 +3,16 @@ package recipeapi
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 )
 
-func findOneAndMap(ctx context.Context, view *userview.View, recipeID string) (*Recipe, error) {
+func findOneAndMap(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string) (*Recipe, error) {
 
 	recipe, err := recipe.FindOne(ctx, recipeID)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToDto(recipe, view), nil
+	return mapToDto(recipe, user), nil
 }
