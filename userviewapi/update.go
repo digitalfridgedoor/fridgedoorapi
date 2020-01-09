@@ -9,12 +9,12 @@ import (
 )
 
 // RemoveTag removes a tag from a recipe
-func RemoveTag(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, tag string) (*View, error) {
+func RemoveTag(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, tag string) (*View, error) {
 
 	err := userview.RemoveTag(ctx, user.ViewID.Hex(), tag)
 	if err != nil {
 		return nil, err
 	}
 
-	return GetUserViewByID(ctx, user.ViewID.Hex())
+	return GetUserViewByID(ctx, user)
 }
