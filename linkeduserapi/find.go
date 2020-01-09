@@ -2,9 +2,10 @@ package linkeduserapi
 
 import (
 	"context"
-	"digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"digitalfridgedoor/fridgedoordatabase/recipe"
-	"digitalfridgedoor/fridgedoordatabase/userview"
+
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
