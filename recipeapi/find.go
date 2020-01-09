@@ -10,12 +10,16 @@ import (
 // FindOne finds a recipe by id
 func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string) (*Recipe, error) {
 
-	recipe, err := recipe.FindOne(ctx, recipeID)
+	r, err := recipe.FindOne(ctx, recipeID)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToDto(recipe, user), nil
+	if r.CanView(user.ViewID) {
+		return mapToDto(r, user), nil
+	}
+
+	return nil, errAuth
 }
 
 // FindByName finds users recipes by name
@@ -41,16 +45,18 @@ func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 }
 
 func mapToDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*Recipe {
-	mapped := make([]*Recipe, len(r))
+	mapped := []*Recipe{}
 	for idx, v := range r {
-		mapped[idx] = mapToDto(v, user)
+		if v.CanView(user.ViewID) {
+			mapped[idx] = mapToDto(v, user)
+		}
 	}
 
 	return mapped
 }
 
 func mapToDto(r *recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
-	canEdit := r.AddedBy == user.ViewID
+	canEdit := r.CanEdit(user.ViewID)
 	ownedByUser := r.AddedBy == user.ViewID
 	return &Recipe{
 		ID:          r.ID,
