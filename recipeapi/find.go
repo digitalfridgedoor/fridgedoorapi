@@ -46,9 +46,9 @@ func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 
 func mapToDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*Recipe {
 	mapped := []*Recipe{}
-	for idx, v := range r {
+	for _, v := range r {
 		if v.CanView(user.ViewID) {
-			mapped[idx] = mapToDto(v, user)
+			mapped = append(mapped, mapToDto(v, user))
 		}
 	}
 
