@@ -16,3 +16,10 @@ type Recipe struct {
 	ParentIds   []primitive.ObjectID `json:"parentIds"`
 	Metadata    recipe.Metadata      `json:"metadata"`
 }
+
+// RecipeDescription is a short view of a recipe
+type RecipeDescription struct {
+	ID    primitive.ObjectID `json:"id"`
+	Name  string             `json:"name"`
+	Image bool               `json:"image"`
+}

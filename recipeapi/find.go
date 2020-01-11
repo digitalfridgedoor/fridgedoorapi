@@ -23,7 +23,7 @@ func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, rec
 }
 
 // FindByName finds users recipes by name
-func FindByName(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, searchTerm string) ([]*Recipe, error) {
+func FindByName(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, searchTerm string) ([]*RecipeDescription, error) {
 
 	recipes, err := recipe.FindByName(ctx, searchTerm, user.ViewID)
 	if err != nil {
@@ -34,7 +34,7 @@ func FindByName(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 }
 
 // FindByTags finds users recipes with tags
-func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, tags []string, notTags []string) ([]*Recipe, error) {
+func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, tags []string, notTags []string) ([]*RecipeDescription, error) {
 
 	recipes, err := recipe.FindByTags(ctx, user.ViewID, tags, notTags)
 	if err != nil {
@@ -44,15 +44,23 @@ func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 	return mapToDtos(recipes, user), nil
 }
 
-func mapToDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*Recipe {
-	mapped := []*Recipe{}
+func mapToDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*RecipeDescription {
+	mapped := []*RecipeDescription{}
 	for _, v := range r {
 		if v.CanView(user.ViewID) {
-			mapped = append(mapped, mapToDto(v, user))
+			mapped = append(mapped, mapToShortDto(v, user))
 		}
 	}
 
 	return mapped
+}
+
+func mapToShortDto(r *recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) *RecipeDescription {
+	return &RecipeDescription{
+		ID:    r.ID,
+		Name:  r.Name,
+		Image: r.Metadata.Image,
+	}
 }
 
 func mapToDto(r *recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
