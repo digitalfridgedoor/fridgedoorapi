@@ -2,6 +2,7 @@ package imageapi
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -10,8 +11,23 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-// Connect connects to s3
-func Connect() (*s3.S3, error) {
+// CreatePresignedURL creates a presigned url for the requested resource
+func CreatePresignedURL(verb string, key string) (string, error) {
+	svc, err := connectToS3()
+	if err != nil {
+		fmt.Printf("Error connecting: %v.\n", err)
+		return "", errors.New("cannot connect to S3")
+	}
+
+	req, err := createRequest(svc, verb, key)
+	if err != nil {
+		return "", err
+	}
+
+	return req.Presign(15 * time.Minute)
+}
+
+func connectToS3() (*s3.S3, error) {
 	region := "eu-west-2"
 	sess, err := session.NewSessionWithOptions(session.Options{
 		Config:            aws.Config{Region: aws.String(region)},
@@ -24,16 +40,6 @@ func Connect() (*s3.S3, error) {
 	svc := s3.New(sess)
 
 	return svc, nil
-}
-
-// CreatePresignedURL creates a presigned url for the requested resource
-func CreatePresignedURL(svc *s3.S3, verb string, key string) (string, error) {
-	req, err := createRequest(svc, "get", key)
-	if err != nil {
-		return "", err
-	}
-
-	return req.Presign(15 * time.Minute)
 }
 
 func createRequest(svc *s3.S3, verb string, key string) (*request.Request, error) {
