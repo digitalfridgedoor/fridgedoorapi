@@ -4,10 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
-
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 	"github.com/stretchr/testify/assert"
@@ -18,7 +16,7 @@ func TestFindForUser(t *testing.T) {
 	username := "TestUser"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
 	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 
 	assert.Nil(t, err)
@@ -28,25 +26,19 @@ func TestFindForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, view)
 
-	coll, ok := view.Collections[collectionName]
-	assert.True(t, ok)
-	assert.Equal(t, 1, len(coll.Recipes))
-	recipeID := coll.Recipes[0]
-	assert.Equal(t, r.ID, recipeID)
-
-	collectionRecipes, err := userviewapi.GetCollectionRecipes(ctx, coll)
+	userRecipes, err := recipeapi.FindByTags(ctx, testUser, []string{}, []string{})
 	assert.Nil(t, err)
 
-	assert.Equal(t, 1, len(collectionRecipes))
-	collectionRecipe := collectionRecipes[0]
-	assert.Equal(t, r.ID, collectionRecipe.ID)
-	assert.Equal(t, recipeName, collectionRecipe.Name)
+	assert.Equal(t, 1, len(userRecipes))
+	userRecipe := userRecipes[0]
+	assert.Equal(t, r.ID, userRecipe.ID)
+	assert.Equal(t, recipeName, userRecipe.Name)
 
 	// Cleanup
 	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	dfdtesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(testUser)
 }
 
 func TestFindByNameForUser(t *testing.T) {
@@ -54,7 +46,7 @@ func TestFindByNameForUser(t *testing.T) {
 	username := "TestUser"
 	collectionName := "public"
 	recipeName := "test-recipe"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
 	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 
 	assert.Nil(t, err)
@@ -69,5 +61,5 @@ func TestFindByNameForUser(t *testing.T) {
 	err = recipe.Delete(ctx, r.ID)
 	assert.Nil(t, err)
 
-	dfdtesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(testUser)
 }

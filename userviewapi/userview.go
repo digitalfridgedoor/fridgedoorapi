@@ -13,7 +13,7 @@ func GetUserViewByID(ctx context.Context, user *fridgedoorgateway.AuthenticatedU
 
 	// todo: auth?
 
-	view, err := userview.FindOne(ctx, user.ViewID)
+	view, err := userview.FindOne(ctx, &user.ViewID)
 	if err != nil {
 		return nil, err
 	}

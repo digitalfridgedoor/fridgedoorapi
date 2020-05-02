@@ -10,5 +10,5 @@ import (
 // FindOne finds a recipe by id
 func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, month int, year int) (*plan.Plan, error) {
 
-	return plan.FindByMonthAndYear(ctx, *user.ViewID, month, year)
+	return plan.FindByMonthAndYear(ctx, user.ViewID, month, year)
 }

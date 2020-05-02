@@ -12,7 +12,7 @@ import (
 func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, updateRequest *UpdateDayPlanRequest) (*plan.Plan, error) {
 
 	request := &plan.UpdateDayPlanRequest{
-		UserID:     *user.ViewID,
+		UserID:     user.ViewID,
 		Year:       updateRequest.Year,
 		Month:      updateRequest.Month,
 		Day:        updateRequest.Day,
