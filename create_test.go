@@ -99,7 +99,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	fridgedoorgatewaytesting.DeleteTestUser(testUser)
 }
 
-func contains(t *testing.T, ingredients []dfdmodels.Ingredient, expected []string) {
+func contains(t *testing.T, ingredients []dfdmodels.RecipeIngredient, expected []string) {
 	names := make([]string, len(ingredients))
 	for _, ing := range ingredients {
 		names = append(names, ing.Name)
