@@ -13,7 +13,12 @@ import (
 // AddIngredient adds an ingredient to a recipe
 func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, ingredientID string) (*Recipe, error) {
 
-	ing, err := ingredient.FindOne(ctx, ingredientID)
+	ingID, err := primitive.ObjectIDFromHex(ingredientID)
+	if err != nil {
+		return nil, errInvalidID
+	}
+
+	ing, err := ingredient.FindOne(ctx, &ingID)
 	if err != nil {
 		return nil, err
 	}
