@@ -3,6 +3,8 @@ package linkeduserapi
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
@@ -46,8 +48,8 @@ func GetOtherUsersRecipes(ctx context.Context, user *fridgedoorgateway.Authentic
 	return populated, nil
 }
 
-func populateLinkedUser(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, view *userview.View) (*LinkedUser, error) {
-	recipes, err := findRecipes(ctx, user, view.ID)
+func populateLinkedUser(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, view *dfdmodels.UserView) (*LinkedUser, error) {
+	recipes, err := findRecipes(ctx, user, *view.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +61,8 @@ func populateLinkedUser(ctx context.Context, user *fridgedoorgateway.Authenticat
 	}, nil
 }
 
-func populatePublicUser(ctx context.Context, view *userview.View) (*LinkedUser, error) {
-	recipes, err := findPublicRecipes(ctx, view.ID)
+func populatePublicUser(ctx context.Context, view *dfdmodels.UserView) (*LinkedUser, error) {
+	recipes, err := findPublicRecipes(ctx, *view.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +97,7 @@ func findPublicRecipes(ctx context.Context, linkedUserID primitive.ObjectID) ([]
 func mapToAuthedDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*Recipe {
 	mapped := []*Recipe{}
 	for _, v := range r {
-		if v.CanView(user.ViewID) {
+		if v.CanView(*user.ViewID) {
 			mapped = append(mapped, mapToDto(v))
 		}
 	}
@@ -114,7 +116,7 @@ func mapToDtos(r []*recipe.Recipe) []*Recipe {
 
 func mapToDto(r *recipe.Recipe) *Recipe {
 	return &Recipe{
-		ID:    r.ID,
+		ID:    &r.ID,
 		Name:  r.Name,
 		Image: r.Metadata.Image,
 	}
