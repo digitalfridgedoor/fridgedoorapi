@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 )
 
@@ -12,7 +13,7 @@ func GetUserViewByID(ctx context.Context, user *fridgedoorgateway.AuthenticatedU
 
 	// todo: auth?
 
-	view, err := userview.FindOne(ctx, user.ViewID.Hex())
+	view, err := userview.FindOne(ctx, user.ViewID)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +21,7 @@ func GetUserViewByID(ctx context.Context, user *fridgedoorgateway.AuthenticatedU
 	return populateUserView(ctx, view), nil
 }
 
-func populateUserView(ctx context.Context, view *userview.View) *View {
+func populateUserView(ctx context.Context, view *dfdmodels.UserView) *View {
 
 	return &View{
 		ID:       view.ID,
