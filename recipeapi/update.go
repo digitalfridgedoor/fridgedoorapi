@@ -3,6 +3,8 @@ package recipeapi
 import (
 	"context"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
@@ -10,27 +12,27 @@ import (
 )
 
 // Rename updates the name of the recipe
-func Rename(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, name string) (*Recipe, error) {
+func Rename(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, name string) (*Recipe, error) {
 
-	err := recipe.Rename(ctx, *user.ViewID, recipeID, name)
+	r, err := recipe.Rename(ctx, user.ViewID, recipeID, name)
 	if err != nil {
 		return nil, err
 	}
 
-	return findOneAndMap(ctx, user, recipeID)
+	return mapToDto(r, user), nil
 }
 
 // UpdateMetadata updates the recipes metadata property
-func UpdateMetadata(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, updates map[string]string) (*Recipe, error) {
+func UpdateMetadata(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, updates map[string]string) (*Recipe, error) {
 
-	err := recipe.UpdateMetadata(ctx, *user.ViewID, recipeID, updates)
+	r, err := recipe.UpdateMetadata(ctx, user.ViewID, recipeID, updates)
 	if err != nil {
 		return nil, err
 	}
 
 	if update, ok := updates["tag_add"]; ok {
-		userview.AddTag(ctx, user.ViewID, update)
+		userview.AddTag(ctx, &user.ViewID, update)
 	}
 
-	return findOneAndMap(ctx, user, recipeID)
+	return mapToDto(r, user), nil
 }

@@ -18,7 +18,7 @@ func DeleteRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser
 		return err
 	}
 
-	err = recipe.Delete(ctx, rID)
+	err = recipe.Delete(ctx, &rID)
 	if err != nil {
 		fmt.Printf("Error deleting recipe with id '%v': %v.\n", recipeID, err)
 		return err

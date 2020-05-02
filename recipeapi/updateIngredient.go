@@ -3,6 +3,8 @@ package recipeapi
 import (
 	"context"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -16,32 +18,47 @@ func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 		return nil, err
 	}
 
-	err = recipe.AddIngredient(ctx, *user.ViewID, recipeID, stepIdx, ingredientID, ing.Name)
+	rID, err := primitive.ObjectIDFromHex(recipeID)
+	if err != nil {
+		return nil, errInvalidID
+	}
+
+	recipe, err := recipe.AddIngredient(ctx, user.ViewID, &rID, stepIdx, ingredientID, ing.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	return findOneAndMap(ctx, user, recipeID)
+	return mapToDto(recipe, user), nil
 }
 
 // UpdateIngredient removes an ingredient to a recipe
 func UpdateIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, ingredientID string, updates map[string]string) (*Recipe, error) {
 
-	err := recipe.UpdateIngredient(ctx, *user.ViewID, recipeID, stepIdx, ingredientID, updates)
+	rID, err := primitive.ObjectIDFromHex(recipeID)
+	if err != nil {
+		return nil, errInvalidID
+	}
+
+	recipe, err := recipe.UpdateIngredient(ctx, user.ViewID, &rID, stepIdx, ingredientID, updates)
 	if err != nil {
 		return nil, err
 	}
 
-	return findOneAndMap(ctx, user, recipeID)
+	return mapToDto(recipe, user), nil
 }
 
 // RemoveIngredient removes an ingredient to a recipe
 func RemoveIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, ingredientID string) (*Recipe, error) {
 
-	err := recipe.RemoveIngredient(ctx, *user.ViewID, recipeID, stepIdx, ingredientID)
+	rID, err := primitive.ObjectIDFromHex(recipeID)
+	if err != nil {
+		return nil, errInvalidID
+	}
+
+	recipe, err := recipe.RemoveIngredient(ctx, user.ViewID, &rID, stepIdx, ingredientID)
 	if err != nil {
 		return nil, err
 	}
 
-	return findOneAndMap(ctx, user, recipeID)
+	return mapToDto(recipe, user), nil
 }

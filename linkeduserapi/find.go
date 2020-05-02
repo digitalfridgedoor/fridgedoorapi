@@ -74,50 +74,22 @@ func populatePublicUser(ctx context.Context, view *dfdmodels.UserView) (*LinkedU
 	}, nil
 }
 
-func findRecipes(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, linkedUserID primitive.ObjectID) ([]*Recipe, error) {
+func findRecipes(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, linkedUserID primitive.ObjectID) ([]*recipe.Description, error) {
 
-	recipes, err := recipe.FindByTags(ctx, linkedUserID, []string{}, []string{})
+	recipes, err := recipe.FindByTags(ctx, linkedUserID, []string{}, []string{}, 20)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToAuthedDtos(recipes, user), nil
+	return recipes, nil
 }
 
-func findPublicRecipes(ctx context.Context, linkedUserID primitive.ObjectID) ([]*Recipe, error) {
+func findPublicRecipes(ctx context.Context, linkedUserID primitive.ObjectID) ([]*recipe.Description, error) {
 
-	recipes, err := recipe.FindPublic(ctx, linkedUserID)
+	recipes, err := recipe.FindPublic(ctx, linkedUserID, 10)
 	if err != nil {
 		return nil, err
 	}
 
-	return mapToDtos(recipes), nil
-}
-
-func mapToAuthedDtos(r []*recipe.Recipe, user *fridgedoorgateway.AuthenticatedUser) []*Recipe {
-	mapped := []*Recipe{}
-	for _, v := range r {
-		if v.CanView(*user.ViewID) {
-			mapped = append(mapped, mapToDto(v))
-		}
-	}
-
-	return mapped
-}
-
-func mapToDtos(r []*recipe.Recipe) []*Recipe {
-	mapped := []*Recipe{}
-	for _, v := range r {
-		mapped = append(mapped, mapToDto(v))
-	}
-
-	return mapped
-}
-
-func mapToDto(r *recipe.Recipe) *Recipe {
-	return &Recipe{
-		ID:    &r.ID,
-		Name:  r.Name,
-		Image: r.Metadata.Image,
-	}
+	return recipes, nil
 }
