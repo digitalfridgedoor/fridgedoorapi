@@ -7,5 +7,5 @@ import (
 // AuthenticatedUser represents the user requesting the endpoint
 type AuthenticatedUser struct {
 	Username string
-	ViewID   *primitive.ObjectID
+	ViewID   primitive.ObjectID
 }
