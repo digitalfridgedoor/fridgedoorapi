@@ -15,51 +15,53 @@ import (
 )
 
 func TestSearchIngredient(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetIngredientFindPredicate(func(gs *dfdmodels.Ingredient, m primitive.M) bool {
+		nameval := m["name"].(bson.M)
+		regexval := nameval["$regex"].(primitive.Regex)
+
+		r := regexp.MustCompile(regexval.Pattern)
+
+		return r.MatchString(gs.Name)
+	})
+
+	ingredient, err := IngredientCollection(context.TODO())
+	assert.Nil(t, err)
+
+	ingredient.Create(context.TODO(), "test")
+	ingredient.Create(context.TODO(), "one")
+
+	ingredients, err := ingredient.FindByName(context.TODO(), "on")
+
+	assert.Nil(t, err)
+	assert.NotNil(t, ingredients)
+	assert.Equal(t, 1, len(ingredients))
+}
+
+func TestFindOne(t *testing.T) {
+
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetIngredientFindPredicate(func(gs *dfdmodels.Ingredient, m primitive.M) bool {
 		nameval := m["name"].(*[]bson.M)
 		regexval := (*nameval)[0]["$regex"]
 
-		r, err := regexp.Compile(regexval)
+		r := regexp.MustCompile(regexval.(string))
 
 		return r.MatchString(gs.Name)
 	})
 
-	CreateIngredient("test")
-	CreateIngredient("one")
-
-	ingredients, err := SearchIngredients("on")
-
-	assert.Nil(t, err)
-	assert.NotNil(t, ingredients)
-	assert.Greater(t, 1, len(ingredients))
-}
-
-func TestFind(t *testing.T) {
-
-	ok, coll := createIngredient(context.TODO())
-	assert.True(t, ok)
-
-	capital, err := coll.FindByName(context.Background(), "C")
-	lowercase, err := coll.FindByName(context.Background(), "c")
-
-	assert.Nil(t, err)
-	assert.Equal(t, len(capital), len(lowercase))
-}
-
-func TestFindOne(t *testing.T) {
-
-	ok, coll := createIngredient(context.TODO())
-	assert.True(t, ok)
-
-	id, err := primitive.ObjectIDFromHex("5d8f744446106c8aee8cde37")
+	ingredient, err := IngredientCollection(context.TODO())
 	assert.Nil(t, err)
 
-	ing, err := coll.findOne(context.Background(), &id)
+	name := "name"
+	i, err := ingredient.Create(context.TODO(), name)
+	assert.Nil(t, err)
+
+	ing, err := ingredient.FindOne(context.Background(), &i.ID)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, ing)
-	assert.Equal(t, "5dac764fa0b9423b0090a898", ing.ParentID.Hex())
-	assert.Equal(t, "5d8f744446106c8aee8cde37", ing.ID.Hex())
-	assert.Equal(t, "Chicken thighs", ing.Name)
+	assert.Equal(t, i.ID, ing.ID)
+	assert.Equal(t, name, ing.Name)
 }

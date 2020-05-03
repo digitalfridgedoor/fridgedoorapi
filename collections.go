@@ -2,7 +2,8 @@ package fridgedoorapi
 
 import (
 	"context"
-	"digitalfridgedoor/fridgedoordatabase/database"
+
+	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 )
 
 // Ingredient is the ingredient collection
