@@ -3,6 +3,8 @@ package recipeapi
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoorapi"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
@@ -15,6 +17,11 @@ func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 	ingID, err := primitive.ObjectIDFromHex(ingredientID)
 	if err != nil {
 		return nil, errInvalidID
+	}
+
+	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	ing, err := ingredient.FindOne(ctx, &ingID)
