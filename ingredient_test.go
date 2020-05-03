@@ -14,17 +14,19 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func FindByNameTestPredicate(gs *dfdmodels.Ingredient, m primitive.M) bool {
+	nameval := m["name"].(bson.M)
+	regexval := nameval["$regex"].(primitive.Regex)
+
+	r := regexp.MustCompile(regexval.Pattern)
+
+	return r.MatchString(gs.Name)
+}
+
 func TestSearchIngredient(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetIngredientFindPredicate(func(gs *dfdmodels.Ingredient, m primitive.M) bool {
-		nameval := m["name"].(bson.M)
-		regexval := nameval["$regex"].(primitive.Regex)
-
-		r := regexp.MustCompile(regexval.Pattern)
-
-		return r.MatchString(gs.Name)
-	})
+	dfdtesting.SetIngredientFindPredicate(FindByNameTestPredicate)
 
 	ingredient, err := IngredientCollection(context.TODO())
 	assert.Nil(t, err)
