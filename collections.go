@@ -11,10 +11,10 @@ type Ingredient struct {
 }
 
 // IngredientCollection returns a connection to mongodb ingredient collection
-func IngredientCollection(ctx context.Context) (bool, *Ingredient) {
+func IngredientCollection(ctx context.Context) (*Ingredient, error) {
 	if ok, coll := database.Ingredient(ctx); ok {
-		return true, &Ingredient{coll}
+		return &Ingredient{coll}, nil
 	}
 
-	return false, nil
+	return nil, errNotConnected
 }
