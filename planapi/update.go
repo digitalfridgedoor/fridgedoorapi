@@ -3,13 +3,13 @@ package planapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/plan"
-
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoordatabase/plan"
 )
 
 // UpdatePlan adds/updates a meal plan for the day
-func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, updateRequest *UpdateDayPlanRequest) (*plan.Plan, error) {
+func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, updateRequest *UpdateDayPlanRequest) (*dfdmodels.Plan, error) {
 
 	request := &plan.UpdateDayPlanRequest{
 		UserID:     user.ViewID,
@@ -26,5 +26,5 @@ func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 		return nil, err
 	}
 
-	return plan.FindOne(ctx, *planID)
+	return plan.FindOne(ctx, planID)
 }
