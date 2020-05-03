@@ -6,7 +6,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 

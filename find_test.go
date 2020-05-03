@@ -14,10 +14,9 @@ import (
 func TestFindForUser(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
-	collectionName := "public"
 	recipeName := "test-recipe"
 	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
-	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
@@ -44,10 +43,9 @@ func TestFindForUser(t *testing.T) {
 func TestFindByNameForUser(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
-	collectionName := "public"
 	recipeName := "test-recipe"
 	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
-	r, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
