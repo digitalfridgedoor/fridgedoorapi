@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/search"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -25,7 +27,7 @@ func TestFindForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, view)
 
-	userRecipes, err := recipeapi.FindByTags(ctx, testUser, []string{}, []string{})
+	userRecipes, err := search.FindRecipeByTags(ctx, testUser, []string{}, []string{})
 	assert.Nil(t, err)
 
 	assert.Equal(t, 1, len(userRecipes))
@@ -50,7 +52,7 @@ func TestFindByNameForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	recipes, err := recipeapi.FindByName(ctx, testUser, "test")
+	recipes, err := search.FindRecipeByName(ctx, testUser, "test")
 	assert.Nil(t, err)
 	assert.NotNil(t, recipes)
 	assert.Equal(t, 1, len(recipes))

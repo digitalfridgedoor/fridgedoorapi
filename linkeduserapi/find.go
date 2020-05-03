@@ -3,10 +3,11 @@ package linkeduserapi
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/search"
+
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -74,9 +75,9 @@ func populatePublicUser(ctx context.Context, view *dfdmodels.UserView) (*LinkedU
 	}, nil
 }
 
-func findRecipes(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, linkedUserID primitive.ObjectID) ([]*recipe.Description, error) {
+func findRecipes(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, linkedUserID primitive.ObjectID) ([]*search.RecipeDescription, error) {
 
-	recipes, err := recipe.FindByTags(ctx, linkedUserID, []string{}, []string{}, 20)
+	recipes, err := search.FindRecipeByTags(ctx, linkedUserID, []string{}, []string{}, 20)
 	if err != nil {
 		return nil, err
 	}
@@ -84,9 +85,9 @@ func findRecipes(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser,
 	return recipes, nil
 }
 
-func findPublicRecipes(ctx context.Context, linkedUserID primitive.ObjectID) ([]*recipe.Description, error) {
+func findPublicRecipes(ctx context.Context, linkedUserID primitive.ObjectID) ([]*search.RecipeDescription, error) {
 
-	recipes, err := recipe.FindPublic(ctx, linkedUserID, 10)
+	recipes, err := search.FindPublicRecipes(ctx, linkedUserID, 10)
 	if err != nil {
 		return nil, err
 	}

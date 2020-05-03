@@ -25,28 +25,6 @@ func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, rec
 	return nil, errAuth
 }
 
-// FindByName finds users recipes by name
-func FindByName(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, searchTerm string) ([]*recipe.Description, error) {
-
-	recipes, err := recipe.FindByName(ctx, searchTerm, user.ViewID, 20)
-	if err != nil {
-		return nil, err
-	}
-
-	return recipes, nil
-}
-
-// FindByTags finds users recipes with tags
-func FindByTags(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, tags []string, notTags []string) ([]*recipe.Description, error) {
-
-	recipes, err := recipe.FindByTags(ctx, user.ViewID, tags, notTags, 20)
-	if err != nil {
-		return nil, err
-	}
-
-	return recipes, nil
-}
-
 func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
 	canEdit := recipe.CanEdit(r, user.ViewID)
 	ownedByUser := r.AddedBy == user.ViewID
