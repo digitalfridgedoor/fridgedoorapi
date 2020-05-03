@@ -9,14 +9,9 @@ import (
 )
 
 // AddMethodStep adds a new method step to a recipe
-func AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, action string) (*Recipe, error) {
+func AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, action string) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	r, err := recipe.AddMethodStep(ctx, user.ViewID, &rID, action)
+	r, err := recipe.AddMethodStep(ctx, user.ViewID, recipeID, action)
 	if err != nil {
 		return nil, err
 	}
@@ -25,14 +20,9 @@ func AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 }
 
 // UpdateMethodStep removes a method step
-func UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, updates map[string]string) (*Recipe, error) {
+func UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, updates map[string]string) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	r, err := recipe.UpdateMethodStepByIndex(ctx, user.ViewID, &rID, stepIdx, updates)
+	r, err := recipe.UpdateMethodStepByIndex(ctx, user.ViewID, recipeID, stepIdx, updates)
 	if err != nil {
 		return nil, err
 	}
@@ -41,14 +31,9 @@ func UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.Authenticated
 }
 
 // RemoveMethodStep removes a method step
-func RemoveMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int) (*Recipe, error) {
+func RemoveMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	r, err := recipe.RemoveMethodStepByIndex(ctx, user.ViewID, &rID, stepIdx)
+	r, err := recipe.RemoveMethodStepByIndex(ctx, user.ViewID, recipeID, stepIdx)
 	if err != nil {
 		return nil, err
 	}

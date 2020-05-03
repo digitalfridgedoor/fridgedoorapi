@@ -9,19 +9,9 @@ import (
 )
 
 // AddSubRecipe adds a link between the recipe and the subrecipe
-func AddSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, subRecipeID string) (*Recipe, error) {
+func AddSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, subRecipeID *primitive.ObjectID) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	subrID, err := primitive.ObjectIDFromHex(subRecipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	r, err := recipe.AddSubRecipe(ctx, user.ViewID, &rID, &subrID)
+	r, err := recipe.AddSubRecipe(ctx, user.ViewID, recipeID, subRecipeID)
 	if err != nil {
 		return nil, err
 	}
@@ -30,19 +20,9 @@ func AddSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser
 }
 
 // RemoveSubRecipe the link between the recipe/subrecipe
-func RemoveSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, subRecipeID string) (*Recipe, error) {
+func RemoveSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, subRecipeID *primitive.ObjectID) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	subrID, err := primitive.ObjectIDFromHex(subRecipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	r, err := recipe.RemoveSubRecipe(ctx, user.ViewID, &rID, &subrID)
+	r, err := recipe.RemoveSubRecipe(ctx, user.ViewID, recipeID, subRecipeID)
 	if err != nil {
 		return nil, err
 	}

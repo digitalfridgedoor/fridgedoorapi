@@ -11,14 +11,9 @@ import (
 )
 
 // DeleteRecipe removes the recipe from the collection, and then removes the recipe
-func DeleteRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, collectionName string, recipeID string) error {
+func DeleteRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, collectionName string, recipeID *primitive.ObjectID) error {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return err
-	}
-
-	err = recipe.Delete(ctx, &rID)
+	err := recipe.Delete(ctx, recipeID)
 	if err != nil {
 		fmt.Printf("Error deleting recipe with id '%v': %v.\n", recipeID, err)
 		return err

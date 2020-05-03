@@ -11,7 +11,7 @@ import (
 )
 
 // AddIngredient adds an ingredient to a recipe
-func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, ingredientID string) (*Recipe, error) {
+func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, ingredientID string) (*Recipe, error) {
 
 	ingID, err := primitive.ObjectIDFromHex(ingredientID)
 	if err != nil {
@@ -23,12 +23,7 @@ func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 		return nil, err
 	}
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	recipe, err := recipe.AddIngredient(ctx, user.ViewID, &rID, stepIdx, ingredientID, ing.Name)
+	recipe, err := recipe.AddIngredient(ctx, user.ViewID, recipeID, stepIdx, ingredientID, ing.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -37,14 +32,9 @@ func AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 }
 
 // UpdateIngredient removes an ingredient to a recipe
-func UpdateIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, ingredientID string, updates map[string]string) (*Recipe, error) {
+func UpdateIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, ingredientID string, updates map[string]string) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	recipe, err := recipe.UpdateIngredient(ctx, user.ViewID, &rID, stepIdx, ingredientID, updates)
+	recipe, err := recipe.UpdateIngredient(ctx, user.ViewID, recipeID, stepIdx, ingredientID, updates)
 	if err != nil {
 		return nil, err
 	}
@@ -53,14 +43,9 @@ func UpdateIngredient(ctx context.Context, user *fridgedoorgateway.Authenticated
 }
 
 // RemoveIngredient removes an ingredient to a recipe
-func RemoveIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID string, stepIdx int, ingredientID string) (*Recipe, error) {
+func RemoveIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, ingredientID string) (*Recipe, error) {
 
-	rID, err := primitive.ObjectIDFromHex(recipeID)
-	if err != nil {
-		return nil, errInvalidID
-	}
-
-	recipe, err := recipe.RemoveIngredient(ctx, user.ViewID, &rID, stepIdx, ingredientID)
+	recipe, err := recipe.RemoveIngredient(ctx, user.ViewID, recipeID, stepIdx, ingredientID)
 	if err != nil {
 		return nil, err
 	}
