@@ -2,41 +2,66 @@ package recipeapi
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // AddMethodStep adds a new method step to a recipe
-func AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, action string) (*Recipe, error) {
-
-	r, err := recipe.AddMethodStep(ctx, user.ViewID, recipeID, action)
-	if err != nil {
-		return nil, err
+func (editable *EditableRecipe) AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, action string) (*Recipe, error) {
+	methodStep := dfdmodels.MethodStep{
+		Action: action,
 	}
 
-	return mapToDto(r, user), nil
+	editable.db.Method = append(editable.db.Method, methodStep)
+
+	return editable.saveAndGetDto(ctx)
 }
 
 // UpdateMethodStep removes a method step
-func UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, updates map[string]string) (*Recipe, error) {
+func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, updates map[string]string) (*Recipe, error) {
 
-	r, err := recipe.UpdateMethodStepByIndex(ctx, user.ViewID, recipeID, stepIdx, updates)
+	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
 	if err != nil {
+		fmt.Printf("Error retreiving method step, %v.\n", err)
 		return nil, err
 	}
 
-	return mapToDto(r, user), nil
+	editableMethodStep.updateMethodStep(updates)
+	editable.db.Method[stepIdx] = *editableMethodStep.step
+
+	return editable.saveAndGetDto(ctx)
 }
 
 // RemoveMethodStep removes a method step
-func RemoveMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int) (*Recipe, error) {
+func (editable *EditableRecipe) RemoveMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int) (*Recipe, error) {
 
-	r, err := recipe.RemoveMethodStepByIndex(ctx, user.ViewID, recipeID, stepIdx)
-	if err != nil {
-		return nil, err
+	if stepIdx < 0 {
+		return nil, errors.New("Invalid index")
 	}
 
-	return mapToDto(r, user), nil
+	if len(editable.db.Method) <= stepIdx {
+		return nil, errors.New("Invalid index")
+	}
+
+	copy(editable.db.Method[stepIdx:], editable.db.Method[stepIdx+1:])  // Shift a[i+1:] left one index.
+	editable.db.Method = editable.db.Method[:len(editable.db.Method)-1] // Truncate slice.
+
+	return editable.saveAndGetDto(ctx)
+}
+
+func (editable *editableMethodStep) updateMethodStep(updates map[string]string) {
+
+	if update, ok := updates["action"]; ok {
+		editable.step.Action = update
+	}
+	if update, ok := updates["description"]; ok {
+		editable.step.Description = update
+	}
+	if update, ok := updates["time"]; ok {
+		editable.step.Time = update
+	}
 }

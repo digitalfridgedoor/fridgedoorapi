@@ -22,3 +22,19 @@ func (editable *EditableRecipe) save(ctx context.Context) bool {
 
 	return true
 }
+
+func (editable *EditableRecipe) saveAndGetDto(ctx context.Context) (*Recipe, error) {
+	ok := editable.save(ctx)
+	if !ok {
+		fmt.Printf("Did not save update, %v.\n", errNotConnected)
+		return nil, errNotConnected
+	}
+
+	updated, err := findOne(ctx, editable.db.ID)
+	if err != nil {
+		fmt.Printf("Error reloading recipe, %v.\n", err)
+		return nil, err
+	}
+
+	return mapToDto(updated, editable.user), nil
+}

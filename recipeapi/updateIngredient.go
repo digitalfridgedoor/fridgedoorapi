@@ -45,19 +45,7 @@ func (editable *EditableRecipe) AddIngredient(ctx context.Context, user *fridged
 	editableMethodStep.step.Ingredients = append(editableMethodStep.step.Ingredients, recipeIng)
 	editable.db.Method[stepIdx] = *editableMethodStep.step
 
-	ok := editable.save(ctx)
-	if !ok {
-		fmt.Printf("Did not save update, %v.\n", err)
-		return nil, err
-	}
-
-	updated, err := findOne(ctx, editable.db.ID, user.ViewID)
-	if err != nil {
-		fmt.Printf("Error reloading recipe, %v.\n", err)
-		return nil, err
-	}
-
-	return mapToDto(updated, user), nil
+	return editable.saveAndGetDto(ctx)
 }
 
 // UpdateIngredient removes an ingredient to a recipe
@@ -72,19 +60,7 @@ func (editable *EditableRecipe) UpdateIngredient(ctx context.Context, user *frid
 	editableMethodStep.updateIngredientByID(ingredientID, updates)
 	editable.db.Method[stepIdx] = *editableMethodStep.step
 
-	ok := editable.save(ctx)
-	if !ok {
-		fmt.Printf("Did not save update, %v.\n", err)
-		return nil, err
-	}
-
-	updated, err := findOne(ctx, editable.db.ID, user.ViewID)
-	if err != nil {
-		fmt.Printf("Error reloading recipe, %v.\n", err)
-		return nil, err
-	}
-
-	return mapToDto(updated, user), nil
+	return editable.saveAndGetDto(ctx)
 }
 
 // RemoveIngredient removes an ingredient to a recipe
@@ -103,19 +79,7 @@ func (editable *EditableRecipe) RemoveIngredient(ctx context.Context, user *frid
 	editableMethodStep.filterIngredients(filterFn)
 	editable.db.Method[stepIdx] = *editableMethodStep.step
 
-	ok := editable.save(ctx)
-	if !ok {
-		fmt.Printf("Did not save update, %v.\n", err)
-		return nil, err
-	}
-
-	updated, err := findOne(ctx, editable.db.ID, user.ViewID)
-	if err != nil {
-		fmt.Printf("Error reloading recipe, %v.\n", err)
-		return nil, err
-	}
-
-	return mapToDto(updated, user), nil
+	return editable.saveAndGetDto(ctx)
 }
 
 func (editable *editableMethodStep) containsIngredient(ingredientID string) bool {

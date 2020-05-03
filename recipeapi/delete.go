@@ -11,7 +11,7 @@ import (
 )
 
 // DeleteRecipe removes the recipe from the collection, and then removes the recipe
-func DeleteRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, collectionName string, recipeID *primitive.ObjectID) error {
+func DeleteRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID) error {
 
 	ok, coll := database.Recipe(ctx)
 	if !ok {

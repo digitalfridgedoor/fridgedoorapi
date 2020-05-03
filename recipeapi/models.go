@@ -1,13 +1,15 @@
 package recipeapi
 
 import (
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ViewableRecipe struct {
-	db *dfdmodels.Recipe
+	db   *dfdmodels.Recipe
+	user *fridgedoorgateway.AuthenticatedUser
 }
 
 type EditableRecipe ViewableRecipe
