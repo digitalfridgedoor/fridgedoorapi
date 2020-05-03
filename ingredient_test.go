@@ -58,7 +58,7 @@ func TestFindOne(t *testing.T) {
 	i, err := ingredient.Create(context.TODO(), name)
 	assert.Nil(t, err)
 
-	ing, err := ingredient.FindOne(context.Background(), &i.ID)
+	ing, err := ingredient.FindOne(context.Background(), i.ID)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, ing)

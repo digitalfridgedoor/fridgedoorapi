@@ -30,6 +30,9 @@ func (coll *Ingredient) Create(ctx context.Context, name string) (*dfdmodels.Ing
 func (coll *Ingredient) FindOne(ctx context.Context, id *primitive.ObjectID) (*dfdmodels.Ingredient, error) {
 
 	ing, err := coll.c.FindByID(ctx, id, &dfdmodels.Ingredient{})
+	if err != nil {
+		return nil, err
+	}
 
 	return ing.(*dfdmodels.Ingredient), err
 }
