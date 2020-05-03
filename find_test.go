@@ -27,7 +27,7 @@ func TestFindForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, view)
 
-	userRecipes, err := search.FindRecipeByTags(ctx, testUser, []string{}, []string{})
+	userRecipes, err := search.FindRecipeByTags(ctx, testUser.ViewID, []string{}, []string{}, 20)
 	assert.Nil(t, err)
 
 	assert.Equal(t, 1, len(userRecipes))
@@ -52,7 +52,7 @@ func TestFindByNameForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	recipes, err := search.FindRecipeByName(ctx, testUser, "test")
+	recipes, err := search.FindRecipeByName(ctx, "test", testUser.ViewID, 20)
 	assert.Nil(t, err)
 	assert.NotNil(t, recipes)
 	assert.Equal(t, 1, len(recipes))
