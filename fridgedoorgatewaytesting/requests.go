@@ -25,6 +25,19 @@ func CreateTestAuthorizedRequest(username string) *events.APIGatewayProxyRequest
 	return request
 }
 
+// CreateTestAuthenticatedUserAndRequest creates a request, user view and AuthenticatedUser for the given user
+func CreateTestAuthenticatedUserAndRequest(username string) (*fridgedoorgateway.AuthenticatedUser, *events.APIGatewayProxyRequest) {
+	request := CreateTestAuthorizedRequest(username)
+
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), request)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return user, request
+}
+
 // CreateTestAuthenticatedUser creates a user view and AuthenticatedUser for the given user
 func CreateTestAuthenticatedUser(username string) *fridgedoorgateway.AuthenticatedUser {
 	request := CreateTestAuthorizedRequest(username)
