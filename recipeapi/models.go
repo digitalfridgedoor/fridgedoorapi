@@ -2,8 +2,19 @@ package recipeapi
 
 import (
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type ViewableRecipe struct {
+	db *dfdmodels.Recipe
+}
+
+type EditableRecipe ViewableRecipe
+
+type editableMethodStep struct {
+	step *dfdmodels.MethodStep
+}
 
 // Recipe represents a recipe
 type Recipe struct {

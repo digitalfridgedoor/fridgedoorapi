@@ -72,7 +72,7 @@ func TestNinTags(t *testing.T) {
 	_, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
 	assert.Nil(t, err)
 
-	results, err := recipe.FindByTags(ctx, userID, []string{}, []string{tag}, 20)
+	results, err := FindRecipeByTags(ctx, userID, []string{}, []string{tag}, 20)
 	assert.Nil(t, err)
 	assert.GreaterOrEqual(t, len(results), 1)
 
