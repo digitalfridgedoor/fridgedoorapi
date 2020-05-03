@@ -9,24 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestSearchIngredient(t *testing.T) {
-
-	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetIngredientFindPredicate(dfdtesting.FindIngredientByNameTestPredicate)
-
-	ingredient, err := IngredientCollection(context.TODO())
-	assert.Nil(t, err)
-
-	ingredient.Create(context.TODO(), "test")
-	ingredient.Create(context.TODO(), "one")
-
-	ingredients, err := ingredient.FindByName(context.TODO(), "on")
-
-	assert.Nil(t, err)
-	assert.NotNil(t, ingredients)
-	assert.Equal(t, 1, len(ingredients))
-}
-
 func TestFindOne(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
