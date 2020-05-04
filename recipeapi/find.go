@@ -11,14 +11,14 @@ import (
 )
 
 // FindOne finds a recipe by id
-func FindOne(ctx context.Context, recipeID *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*ViewableRecipe, error) {
+func FindOne(ctx context.Context, recipeID *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*Recipe, error) {
 
 	r, err := findOneViewable(ctx, recipeID, user)
 	if err != nil {
 		return nil, err
 	}
 
-	return r, nil
+	return mapToDto(r.db, user), nil
 }
 
 func FindOneEditable(ctx context.Context, id *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*EditableRecipe, error) {

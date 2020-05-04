@@ -32,7 +32,7 @@ func TestRename(t *testing.T) {
 	assert.NotNil(t, r)
 	assert.Equal(t, newRecipeName, r.Name)
 
-	latest, err := FindOne(ctx, recipe.ID, user)
+	latest, err := findOneViewable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 	assert.NotNil(t, latest.db)
 	assert.Equal(t, newRecipeName, latest.db.Name)
@@ -61,7 +61,7 @@ func TestUpdateMetadataViewableBy(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	latest, err := FindOne(ctx, recipe.ID, user)
+	latest, err := findOneViewable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 	assert.NotNil(t, latest.db)
 
@@ -78,7 +78,7 @@ func TestUpdateMetadataViewableBy(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	latest, err = FindOne(ctx, recipe.ID, user)
+	latest, err = findOneViewable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 	assert.NotNil(t, latest.db)
 
@@ -109,7 +109,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	latest, err := FindOne(ctx, recipe.ID, user)
+	latest, err := findOneViewable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 	assert.NotNil(t, latest.db)
 
@@ -127,7 +127,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	latest, err = FindOne(ctx, recipe.ID, user)
+	latest, err = findOneViewable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 	assert.NotNil(t, latest.db)
 
@@ -146,7 +146,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	latest, err = FindOne(ctx, recipe.ID, user)
+	latest, err = findOneViewable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 	assert.NotNil(t, latest.db)
 
