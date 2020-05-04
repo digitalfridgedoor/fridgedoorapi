@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 
@@ -117,7 +118,7 @@ func readRecipeDescriptionFromChannel(ch <-chan interface{}, userID primitive.Ob
 	for i := range ch {
 		r := i.(*dfdmodels.Recipe)
 
-		if recipe.CanView(r, userID) {
+		if recipeapi.CanView(r, userID) {
 			results = append(results, &RecipeDescription{
 				ID:    r.ID,
 				Name:  r.Name,

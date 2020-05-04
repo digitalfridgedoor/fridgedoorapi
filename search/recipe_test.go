@@ -4,11 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
-
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +19,7 @@ func TestFindStartingWith(t *testing.T) {
 
 	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
 
-	recipe.Create(context.TODO(), user.ViewID, "fi_recipe")
+	recipeapi.CreateRecipe(context.TODO(), user, "fi_recipe")
 
 	results, err := FindRecipeByName(context.Background(), "fi", user.ViewID, 10)
 

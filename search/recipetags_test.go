@@ -4,8 +4,10 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -19,34 +21,36 @@ func TestTags(t *testing.T) {
 
 	ctx := context.TODO()
 
-	userID, err := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
+	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
-	r, err := recipe.Create(ctx, userID, recipeName)
-
+	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, recipeName, r.Name)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, user)
+	assert.Nil(t, err)
 
 	tag := primitive.NewObjectID().Hex()
 
 	updates := make(map[string]string)
 	updates["tag_add"] = tag
-	_, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
+	_, err = editable.UpdateMetadata(ctx, user, updates)
 	assert.Nil(t, err)
 
-	results, err := FindRecipeByTags(ctx, userID, []string{tag}, []string{}, 20)
+	results, err := FindRecipeByTags(ctx, user.ViewID, []string{tag}, []string{}, 20)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(results))
 
 	updates = make(map[string]string)
 	updates["tag_remove"] = tag
-	_, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
+	_, err = editable.UpdateMetadata(ctx, user, updates)
 
-	results, err = FindRecipeByTags(ctx, userID, []string{tag}, []string{}, 20)
+	results, err = FindRecipeByTags(ctx, user.ViewID, []string{tag}, []string{}, 20)
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(results))
 
-	recipe.Delete(ctx, r.ID)
+	recipeapi.DeleteRecipe(ctx, user, r.ID)
 }
 
 func TestNinTags(t *testing.T) {
@@ -56,23 +60,26 @@ func TestNinTags(t *testing.T) {
 
 	ctx := context.Background()
 
-	userID, err := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
+	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
-	r, err := recipe.Create(ctx, userID, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, recipeName, r.Name)
 
-	recipe.Create(ctx, userID, recipeName)
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, user)
+	assert.Nil(t, err)
+
+	recipeapi.CreateRecipe(ctx, user, recipeName)
 
 	tag := primitive.NewObjectID().Hex()
 
 	updates := make(map[string]string)
 	updates["tag_add"] = tag
-	_, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
+	_, err = editable.UpdateMetadata(ctx, user, updates)
 	assert.Nil(t, err)
 
-	results, err := FindRecipeByTags(ctx, userID, []string{}, []string{tag}, 20)
+	results, err := FindRecipeByTags(ctx, user.ViewID, []string{}, []string{tag}, 20)
 	assert.Nil(t, err)
 	assert.GreaterOrEqual(t, len(results), 1)
 
@@ -85,7 +92,7 @@ func TestNinTags(t *testing.T) {
 
 	assert.False(t, recipeInResult)
 
-	recipe.Delete(ctx, r.ID)
+	recipeapi.DeleteRecipe(ctx, user, r.ID)
 }
 
 func TestIncludeAndNinTags(t *testing.T) {
@@ -95,44 +102,47 @@ func TestIncludeAndNinTags(t *testing.T) {
 
 	ctx := context.Background()
 
-	userID, err := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
+	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
-	r, err := recipe.Create(ctx, userID, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, recipeName, r.Name)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, user)
+	assert.Nil(t, err)
 
 	tag := primitive.NewObjectID().Hex()
 	anothertag := primitive.NewObjectID().Hex()
 
 	updates := make(map[string]string)
 	updates["tag_add"] = tag
-	r, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
+	r, err = editable.UpdateMetadata(ctx, user, updates)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	results, err := FindRecipeByTags(ctx, userID, []string{tag}, []string{anothertag}, 20)
+	results, err := FindRecipeByTags(ctx, user.ViewID, []string{tag}, []string{anothertag}, 20)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(results))
 	assert.Equal(t, recipeName, results[0].Name)
 
 	updates = make(map[string]string)
 	updates["tag_add"] = anothertag
-	_, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
+	_, err = editable.UpdateMetadata(ctx, user, updates)
 	assert.Nil(t, err)
 
-	results, err = FindRecipeByTags(ctx, userID, []string{tag}, []string{anothertag}, 20)
+	results, err = FindRecipeByTags(ctx, user.ViewID, []string{tag}, []string{anothertag}, 20)
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(results))
 
 	updates = make(map[string]string)
 	updates["tag_remove"] = anothertag
-	_, err = recipe.UpdateMetadata(ctx, userID, r.ID, updates)
-	results, err = FindRecipeByTags(ctx, userID, []string{tag}, []string{anothertag}, 20)
+	_, err = editable.UpdateMetadata(ctx, user, updates)
+	results, err = FindRecipeByTags(ctx, user.ViewID, []string{tag}, []string{anothertag}, 20)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(results))
 	assert.Equal(t, recipeName, results[0].Name)
 
-	recipe.Delete(ctx, r.ID)
+	recipeapi.DeleteRecipe(ctx, user, r.ID)
 }
