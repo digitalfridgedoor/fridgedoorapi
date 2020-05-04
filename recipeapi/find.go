@@ -8,7 +8,6 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 
 // FindOne finds a recipe by id
@@ -75,7 +74,7 @@ func findOne(ctx context.Context, id *primitive.ObjectID) (*dfdmodels.Recipe, er
 }
 
 func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
-	canEdit := recipe.CanEdit(r, user.ViewID)
+	canEdit := canEdit(r, user.ViewID)
 	ownedByUser := r.AddedBy == user.ViewID
 	return &Recipe{
 		ID:          r.ID,
