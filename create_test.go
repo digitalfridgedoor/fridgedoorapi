@@ -4,19 +4,22 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateAndAddIngredient(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+
 	ctx := context.Background()
 	username := "TestUser"
-	ingredientID := "5d8f739ba7888700270f775a"
 	recipeName := "test-recipe"
 	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
 
@@ -28,20 +31,28 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Method), 0)
 	assert.Equal(t, len(r.Recipes), 0)
 
-	rv, err := recipeapi.AddMethodStep(ctx, testUser, r.ID, "Test action")
+	ingredientcoll, err := IngredientCollection(context.TODO())
+	assert.Nil(t, err)
+	ingredient, err := ingredientcoll.Create(context.TODO(), "one")
+	assert.Nil(t, err)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, testUser)
+	assert.Nil(t, err)
+
+	rv, err := editable.AddMethodStep(ctx, r.ID, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
-	rv, err = recipeapi.AddIngredient(ctx, testUser, r.ID, 0, ingredientID)
+	rv, err = editable.AddIngredient(ctx, 0, ingredient.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method := rv.Method[0]
 	assert.Equal(t, len(method.Ingredients), 1)
 	ing := method.Ingredients[0]
-	assert.Equal(t, "Red onion", ing.Name)
+	assert.Equal(t, "one", ing.Name)
 
 	// Cleanup
-	err = recipe.Delete(ctx, rv.ID)
+	err = recipeapi.DeleteRecipe(ctx, testUser, rv.ID)
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
@@ -49,10 +60,11 @@ func TestCreateAndAddIngredient(t *testing.T) {
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+
 	ctx := context.Background()
 	username := "TestUser"
-	ingredientID := "5d8f739ba7888700270f775a"
-	anotherIngredientID := "5d8f746946106c8aee8cde38"
 	recipeName := "test-recipe"
 	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
 	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
@@ -63,32 +75,42 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Method), 0)
 	assert.Equal(t, len(r.Recipes), 0)
 
-	rv, err := recipeapi.AddMethodStep(ctx, testUser, r.ID, "Test action")
+	ingredientcoll, err := IngredientCollection(context.TODO())
+	assert.Nil(t, err)
+	ingredient, err := ingredientcoll.Create(context.TODO(), "one")
+	assert.Nil(t, err)
+	anotherIngredient, err := ingredientcoll.Create(context.TODO(), "two")
+	assert.Nil(t, err)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, testUser)
+	assert.Nil(t, err)
+
+	rv, err := editable.AddMethodStep(ctx, r.ID, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
-	rv, err = recipeapi.AddIngredient(ctx, testUser, r.ID, 0, ingredientID)
+	rv, err = editable.AddIngredient(ctx, 0, ingredient.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method := rv.Method[0]
 	assert.Equal(t, len(method.Ingredients), 1)
-	contains(t, method.Ingredients, []string{"Red onion"})
+	contains(t, method.Ingredients, []string{"one"})
 
-	rv, err = recipeapi.AddIngredient(ctx, testUser, r.ID, 0, anotherIngredientID)
+	rv, err = editable.AddIngredient(ctx, 0, anotherIngredient.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method = rv.Method[0]
 	assert.Equal(t, 2, len(method.Ingredients))
-	contains(t, method.Ingredients, []string{"Red onion", "Red pepper"})
+	contains(t, method.Ingredients, []string{"one", "two"})
 
-	rv, err = recipeapi.RemoveIngredient(ctx, testUser, r.ID, 0, anotherIngredientID)
+	rv, err = editable.RemoveIngredient(ctx, 0, anotherIngredient.ID.Hex())
 	assert.Nil(t, err)
 	method = rv.Method[0]
 	assert.Equal(t, 1, len(method.Ingredients))
-	contains(t, method.Ingredients, []string{"Red onion"})
+	contains(t, method.Ingredients, []string{"one"})
 
 	// Cleanup
-	err = recipe.Delete(ctx, r.ID)
+	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)

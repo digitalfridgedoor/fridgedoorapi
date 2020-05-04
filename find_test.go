@@ -8,12 +8,17 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFindForUser(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+	dfdtesting.SetRecipeFindByTagsPredicate()
+
 	ctx := context.Background()
 	username := "TestUser"
 	recipeName := "test-recipe"
@@ -36,13 +41,18 @@ func TestFindForUser(t *testing.T) {
 	assert.Equal(t, recipeName, userRecipe.Name)
 
 	// Cleanup
-	err = recipe.Delete(ctx, r.ID)
+	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
 	assert.Nil(t, err)
 
 	fridgedoorgatewaytesting.DeleteTestUser(testUser)
 }
 
 func TestFindByNameForUser(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+	dfdtesting.SetRecipeFindByNamePredicate()
+
 	ctx := context.Background()
 	username := "TestUser"
 	recipeName := "test-recipe"
@@ -58,7 +68,7 @@ func TestFindByNameForUser(t *testing.T) {
 	assert.Equal(t, 1, len(recipes))
 
 	// Cleanup
-	err = recipe.Delete(ctx, r.ID)
+	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
 	assert.Nil(t, err)
 
 	fridgedoorgatewaytesting.DeleteTestUser(testUser)
