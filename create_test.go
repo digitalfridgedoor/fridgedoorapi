@@ -39,7 +39,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	editable, err := recipeapi.FindOneEditable(ctx, r.ID, testUser)
 	assert.Nil(t, err)
 
-	rv, err := editable.AddMethodStep(ctx, r.ID, "Test action")
+	rv, err := editable.AddMethodStep(ctx, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
@@ -85,7 +85,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	editable, err := recipeapi.FindOneEditable(ctx, r.ID, testUser)
 	assert.Nil(t, err)
 
-	rv, err := editable.AddMethodStep(ctx, r.ID, "Test action")
+	rv, err := editable.AddMethodStep(ctx, "Test action")
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
