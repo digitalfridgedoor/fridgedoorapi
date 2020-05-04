@@ -6,11 +6,10 @@ import (
 	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // AddMethodStep adds a new method step to a recipe
-func (editable *EditableRecipe) AddMethodStep(ctx context.Context, recipeID *primitive.ObjectID, action string) (*Recipe, error) {
+func (editable *EditableRecipe) AddMethodStep(ctx context.Context, action string) (*Recipe, error) {
 	methodStep := dfdmodels.MethodStep{
 		Action: action,
 	}
@@ -21,7 +20,7 @@ func (editable *EditableRecipe) AddMethodStep(ctx context.Context, recipeID *pri
 }
 
 // UpdateMethodStep removes a method step
-func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, recipeID *primitive.ObjectID, stepIdx int, updates map[string]string) (*Recipe, error) {
+func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, stepIdx int, updates map[string]string) (*Recipe, error) {
 
 	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
 	if err != nil {
@@ -36,7 +35,7 @@ func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, recipeID *
 }
 
 // RemoveMethodStep removes a method step
-func (editable *EditableRecipe) RemoveMethodStep(ctx context.Context, recipeID *primitive.ObjectID, stepIdx int) (*Recipe, error) {
+func (editable *EditableRecipe) RemoveMethodStep(ctx context.Context, stepIdx int) (*Recipe, error) {
 
 	if stepIdx < 0 {
 		return nil, errors.New("Invalid index")
