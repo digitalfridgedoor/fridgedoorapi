@@ -30,13 +30,13 @@ func TestUpdateIngredient(t *testing.T) {
 
 	editable, err := FindOneEditable(ctx, recipe.ID, user)
 
-	editable.AddMethodStep(ctx, user, recipe.ID, "Test Action")
+	editable.AddMethodStep(ctx, recipe.ID, "Test Action")
 
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(editable.db.Method))
 
 	// Act
-	r, err := editable.AddIngredient(ctx, user, 0, ing.ID)
+	r, err := editable.AddIngredient(ctx, 0, ing.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, "recipe", r.Name)
 	assert.Equal(t, 1, len(r.Method))
@@ -51,7 +51,7 @@ func TestUpdateIngredient(t *testing.T) {
 	updates["name"] = "name_updated"
 	updates["preperation"] = "preperation_updated"
 
-	r, err = editable.UpdateIngredient(ctx, user, 0, ing.ID.Hex(), updates)
+	r, err = editable.UpdateIngredient(ctx, 0, ing.ID.Hex(), updates)
 	assert.Nil(t, err)
 	assert.Equal(t, "recipe", r.Name)
 	assert.Equal(t, 1, len(r.Method))
@@ -61,7 +61,7 @@ func TestUpdateIngredient(t *testing.T) {
 	assert.Equal(t, "amount_updated", r.Method[0].Ingredients[0].Amount)
 	assert.Equal(t, "preperation_updated", r.Method[0].Ingredients[0].Preperation)
 
-	r, err = editable.RemoveIngredient(ctx, user, 0, ing.ID.Hex())
+	r, err = editable.RemoveIngredient(ctx, 0, ing.ID.Hex())
 	assert.Nil(t, err)
 	assert.Equal(t, "recipe", r.Name)
 	assert.Equal(t, 1, len(r.Method))

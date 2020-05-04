@@ -4,13 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // AddSubRecipe adds a link between the recipe and the subrecipe
-func (editable *EditableRecipe) AddSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, subRecipeID *primitive.ObjectID) (*Recipe, error) {
+func (editable *EditableRecipe) AddSubRecipe(ctx context.Context, subRecipeID *primitive.ObjectID) (*Recipe, error) {
 
 	if *editable.db.ID == *subRecipeID {
 		return nil, errSubRecipe
@@ -26,7 +25,7 @@ func (editable *EditableRecipe) AddSubRecipe(ctx context.Context, user *fridgedo
 		return nil, errDuplicate
 	}
 
-	subRecipe, err := FindOneEditable(ctx, subRecipeID, user)
+	subRecipe, err := FindOneEditable(ctx, subRecipeID, editable.user)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +50,7 @@ func (editable *EditableRecipe) AddSubRecipe(ctx context.Context, user *fridgedo
 }
 
 // RemoveSubRecipe the link between the recipe/subrecipe
-func (editable *EditableRecipe) RemoveSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, subRecipeID *primitive.ObjectID) (*Recipe, error) {
+func (editable *EditableRecipe) RemoveSubRecipe(ctx context.Context, subRecipeID *primitive.ObjectID) (*Recipe, error) {
 
 	filterFn := func(id *dfdmodels.SubRecipe) bool {
 		return id.RecipeID != *subRecipeID
@@ -59,7 +58,7 @@ func (editable *EditableRecipe) RemoveSubRecipe(ctx context.Context, user *fridg
 
 	editable.filterSubRecipes(filterFn)
 
-	subRecipe, err := FindOneEditable(ctx, subRecipeID, user)
+	subRecipe, err := FindOneEditable(ctx, subRecipeID, editable.user)
 
 	if err == nil {
 		subRecipe.removeParentRecipeID(*editable.db.ID)

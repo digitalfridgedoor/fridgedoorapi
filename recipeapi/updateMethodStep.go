@@ -5,13 +5,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // AddMethodStep adds a new method step to a recipe
-func (editable *EditableRecipe) AddMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, action string) (*Recipe, error) {
+func (editable *EditableRecipe) AddMethodStep(ctx context.Context, recipeID *primitive.ObjectID, action string) (*Recipe, error) {
 	methodStep := dfdmodels.MethodStep{
 		Action: action,
 	}
@@ -22,7 +21,7 @@ func (editable *EditableRecipe) AddMethodStep(ctx context.Context, user *fridged
 }
 
 // UpdateMethodStep removes a method step
-func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int, updates map[string]string) (*Recipe, error) {
+func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, recipeID *primitive.ObjectID, stepIdx int, updates map[string]string) (*Recipe, error) {
 
 	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
 	if err != nil {
@@ -37,7 +36,7 @@ func (editable *EditableRecipe) UpdateMethodStep(ctx context.Context, user *frid
 }
 
 // RemoveMethodStep removes a method step
-func (editable *EditableRecipe) RemoveMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID, stepIdx int) (*Recipe, error) {
+func (editable *EditableRecipe) RemoveMethodStep(ctx context.Context, recipeID *primitive.ObjectID, stepIdx int) (*Recipe, error) {
 
 	if stepIdx < 0 {
 		return nil, errors.New("Invalid index")

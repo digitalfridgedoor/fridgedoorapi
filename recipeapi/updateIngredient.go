@@ -10,12 +10,10 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 )
 
 // AddIngredient adds an ingredient to a recipe
-func (editable *EditableRecipe) AddIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, stepIdx int, ingredientID *primitive.ObjectID) (*Recipe, error) {
+func (editable *EditableRecipe) AddIngredient(ctx context.Context, stepIdx int, ingredientID *primitive.ObjectID) (*Recipe, error) {
 
 	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
 	if err != nil {
@@ -49,7 +47,7 @@ func (editable *EditableRecipe) AddIngredient(ctx context.Context, user *fridged
 }
 
 // UpdateIngredient removes an ingredient to a recipe
-func (editable *EditableRecipe) UpdateIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, stepIdx int, ingredientID string, updates map[string]string) (*Recipe, error) {
+func (editable *EditableRecipe) UpdateIngredient(ctx context.Context, stepIdx int, ingredientID string, updates map[string]string) (*Recipe, error) {
 
 	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
 	if err != nil {
@@ -64,7 +62,7 @@ func (editable *EditableRecipe) UpdateIngredient(ctx context.Context, user *frid
 }
 
 // RemoveIngredient removes an ingredient to a recipe
-func (editable *EditableRecipe) RemoveIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, stepIdx int, ingredientID string) (*Recipe, error) {
+func (editable *EditableRecipe) RemoveIngredient(ctx context.Context, stepIdx int, ingredientID string) (*Recipe, error) {
 
 	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
 	if err != nil {

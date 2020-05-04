@@ -25,7 +25,7 @@ func TestUpdateMethodStep(t *testing.T) {
 	action := "Test Action"
 
 	// Act
-	r, err := editable.AddMethodStep(ctx, user, recipe.ID, action)
+	r, err := editable.AddMethodStep(ctx, recipe.ID, action)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, 1, len(r.Method))
@@ -38,7 +38,7 @@ func TestUpdateMethodStep(t *testing.T) {
 	updates["description"] = "description_updated"
 	updates["time"] = "time_updated"
 
-	r, err = editable.UpdateMethodStep(ctx, user, recipe.ID, 0, updates)
+	r, err = editable.UpdateMethodStep(ctx, recipe.ID, 0, updates)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, 1, len(r.Method))
@@ -46,7 +46,7 @@ func TestUpdateMethodStep(t *testing.T) {
 	assert.Equal(t, "description_updated", r.Method[0].Description)
 	assert.Equal(t, "time_updated", r.Method[0].Time)
 
-	r, err = editable.RemoveMethodStep(ctx, user, recipe.ID, 0)
+	r, err = editable.RemoveMethodStep(ctx, recipe.ID, 0)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, 0, len(r.Method))

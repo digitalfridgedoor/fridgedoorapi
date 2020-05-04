@@ -33,7 +33,7 @@ func TestAddSubRecipe(t *testing.T) {
 	r, err := FindOneEditable(ctx, recipe.ID, user)
 	assert.Nil(t, err)
 
-	latestRecipe, err := r.AddSubRecipe(ctx, user, subRecipe.ID)
+	latestRecipe, err := r.AddSubRecipe(ctx, subRecipe.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(latestRecipe.Recipes))
 	latestSubRecipe := latestRecipe.Recipes[0]
@@ -47,7 +47,7 @@ func TestAddSubRecipe(t *testing.T) {
 	assert.Equal(t, 1, len(latestSubRecipeMain.db.ParentIds))
 	assert.Equal(t, *r.db.ID, latestSubRecipeMain.db.ParentIds[0])
 
-	latestRecipe, err = r.RemoveSubRecipe(ctx, user, subRecipe.ID)
+	latestRecipe, err = r.RemoveSubRecipe(ctx, subRecipe.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(latestRecipe.Recipes))
 

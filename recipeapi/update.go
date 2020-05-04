@@ -5,12 +5,11 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 )
 
 // Rename updates the name of the recipe
-func (editable *EditableRecipe) Rename(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, name string) (*Recipe, error) {
+func (editable *EditableRecipe) Rename(ctx context.Context, name string) (*Recipe, error) {
 
 	editable.db.Name = name
 
@@ -18,7 +17,7 @@ func (editable *EditableRecipe) Rename(ctx context.Context, user *fridgedoorgate
 }
 
 // UpdateMetadata updates the recipes metadata property
-func (editable *EditableRecipe) UpdateMetadata(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, updates map[string]string) (*Recipe, error) {
+func (editable *EditableRecipe) UpdateMetadata(ctx context.Context, updates map[string]string) (*Recipe, error) {
 
 	editable.updateRecipeMetadata(ctx, updates)
 
@@ -28,7 +27,7 @@ func (editable *EditableRecipe) UpdateMetadata(ctx context.Context, user *fridge
 	}
 
 	if update, ok := updates["tag_add"]; ok {
-		userview.AddTag(ctx, &user.ViewID, update)
+		userview.AddTag(ctx, &editable.user.ViewID, update)
 	}
 
 	return latest, nil

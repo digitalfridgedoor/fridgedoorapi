@@ -25,7 +25,7 @@ func TestRename(t *testing.T) {
 	newRecipeName := "recipe_updated"
 
 	// Act
-	r, err := editable.Rename(ctx, user, newRecipeName)
+	r, err := editable.Rename(ctx, newRecipeName)
 
 	// Assert
 	assert.Nil(t, err)
@@ -55,7 +55,7 @@ func TestUpdateMetadataViewableBy(t *testing.T) {
 	// Act
 	updates := make(map[string]string)
 	updates["viewableby_everyone"] = "true"
-	r, err := editable.UpdateMetadata(ctx, user, updates)
+	r, err := editable.UpdateMetadata(ctx, updates)
 
 	// Assert
 	assert.Nil(t, err)
@@ -72,7 +72,7 @@ func TestUpdateMetadataViewableBy(t *testing.T) {
 	// Act
 	updates = make(map[string]string)
 	updates["viewableby_everyone"] = "false"
-	r, err = editable.UpdateMetadata(ctx, user, updates)
+	r, err = editable.UpdateMetadata(ctx, updates)
 
 	// Assert
 	assert.Nil(t, err)
@@ -103,7 +103,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	// Act
 	updates := make(map[string]string)
 	updates["link_add"] = "one"
-	r, err := editable.UpdateMetadata(ctx, user, updates)
+	r, err := editable.UpdateMetadata(ctx, updates)
 
 	// Assert
 	assert.Nil(t, err)
@@ -121,7 +121,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	// Act
 	updates = make(map[string]string)
 	updates["link_add"] = "two"
-	r, err = editable.UpdateMetadata(ctx, user, updates)
+	r, err = editable.UpdateMetadata(ctx, updates)
 
 	// Assert
 	assert.Nil(t, err)
@@ -140,7 +140,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	// Act
 	updates = make(map[string]string)
 	updates["link_remove"] = "one"
-	r, err = editable.UpdateMetadata(ctx, user, updates)
+	r, err = editable.UpdateMetadata(ctx, updates)
 
 	// Assert
 	assert.Nil(t, err)
