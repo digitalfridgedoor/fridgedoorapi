@@ -12,7 +12,7 @@ import (
 )
 
 // FindOne finds a recipe by id
-func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, recipeID *primitive.ObjectID) (*ViewableRecipe, error) {
+func FindOne(ctx context.Context, recipeID *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*ViewableRecipe, error) {
 
 	r, err := findOneViewable(ctx, recipeID, user)
 	if err != nil {
