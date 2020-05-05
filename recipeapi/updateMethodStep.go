@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 )
 
 // AddMethodStep adds a new method step to a recipe

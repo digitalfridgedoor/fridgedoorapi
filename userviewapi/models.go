@@ -1,7 +1,7 @@
 package userviewapi
 
 import (
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

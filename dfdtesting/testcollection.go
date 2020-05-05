@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 
 	"go.mongodb.org/mongo-driver/bson"

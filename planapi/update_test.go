@@ -4,14 +4,12 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"go.mongodb.org/mongo-driver/bson"
-
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -49,7 +47,7 @@ func TestUpdate(t *testing.T) {
 		return month == p.Month && year == p.Year && userid == p.UserID
 	})
 
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 
 	recipeID, _ := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
 

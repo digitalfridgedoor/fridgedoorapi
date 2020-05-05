@@ -4,12 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +18,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
 	recipeName := "test-recipe"
-	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
+	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
 
 	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 
@@ -56,7 +53,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
+	dfdtesting.DeleteTestUser(ctx, testUser)
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
@@ -66,7 +63,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
 	recipeName := "test-recipe"
-	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
+	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
 	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 
 	assert.Nil(t, err)
@@ -114,7 +111,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
+	dfdtesting.DeleteTestUser(ctx, testUser)
 }
 
 func contains(t *testing.T, ingredients []dfdmodels.RecipeIngredient, expected []string) {

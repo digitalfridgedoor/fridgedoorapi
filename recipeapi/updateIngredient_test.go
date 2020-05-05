@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +16,7 @@ func TestUpdateIngredient(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 
 	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
 	assert.Nil(t, err)

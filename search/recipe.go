@@ -5,7 +5,7 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

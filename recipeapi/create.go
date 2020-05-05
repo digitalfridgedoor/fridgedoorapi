@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/database"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 )
 
 // CreateRecipe creates a new recipe with given name

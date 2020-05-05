@@ -4,9 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +14,7 @@ func TestFindByMonthAndYear(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetPlanFindPredicate(dfdtesting.FindPlanByMonthAndYearTestPredicate)
 
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 
 	r, err := FindOne(context.Background(), user, 1, 2020)
 

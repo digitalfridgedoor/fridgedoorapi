@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +16,7 @@ func TestRename(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)
@@ -44,7 +44,7 @@ func TestUpdateMetadataViewableBy(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)
@@ -93,7 +93,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)

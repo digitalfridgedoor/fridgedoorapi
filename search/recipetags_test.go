@@ -4,10 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -21,7 +19,7 @@ func TestTags(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
@@ -60,7 +58,7 @@ func TestNinTags(t *testing.T) {
 
 	ctx := context.Background()
 
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
@@ -102,7 +100,7 @@ func TestIncludeAndNinTags(t *testing.T) {
 
 	ctx := context.Background()
 
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)

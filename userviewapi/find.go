@@ -6,8 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 )
 
 // GetByID gets a userview for the given ID

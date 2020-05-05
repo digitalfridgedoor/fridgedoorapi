@@ -4,14 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"go.mongodb.org/mongo-driver/bson"
-
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func TestFindLinked(t *testing.T) {

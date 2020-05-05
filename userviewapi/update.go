@@ -3,7 +3,7 @@ package userviewapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 )
 
 // AddTag adds a tag to users list if it isn't already there
