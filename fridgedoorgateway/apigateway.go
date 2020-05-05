@@ -6,7 +6,8 @@ import (
 	"fmt"
 
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 )
 
 var errNotLoggedIn = errors.New("No user logged in")
@@ -19,9 +20,9 @@ func GetOrCreateAuthenticatedUser(ctx context.Context, request *events.APIGatewa
 		return nil, errNotLoggedIn
 	}
 
-	view, err := userview.GetByUsername(ctx, username)
+	view, err := userviewapi.GetByUsername(ctx, username)
 	if err != nil {
-		view, err = userview.Create(ctx, username)
+		view, err = userviewapi.Create(ctx, username)
 		if err != nil {
 			fmt.Printf("Error creating new user: %v", err)
 			return nil, err
@@ -31,9 +32,13 @@ func GetOrCreateAuthenticatedUser(ctx context.Context, request *events.APIGatewa
 	nickname, ok := parseNickname(request)
 	if ok {
 		fmt.Printf("Got nickname: %v\n", nickname)
-		err = userview.SetNickname(ctx, view, nickname)
-		if err != nil {
-			fmt.Printf("Error setting nickname: %v\n", err)
+
+		editable, err := userviewapi.GetEditableByID(ctx, *view.ID)
+		if err == nil {
+			err = editable.SetNickname(ctx, view, nickname)
+			if err != nil {
+				fmt.Printf("Error setting nickname: %v\n", err)
+			}
 		}
 	}
 
