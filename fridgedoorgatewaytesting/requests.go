@@ -3,6 +3,8 @@ package fridgedoorgatewaytesting
 import (
 	"context"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 
@@ -71,7 +73,7 @@ func deleteByUsername(ctx context.Context, username string) {
 		return
 	}
 
-	view, err := GetByUsername(ctx, username)
+	view, err := userviewapi.GetByUsername(ctx, username)
 	if err != nil {
 		return
 	}

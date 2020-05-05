@@ -3,9 +3,9 @@ package recipeapi
 import (
 	"context"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Rename updates the name of the recipe
@@ -27,7 +27,10 @@ func (editable *EditableRecipe) UpdateMetadata(ctx context.Context, updates map[
 	}
 
 	if update, ok := updates["tag_add"]; ok {
-		userview.AddTag(ctx, &editable.user.ViewID, update)
+		editableuser, err := userviewapi.GetEditableByID(ctx, editable.user.ViewID)
+		if err == nil {
+			editableuser.AddTag(ctx, update)
+		}
 	}
 
 	return latest, nil

@@ -21,6 +21,7 @@ func FindOne(ctx context.Context, recipeID *primitive.ObjectID, user *fridgedoor
 	return mapToDto(r.db, user), nil
 }
 
+// FindOneEditable finds an editable recipe by id
 func FindOneEditable(ctx context.Context, id *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*EditableRecipe, error) {
 	r, err := findOneViewable(ctx, id, user)
 	if err != nil {
