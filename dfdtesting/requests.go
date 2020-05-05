@@ -1,4 +1,4 @@
-package fridgedoorgatewaytesting
+package dfdtesting
 
 import (
 	"context"

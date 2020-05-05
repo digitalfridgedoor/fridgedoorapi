@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 
