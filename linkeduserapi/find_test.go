@@ -35,7 +35,7 @@ func TestFindLinked(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
-	assert.Len(t, r, 4)
+	assert.GreaterOrEqual(t, len(r), 4)
 
 	assert.True(t, userInUserViews(r, "TestUser"))
 	assert.True(t, userInUserViews(r, "linked1"))

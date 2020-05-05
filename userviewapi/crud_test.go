@@ -18,7 +18,7 @@ func TestUsernameCanOnlyBeUsedOnce(t *testing.T) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), duration)
 	defer cancelFunc()
 
-	username := "TestUser"
+	username := "userviewapi.TestUsernameCanOnlyBeUsedOnce"
 
 	view, err := Create(ctx, username)
 	assert.NotNil(t, view)
