@@ -2,13 +2,15 @@ package dfdtesting
 
 import (
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/maisiesadler/gomongo/gomongotesting"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/maisiesadler/gomongo"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-var overrides = make(map[string]*TestCollection)
+var overrides = make(map[string]*gomongotesting.TestCollection)
 
 // SetTestCollectionOverride sets a the database package to use a TestCollection
 func SetTestCollectionOverride() {
@@ -23,7 +25,12 @@ func SetUserViewFindPredicate(predicate func(*dfdmodels.UserView, bson.M) bool) 
 	}
 
 	coll := getOrAddTestCollection("recipeapi", "userviews")
-	coll.findPredicate = fn
+	coll.SetFindFilter(fn)
+	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
+		if u, ok := document.(*dfdmodels.UserView); ok {
+			u.ID = &id
+		}
+	})
 	return true
 }
 
@@ -35,7 +42,12 @@ func SetRecipeFindPredicate(predicate func(*dfdmodels.Recipe, bson.M) bool) bool
 	}
 
 	coll := getOrAddTestCollection("recipeapi", "recipes")
-	coll.findPredicate = fn
+	coll.SetFindFilter(fn)
+	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
+		if u, ok := document.(*dfdmodels.Recipe); ok {
+			u.ID = &id
+		}
+	})
 	return true
 }
 
@@ -47,7 +59,12 @@ func SetIngredientFindPredicate(predicate func(*dfdmodels.Ingredient, bson.M) bo
 	}
 
 	coll := getOrAddTestCollection("recipeapi", "ingredients")
-	coll.findPredicate = fn
+	coll.SetFindFilter(fn)
+	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
+		if u, ok := document.(*dfdmodels.Ingredient); ok {
+			u.ID = &id
+		}
+	})
 	return true
 }
 
@@ -59,7 +76,12 @@ func SetPlanFindPredicate(predicate func(*dfdmodels.Plan, bson.M) bool) bool {
 	}
 
 	coll := getOrAddTestCollection("recipeapi", "plans")
-	coll.findPredicate = fn
+	coll.SetFindFilter(fn)
+	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
+		if u, ok := document.(*dfdmodels.Plan); ok {
+			u.ID = &id
+		}
+	})
 	return true
 }
 
@@ -67,11 +89,11 @@ func overrideDb(database string, collection string) gomongo.ICollection {
 	return getOrAddTestCollection(database, collection)
 }
 
-func getOrAddTestCollection(database string, collection string) *TestCollection {
+func getOrAddTestCollection(database string, collection string) *gomongotesting.TestCollection {
 	key := database + "_" + collection
 	if val, ok := overrides[key]; ok {
 		return val
 	}
-	overrides[key] = CreateTestCollection()
+	overrides[key] = gomongotesting.CreateTestCollection()
 	return overrides[key]
 }
