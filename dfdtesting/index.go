@@ -15,6 +15,14 @@ var overrides = make(map[string]*gomongotesting.TestCollection)
 // SetTestCollectionOverride sets a the database package to use a TestCollection
 func SetTestCollectionOverride() {
 	gomongo.SetOverride(overrideDb)
+	setAllIDSetters()
+}
+
+func setAllIDSetters() {
+	setUserViewIDSetter()
+	setRecipeIDSetter()
+	setIngredientIDSetter()
+	setPlanIDSetter()
 }
 
 // SetUserViewFindPredicate overrides the logic to get the result for Find
@@ -26,12 +34,17 @@ func SetUserViewFindPredicate(predicate func(*dfdmodels.UserView, bson.M) bool) 
 
 	coll := getOrAddTestCollection("recipeapi", "userviews")
 	coll.SetFindFilter(fn)
+
+	return true
+}
+
+func setUserViewIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "userviews")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.UserView); ok {
 			u.ID = &id
 		}
 	})
-	return true
 }
 
 // SetRecipeFindPredicate overrides the logic to get the result for Find
@@ -43,12 +56,16 @@ func SetRecipeFindPredicate(predicate func(*dfdmodels.Recipe, bson.M) bool) bool
 
 	coll := getOrAddTestCollection("recipeapi", "recipes")
 	coll.SetFindFilter(fn)
+	return true
+}
+
+func setRecipeIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "recipes")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.Recipe); ok {
 			u.ID = &id
 		}
 	})
-	return true
 }
 
 // SetIngredientFindPredicate overrides the logic to get the result for Find
@@ -60,12 +77,16 @@ func SetIngredientFindPredicate(predicate func(*dfdmodels.Ingredient, bson.M) bo
 
 	coll := getOrAddTestCollection("recipeapi", "ingredients")
 	coll.SetFindFilter(fn)
+	return true
+}
+
+func setIngredientIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "ingredients")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.Ingredient); ok {
 			u.ID = &id
 		}
 	})
-	return true
 }
 
 // SetPlanFindPredicate overrides the logic to get the result for Find
@@ -77,12 +98,16 @@ func SetPlanFindPredicate(predicate func(*dfdmodels.Plan, bson.M) bool) bool {
 
 	coll := getOrAddTestCollection("recipeapi", "plans")
 	coll.SetFindFilter(fn)
+	return true
+}
+
+func setPlanIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "plans")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.Plan); ok {
 			u.ID = &id
 		}
 	})
-	return true
 }
 
 func overrideDb(database string, collection string) gomongo.ICollection {
