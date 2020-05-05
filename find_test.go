@@ -9,14 +9,12 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFindForUser(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetUserViewFindByUsernamePredicate()
 	dfdtesting.SetRecipeFindByTagsPredicate()
 
 	ctx := context.Background()
@@ -27,10 +25,6 @@ func TestFindForUser(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
-
-	view, err := userview.GetByUsername(ctx, username)
-	assert.Nil(t, err)
-	assert.NotNil(t, view)
 
 	userRecipes, err := search.FindRecipeByTags(ctx, testUser.ViewID, []string{}, []string{}, 20)
 	assert.Nil(t, err)

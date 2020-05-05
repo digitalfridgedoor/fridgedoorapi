@@ -3,18 +3,69 @@ package userviewapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 )
 
-// RemoveTag removes a tag from a recipe
-func RemoveTag(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, tag string) (*View, error) {
+// AddTag adds a tag to users list if it isn't already there
+func (editable *EditableView) AddTag(ctx context.Context, tag string) error {
 
-	err := userview.RemoveTag(ctx, &user.ViewID, tag)
-	if err != nil {
-		return nil, err
+	hasTag := false
+	for _, t := range editable.db.Tags {
+		if t == tag {
+			hasTag = true
+		}
 	}
 
-	return GetUserViewByID(ctx, user)
+	if !hasTag {
+		editable.db.Tags = append(editable.db.Tags, tag)
+	}
+
+	ok := editable.save(ctx)
+	if !ok {
+		return errNotUpdated
+	}
+
+	return nil
+}
+
+// RemoveTag removes a tag from a recipe
+func (editable *EditableView) RemoveTag(ctx context.Context, tag string) error {
+
+	editable.db.Tags = filterTags(editable.db.Tags, tag)
+
+	ok := editable.save(ctx)
+	if !ok {
+		return errNotUpdated
+	}
+
+	return nil
+}
+
+// SetNickname updates the users nickname
+func (editable *EditableView) SetNickname(ctx context.Context, view *dfdmodels.UserView, nickname string) error {
+
+	if nickname == "" || view.Nickname == nickname {
+		return nil
+	}
+
+	view.Nickname = nickname
+
+	ok := editable.save(ctx)
+	if !ok {
+		return errNotUpdated
+	}
+
+	return nil
+}
+
+func filterTags(tags []string, tagToRemove string) []string {
+	filtered := []string{}
+
+	for _, tag := range tags {
+		if tag != tagToRemove {
+			filtered = append(filtered, tag)
+		}
+	}
+
+	return filtered
 }
