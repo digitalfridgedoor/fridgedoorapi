@@ -4,8 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,12 +17,11 @@ func TestUpdateTags(t *testing.T) {
 	ctx := context.TODO()
 
 	view, err := GetOrCreate(ctx, username)
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(username)
 
 	assert.Nil(t, err)
 	assert.Equal(t, username, view.Username)
 
-	editable, err := GetEditableAuthenticatedUserView(ctx, user)
+	editable, err := GetEditableByID(ctx, *view.ID)
 	assert.Nil(t, err)
 
 	viewID := view.ID

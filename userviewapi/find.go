@@ -6,15 +6,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 )
 
-// GetAuthenticatedUserView gets a userview for the authenticated user
-func GetAuthenticatedUserView(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser) (*View, error) {
+// GetByID gets a userview for the given ID
+func GetByID(ctx context.Context, userID primitive.ObjectID) (*View, error) {
 
-	view, err := findView(ctx, user.ViewID)
+	view, err := findView(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -22,10 +21,10 @@ func GetAuthenticatedUserView(ctx context.Context, user *fridgedoorgateway.Authe
 	return populateUserView(ctx, view), nil
 }
 
-// GetEditableAuthenticatedUserView gets an editable userview for the authenticated user
-func GetEditableAuthenticatedUserView(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser) (*EditableView, error) {
+// GetEditableByID gets an editable userview for the given ID
+func GetEditableByID(ctx context.Context, userID primitive.ObjectID) (*EditableView, error) {
 
-	view, err := findView(ctx, user.ViewID)
+	view, err := findView(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
