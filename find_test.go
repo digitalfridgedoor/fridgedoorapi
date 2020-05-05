@@ -38,7 +38,7 @@ func TestFindForUser(t *testing.T) {
 	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
 	assert.Nil(t, err)
 
-	fridgedoorgatewaytesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
 }
 
 func TestFindByNameForUser(t *testing.T) {
@@ -65,5 +65,5 @@ func TestFindByNameForUser(t *testing.T) {
 	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
 	assert.Nil(t, err)
 
-	fridgedoorgatewaytesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
 }

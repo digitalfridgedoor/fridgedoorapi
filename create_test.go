@@ -56,7 +56,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	fridgedoorgatewaytesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
@@ -114,7 +114,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	fridgedoorgatewaytesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
 }
 
 func contains(t *testing.T, ingredients []dfdmodels.RecipeIngredient, expected []string) {
