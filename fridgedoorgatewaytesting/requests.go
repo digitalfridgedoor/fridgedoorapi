@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+	"github.com/digitalfridgedoor/fridgedoordatabase/database"
 
 	"github.com/aws/aws-lambda-go/events"
 )
@@ -52,15 +52,29 @@ func CreateTestAuthenticatedUser(username string) *fridgedoorgateway.Authenticat
 }
 
 // DeleteUserForRequest deletes a userview for a test request
-func DeleteUserForRequest(request *events.APIGatewayProxyRequest) {
+func DeleteUserForRequest(ctx context.Context, request *events.APIGatewayProxyRequest) {
 	username, ok := fridgedoorgateway.ParseUsername(request)
 
 	if ok {
-		userview.Delete(context.TODO(), username)
+		deleteByUsername(ctx, username)
 	}
 }
 
 // DeleteTestUser deletes a user
-func DeleteTestUser(user *fridgedoorgateway.AuthenticatedUser) {
-	userview.Delete(context.TODO(), user.Username)
+func DeleteTestUser(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser) {
+	deleteByUsername(ctx, user.Username)
+}
+
+func deleteByUsername(ctx context.Context, username string) {
+	ok, coll := database.UserView(ctx)
+	if !ok {
+		return
+	}
+
+	view, err := GetByUsername(ctx, username)
+	if err != nil {
+		return
+	}
+
+	coll.DeleteByID(ctx, view.ID)
 }
