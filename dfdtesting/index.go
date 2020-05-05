@@ -2,7 +2,8 @@ package dfdtesting
 
 import (
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/database"
+
+	"github.com/maisiesadler/gomongo"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -11,7 +12,7 @@ var overrides = make(map[string]*TestCollection)
 
 // SetTestCollectionOverride sets a the database package to use a TestCollection
 func SetTestCollectionOverride() {
-	database.SetOverride(overrideDb)
+	gomongo.SetOverride(overrideDb)
 }
 
 // SetUserViewFindPredicate overrides the logic to get the result for Find
@@ -62,7 +63,7 @@ func SetPlanFindPredicate(predicate func(*dfdmodels.Plan, bson.M) bool) bool {
 	return true
 }
 
-func overrideDb(database string, collection string) database.ICollection {
+func overrideDb(database string, collection string) gomongo.ICollection {
 	return getOrAddTestCollection(database, collection)
 }
 
