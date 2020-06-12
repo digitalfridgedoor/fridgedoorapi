@@ -115,7 +115,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
 		assert.Len(t, m.Links, 1)
-		assert.Equal(t, "one", m.Links[0])
+		assert.Equal(t, "one", m.Links[0].URL)
 	})
 
 	// Act
@@ -133,8 +133,8 @@ func TestUpdateMetadataLinks(t *testing.T) {
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
 		assert.Len(t, m.Links, 2)
-		assert.Equal(t, "one", m.Links[0])
-		assert.Equal(t, "two", m.Links[1])
+		assert.Equal(t, "one", m.Links[0].URL)
+		assert.Equal(t, "two", m.Links[1].URL)
 	})
 
 	// Act
@@ -152,7 +152,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
 		assert.Len(t, m.Links, 1)
-		assert.Equal(t, "two", m.Links[0])
+		assert.Equal(t, "two", m.Links[0].URL)
 	})
 }
 

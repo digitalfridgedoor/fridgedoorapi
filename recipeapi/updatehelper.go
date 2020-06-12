@@ -101,7 +101,7 @@ func removeLink(current []dfdmodels.Link, removeURL string) []dfdmodels.Link {
 	filtered := []dfdmodels.Link{}
 
 	for _, v := range current {
-		if v.Name != removeURL {
+		if v.URL != removeURL {
 			filtered = append(filtered, v)
 		}
 	}
