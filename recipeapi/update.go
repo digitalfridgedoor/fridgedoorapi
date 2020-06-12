@@ -48,10 +48,10 @@ func (editable *EditableRecipe) updateRecipeMetadata(ctx context.Context, update
 		editable.db.Metadata.Tags = removeString(editable.db.Metadata.Tags, update)
 	}
 	if update, ok := updates["link_add"]; ok {
-		editable.db.Metadata.Links = appendString(editable.db.Metadata.Links, update)
+		editable.db.Metadata.Links = appendLink(editable.db.Metadata.Links, update)
 	}
 	if update, ok := updates["link_remove"]; ok {
-		editable.db.Metadata.Links = removeString(editable.db.Metadata.Links, update)
+		editable.db.Metadata.Links = removeLink(editable.db.Metadata.Links, update)
 	}
 	if update, ok := updates["viewableby_everyone"]; ok {
 		editable.db.Metadata.ViewableBy.Everyone = update == "true"

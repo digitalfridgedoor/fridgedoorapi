@@ -5,6 +5,8 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -72,6 +74,34 @@ func removeID(current []primitive.ObjectID, removeValue primitive.ObjectID) []pr
 
 	for _, v := range current {
 		if v != removeValue {
+			filtered = append(filtered, v)
+		}
+	}
+
+	return filtered
+}
+
+func appendLink(current []dfdmodels.Link, url string) []dfdmodels.Link {
+	hasValue := false
+
+	for _, v := range current {
+		if v.URL == url {
+			hasValue = true
+		}
+	}
+
+	if !hasValue {
+		current = append(current, dfdmodels.Link{URL: url})
+	}
+
+	return current
+}
+
+func removeLink(current []dfdmodels.Link, removeURL string) []dfdmodels.Link {
+	filtered := []dfdmodels.Link{}
+
+	for _, v := range current {
+		if v.Name != removeURL {
 			filtered = append(filtered, v)
 		}
 	}

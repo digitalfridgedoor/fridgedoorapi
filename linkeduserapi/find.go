@@ -39,11 +39,13 @@ func GetOtherUsersRecipes(ctx context.Context, user *fridgedoorgateway.Authentic
 		return nil, err
 	}
 
-	populated := make([]*LinkedUser, len(userViews))
-	for idx, uv := range userViews {
-		linkedUser, err := populateLinkedUser(ctx, user, uv)
-		if err == nil {
-			populated[idx] = linkedUser
+	populated := []*LinkedUser{}
+	for _, uv := range userViews {
+		if *uv.ID != user.ViewID {
+			linkedUser, err := populatePublicUser(ctx, uv)
+			if err == nil {
+				populated = append(populated, linkedUser)
+			}
 		}
 	}
 
