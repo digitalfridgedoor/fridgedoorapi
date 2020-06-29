@@ -23,6 +23,7 @@ func setAllIDSetters() {
 	setRecipeIDSetter()
 	setIngredientIDSetter()
 	setPlanIDSetter()
+	setTemporaryRecipeIDSetter()
 }
 
 // SetUserViewFindPredicate overrides the logic to get the result for Find
@@ -105,6 +106,27 @@ func setPlanIDSetter() {
 	coll := getOrAddTestCollection("recipeapi", "plans")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.Plan); ok {
+			u.ID = &id
+		}
+	})
+}
+
+// SetTemporaryRecipeFindPredicate overrides the logic to get the result for Find
+func SetTemporaryRecipeFindPredicate(predicate func(*dfdmodels.TemporaryRecipe, bson.M) bool) bool {
+	fn := func(value interface{}, filter bson.M) bool {
+		uv := value.(*dfdmodels.TemporaryRecipe)
+		return predicate(uv, filter)
+	}
+
+	coll := getOrAddTestCollection("recipeapi", "temporaryrecipes")
+	coll.SetFindFilter(fn)
+	return true
+}
+
+func setTemporaryRecipeIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "temporaryrecipes")
+	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
+		if u, ok := document.(*dfdmodels.TemporaryRecipe); ok {
 			u.ID = &id
 		}
 	})

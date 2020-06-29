@@ -6,17 +6,17 @@ import (
 	"github.com/maisiesadler/gomongo"
 )
 
-// UserView returns an ICollection for the mongodb collection users
+// UserView returns an ICollection for the mongodb collection userviews
 func UserView(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "userviews")
 }
 
-// Recipe returns an ICollection for the mongodb collection recipe
+// Recipe returns an ICollection for the mongodb collection recipes
 func Recipe(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "recipes")
 }
 
-// Ingredient returns an ICollection for the mongodb collection ingredient
+// Ingredient returns an ICollection for the mongodb collection ingredients
 func Ingredient(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "ingredients")
 }
@@ -24,4 +24,9 @@ func Ingredient(ctx context.Context) (bool, gomongo.ICollection) {
 // Plan returns an ICollection for the mongodb collection plans
 func Plan(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "plans")
+}
+
+// TemporaryRecipe returns an ICollection for the mongodb collection temporaryrecipes
+func TemporaryRecipe(ctx context.Context) (bool, gomongo.ICollection) {
+	return gomongo.CreateCollection(ctx, "recipeapi", "temporaryrecipes")
 }
