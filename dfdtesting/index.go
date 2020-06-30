@@ -23,7 +23,7 @@ func setAllIDSetters() {
 	setRecipeIDSetter()
 	setIngredientIDSetter()
 	setPlanIDSetter()
-	setTemporaryRecipeIDSetter()
+	setRecipelessMealIDSetter()
 }
 
 // SetUserViewFindPredicate overrides the logic to get the result for Find
@@ -111,22 +111,22 @@ func setPlanIDSetter() {
 	})
 }
 
-// SetTemporaryRecipeFindPredicate overrides the logic to get the result for Find
-func SetTemporaryRecipeFindPredicate(predicate func(*dfdmodels.TemporaryRecipe, bson.M) bool) bool {
+// SetRecipelessMealFindPredicate overrides the logic to get the result for Find
+func SetRecipelessMealFindPredicate(predicate func(*dfdmodels.RecipelessMeal, bson.M) bool) bool {
 	fn := func(value interface{}, filter bson.M) bool {
-		uv := value.(*dfdmodels.TemporaryRecipe)
+		uv := value.(*dfdmodels.RecipelessMeal)
 		return predicate(uv, filter)
 	}
 
-	coll := getOrAddTestCollection("recipeapi", "temporaryrecipes")
+	coll := getOrAddTestCollection("recipeapi", "recipelessmeals")
 	coll.SetFindFilter(fn)
 	return true
 }
 
-func setTemporaryRecipeIDSetter() {
-	coll := getOrAddTestCollection("recipeapi", "temporaryrecipes")
+func setRecipelessMealIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "recipelessmeals")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
-		if u, ok := document.(*dfdmodels.TemporaryRecipe); ok {
+		if u, ok := document.(*dfdmodels.RecipelessMeal); ok {
 			u.ID = &id
 		}
 	})
