@@ -2,6 +2,7 @@ package planapi
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/database"
@@ -22,17 +23,30 @@ func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 		return nil, errInvalidInput
 	}
 
-	currentPlanLength := len(plan.Days[updateRequest.Day-1].Meal)
+	dayIdx := updateRequest.Day - 1
+
+	currentPlanLength := len(plan.Days[dayIdx].Meal)
 
 	if currentPlanLength == 0 {
-		plan.Days[updateRequest.Day-1].Meal = make([]dfdmodels.Meal, updateRequest.MealIndex+1)
+		plan.Days[dayIdx].Meal = make([]dfdmodels.Meal, updateRequest.MealIndex+1)
 	} else if currentPlanLength <= updateRequest.MealIndex {
 		diff := updateRequest.MealIndex + 1 - currentPlanLength
-		plan.Days[updateRequest.Day-1].Meal = append(plan.Days[updateRequest.Day-1].Meal, make([]dfdmodels.Meal, diff)...)
+		plan.Days[dayIdx].Meal = append(plan.Days[dayIdx].Meal, make([]dfdmodels.Meal, diff)...)
 	}
 
-	plan.Days[updateRequest.Day-1].Meal[updateRequest.MealIndex].Name = updateRequest.RecipeName
-	plan.Days[updateRequest.Day-1].Meal[updateRequest.MealIndex].RecipeID = updateRequest.RecipeID
+	plan.Days[dayIdx].Meal[updateRequest.MealIndex].Name = updateRequest.RecipeName
+
+	if updateRequest.RecipeID != nil {
+		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipeID = updateRequest.RecipeID
+	} else if updateRequest.MealID != nil {
+		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipelessMealID = updateRequest.MealID
+	} else {
+		id, err := createMealWithNoRecipe(ctx, user, updateRequest.RecipeName, plan.Year, plan.Month, updateRequest.Day)
+		if err != nil {
+			return nil, errors.New("Could not create recipe")
+		}
+		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipelessMealID = id
+	}
 
 	return addOrUpdate(ctx, isNew, plan)
 }

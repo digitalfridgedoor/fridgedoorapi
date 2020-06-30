@@ -59,7 +59,7 @@ func TestUpdate(t *testing.T) {
 		Day:        19,
 		Year:       2020,
 		MealIndex:  0,
-		RecipeID:   recipeID,
+		RecipeID:   &recipeID,
 		RecipeName: name,
 	}
 

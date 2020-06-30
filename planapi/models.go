@@ -9,7 +9,8 @@ type UpdateDayPlanRequest struct {
 	Day        int
 	MealIndex  int
 	RecipeName string
-	RecipeID   primitive.ObjectID
+	RecipeID   *primitive.ObjectID
+	MealID     *primitive.ObjectID
 }
 
 // ClearDayPlanRequest is the api request for clearing a day plan
