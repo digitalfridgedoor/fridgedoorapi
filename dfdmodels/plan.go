@@ -20,19 +20,19 @@ type Day struct {
 
 // Meal represents a one meal plan
 type Meal struct {
-	RecipeID          *primitive.ObjectID `json:"recipeId"`
-	TemporaryRecipeID *primitive.ObjectID `json:"temporaryRecipeId"`
-	Name              string              `json:"name"`
+	RecipeID         *primitive.ObjectID `json:"recipeId"`
+	RecipelessMealID *primitive.ObjectID `json:"temporaryRecipeId"`
+	Name             string              `json:"name"`
 }
 
-// TemporaryRecipe represents a one off recipe
-type TemporaryRecipe struct {
-	ID          *primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	UserID      primitive.ObjectID  `json:"userID"`
-	Name        string              `json:"name"`
-	Ingredients []RecipeIngredient  `json:"ingredients"`
-	Links       []Link              `json:"links"`
-	PlanLink    map[string]PlanLink `json:"planLinks"`
+// RecipelessMeal represents a planned meal with no associated recipe
+type RecipelessMeal struct {
+	ID          *primitive.ObjectID  `json:"id" bson:"_id,omitempty"`
+	UserID      primitive.ObjectID   `json:"userID"`
+	Name        string               `json:"name"`
+	Ingredients []RecipeIngredient   `json:"ingredients"`
+	Links       []Link               `json:"links"`
+	PlanLink    map[string]*PlanLink `json:"planLinks"`
 }
 
 // PlanLink represents the day a temporary recipe was planned for
