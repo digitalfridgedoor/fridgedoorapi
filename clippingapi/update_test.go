@@ -39,7 +39,7 @@ func TestCanUpdateClippingName(t *testing.T) {
 	assert.Nil(t, err)
 
 	updates := make(map[string]string)
-	updates["rename"] = updatedClippingName
+	updates["name"] = updatedClippingName
 
 	meal, err := Update(ctx, user, clippingID, updates)
 	assert.Nil(t, err)
