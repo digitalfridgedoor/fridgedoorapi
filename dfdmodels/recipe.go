@@ -44,7 +44,7 @@ type SubRecipe struct {
 type RecipeMetadata struct {
 	Image      bool             `json:"image"`
 	Tags       []string         `json:"tags"`
-	Links      []Link           `json:"links"`
+	Links      []string         `json:"links"`
 	ViewableBy RecipeViewableBy `json:"viewableBy"`
 }
 
@@ -52,10 +52,4 @@ type RecipeMetadata struct {
 type RecipeViewableBy struct {
 	Everyone bool                 `json:"everyone"`
 	Users    []primitive.ObjectID `json:"users"`
-}
-
-// Link is a link associated with a recipe
-type Link struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
 }
