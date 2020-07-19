@@ -23,7 +23,7 @@ func Update(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clip
 		return nil, err
 	}
 
-	if update, ok := updates["rename"]; ok {
+	if update, ok := updates["name"]; ok {
 		meal.Name = update
 	}
 
