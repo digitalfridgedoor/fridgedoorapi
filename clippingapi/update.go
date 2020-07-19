@@ -49,7 +49,7 @@ func AddLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, cli
 		}
 
 		if !hasValue {
-			clipping.Links = append(clipping.Links, dfdmodels.Link{URL: url, Name: name})
+			clipping.Links = append(clipping.Links, dfdmodels.ClippingLink{URL: url, Name: name})
 		}
 
 		return nil
