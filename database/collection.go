@@ -26,7 +26,7 @@ func Plan(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "plans")
 }
 
-// RecipelessMeal returns an ICollection for the mongodb collection recipelessmeals
-func RecipelessMeal(ctx context.Context) (bool, gomongo.ICollection) {
-	return gomongo.CreateCollection(ctx, "recipeapi", "recipelessmeals")
+// Clipping returns an ICollection for the mongodb collection clipping
+func Clipping(ctx context.Context) (bool, gomongo.ICollection) {
+	return gomongo.CreateCollection(ctx, "recipeapi", "clippings")
 }
