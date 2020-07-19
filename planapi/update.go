@@ -2,7 +2,6 @@ package planapi
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/database"
@@ -38,14 +37,8 @@ func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 
 	if updateRequest.RecipeID != nil {
 		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipeID = updateRequest.RecipeID
-	} else if updateRequest.MealID != nil {
-		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipelessMealID = updateRequest.MealID
-	} else {
-		id, err := createMealWithNoRecipe(ctx, user, updateRequest.RecipeName, plan.Year, plan.Month, updateRequest.Day)
-		if err != nil {
-			return nil, errors.New("Could not create recipe")
-		}
-		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipelessMealID = id
+	} else if updateRequest.ClippingID != nil {
+		plan.Days[dayIdx].Meal[updateRequest.MealIndex].ClippingID = updateRequest.ClippingID
 	}
 
 	return addOrUpdate(ctx, isNew, plan)
