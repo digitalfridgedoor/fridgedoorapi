@@ -13,7 +13,7 @@ type Clipping struct {
 	UserID      primitive.ObjectID  `json:"userID"`
 	Name        string              `json:"name"`
 	Ingredients []*RecipeIngredient `json:"ingredients"`
-	Links       []Link              `json:"links"`
+	Links       []ClippingLink      `json:"links"`
 }
 
 // ClippingLink is a link attached to a clipping
