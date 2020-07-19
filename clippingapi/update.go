@@ -7,19 +7,18 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/database"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"github.com/maisiesadler/gomongo"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Update applies the given updates to the recipeless meal
-func Update(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, mealID *primitive.ObjectID, updates map[string]string) (*dfdmodels.Clipping, error) {
+func Update(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clippingID *primitive.ObjectID, updates map[string]string) (*dfdmodels.Clipping, error) {
 
 	ok, coll := database.Clipping(ctx)
 	if !ok {
 		return nil, errNotConnected
 	}
 
-	meal, err := findClippingByID(ctx, coll, mealID)
+	meal, err := findClippingByID(ctx, coll, clippingID)
 	if err != nil {
 		return nil, err
 	}
@@ -28,29 +27,29 @@ func Update(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, meal
 		meal.Name = update
 	}
 
-	err = coll.UpdateByID(ctx, mealID, meal)
+	err = coll.UpdateByID(ctx, clippingID, meal)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return findClippingByID(ctx, coll, mealID)
+	return findClippingByID(ctx, coll, clippingID)
 }
 
 // AddLink adds the given link to the meal
-func AddLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, mealID *primitive.ObjectID, name string, url string) (*dfdmodels.Clipping, error) {
+func AddLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clippingID *primitive.ObjectID, name string, url string) (*dfdmodels.Clipping, error) {
 
-	return update(ctx, mealID, func(meal *dfdmodels.Clipping) error {
+	return update(ctx, clippingID, func(clipping *dfdmodels.Clipping) error {
 		hasValue := false
 
-		for _, v := range meal.Links {
+		for _, v := range clipping.Links {
 			if v.URL == url {
 				hasValue = true
 			}
 		}
 
 		if !hasValue {
-			meal.Links = append(meal.Links, dfdmodels.Link{URL: url, Name: name})
+			clipping.Links = append(clipping.Links, dfdmodels.Link{URL: url, Name: name})
 		}
 
 		return nil
@@ -58,15 +57,15 @@ func AddLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, mea
 }
 
 // RemoveLink removes the link at the given index
-func RemoveLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, mealID *primitive.ObjectID, linkIdx int) (*dfdmodels.Clipping, error) {
+func RemoveLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clippingID *primitive.ObjectID, linkIdx int) (*dfdmodels.Clipping, error) {
 
-	return update(ctx, mealID, func(meal *dfdmodels.Clipping) error {
+	return update(ctx, clippingID, func(clipping *dfdmodels.Clipping) error {
 
-		if len(meal.Links) < linkIdx {
+		if len(clipping.Links) < linkIdx {
 			return errors.New("Out of range")
 		}
 
-		meal.Links = append(meal.Links[:linkIdx], meal.Links[linkIdx+1:]...)
+		clipping.Links = append(clipping.Links[:linkIdx], clipping.Links[linkIdx+1:]...)
 
 		return nil
 	})
@@ -78,32 +77,20 @@ func update(ctx context.Context, id *primitive.ObjectID, update func(*dfdmodels.
 		return nil, errNotConnected
 	}
 
-	meal, err := findClippingByID(ctx, coll, id)
+	clipping, err := findClippingByID(ctx, coll, id)
 	if err != nil {
 		return nil, err
 	}
 
-	if err = update(meal); err != nil {
+	if err = update(clipping); err != nil {
 		return nil, err
 	}
 
-	err = coll.UpdateByID(ctx, id, meal)
+	err = coll.UpdateByID(ctx, id, clipping)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return findClippingByID(ctx, coll, id)
-}
-
-func findClippingByID(ctx context.Context, coll gomongo.ICollection, id *primitive.ObjectID) (*dfdmodels.Clipping, error) {
-
-	obj, err := coll.FindByID(ctx, id, &dfdmodels.Clipping{})
-	if err != nil {
-		return nil, err
-	}
-
-	meal := obj.(*dfdmodels.Clipping)
-
-	return meal, nil
 }
