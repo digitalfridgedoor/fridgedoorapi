@@ -15,3 +15,19 @@ type Clipping struct {
 	Ingredients []RecipeIngredient  `json:"ingredients"`
 	Links       []Link              `json:"links"`
 }
+
+// ClippingLink is a link attached to a clipping
+type ClippingLink struct {
+	Name          string                `json:"name"`
+	URL           string                `json:"url"`
+	HasBeenParsed bool                  `json:"hasBeenParsed"`
+	Ingredients   []*ClippingIngredient `json:"ingredients"`
+}
+
+// ClippingIngredient is an ingredient found in a link associated with a recipe
+type ClippingIngredient struct {
+	Name        string  `json:"name"`
+	Amount      string  `json:"amount"`
+	Preperation string  `json:"preperation"`
+	Section     *string `json:"section"`
+}
