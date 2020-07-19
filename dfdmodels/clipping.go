@@ -12,7 +12,7 @@ type Clipping struct {
 	AddedOn     time.Time           `json:"addedOn"`
 	UserID      primitive.ObjectID  `json:"userID"`
 	Name        string              `json:"name"`
-	Ingredients []RecipeIngredient  `json:"ingredients"`
+	Ingredients []*RecipeIngredient `json:"ingredients"`
 	Links       []Link              `json:"links"`
 }
 
