@@ -139,6 +139,26 @@ func TestUpdateMetadataLinks(t *testing.T) {
 
 	// Act
 	updates = make(map[string]string)
+	updates["link_update"] = "two_updated"
+	updates["link_update_linkidx"] = "1"
+	r, err = editable.UpdateMetadata(ctx, updates)
+
+	// Assert
+	assert.Nil(t, err)
+	assert.NotNil(t, r)
+
+	latest, err = findOneViewable(ctx, recipe.ID, user)
+	assert.Nil(t, err)
+	assert.NotNil(t, latest.db)
+
+	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
+		assert.Len(t, m.Links, 2)
+		assert.Equal(t, "one", m.Links[0])
+		assert.Equal(t, "two_updated", m.Links[1])
+	})
+
+	// Act
+	updates = make(map[string]string)
 	updates["link_remove"] = "one"
 	r, err = editable.UpdateMetadata(ctx, updates)
 
@@ -152,7 +172,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
 		assert.Len(t, m.Links, 1)
-		assert.Equal(t, "two", m.Links[0])
+		assert.Equal(t, "two_updated", m.Links[0])
 	})
 }
 

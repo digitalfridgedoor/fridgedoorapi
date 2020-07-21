@@ -95,6 +95,16 @@ func appendLink(current []string, url string) []string {
 	return current
 }
 
+func updateLink(current []string, updateIdx string, updateValue string) []string {
+	if linkIdxInt, err := strconv.Atoi(updateIdx); err == nil {
+		if linkIdxInt < len(current) {
+			current[linkIdxInt] = updateValue
+		}
+	}
+
+	return current
+}
+
 func removeLink(current []string, removeURL string) []string {
 	filtered := []string{}
 

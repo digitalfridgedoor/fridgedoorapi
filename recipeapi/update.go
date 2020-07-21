@@ -50,6 +50,11 @@ func (editable *EditableRecipe) updateRecipeMetadata(ctx context.Context, update
 	if update, ok := updates["link_add"]; ok {
 		editable.db.Metadata.Links = appendLink(editable.db.Metadata.Links, update)
 	}
+	if update, ok := updates["link_update"]; ok {
+		if linkIdx, linkIdxOk := updates["link_update_linkidx"]; linkIdxOk {
+			editable.db.Metadata.Links = updateLink(editable.db.Metadata.Links, linkIdx, update)
+		}
+	}
 	if update, ok := updates["link_remove"]; ok {
 		editable.db.Metadata.Links = removeLink(editable.db.Metadata.Links, update)
 	}
