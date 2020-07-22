@@ -5,6 +5,8 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -79,37 +81,47 @@ func removeID(current []primitive.ObjectID, removeValue primitive.ObjectID) []pr
 	return filtered
 }
 
-func appendLink(current []string, url string) []string {
+func appendLink(current []dfdmodels.RecipeLink, url string) []dfdmodels.RecipeLink {
 	hasValue := false
 
 	for _, v := range current {
-		if v == url {
+		if v.URL == url {
 			hasValue = true
 		}
 	}
 
 	if !hasValue {
-		current = append(current, url)
+		current = append(current, dfdmodels.RecipeLink{URL: url})
 	}
 
 	return current
 }
 
-func updateLink(current []string, updateIdx string, updateValue string) []string {
+func updateLinkName(current []dfdmodels.RecipeLink, updateIdx string, updateName string) []dfdmodels.RecipeLink {
 	if linkIdxInt, err := strconv.Atoi(updateIdx); err == nil {
 		if linkIdxInt < len(current) {
-			current[linkIdxInt] = updateValue
+			current[linkIdxInt].Name = updateName
 		}
 	}
 
 	return current
 }
 
-func removeLink(current []string, removeURL string) []string {
-	filtered := []string{}
+func updateLinkURL(current []dfdmodels.RecipeLink, updateIdx string, updateURL string) []dfdmodels.RecipeLink {
+	if linkIdxInt, err := strconv.Atoi(updateIdx); err == nil {
+		if linkIdxInt < len(current) {
+			current[linkIdxInt].URL = updateURL
+		}
+	}
+
+	return current
+}
+
+func removeLink(current []dfdmodels.RecipeLink, removeURL string) []dfdmodels.RecipeLink {
+	filtered := []dfdmodels.RecipeLink{}
 
 	for _, v := range current {
-		if v != removeURL {
+		if v.URL != removeURL {
 			filtered = append(filtered, v)
 		}
 	}

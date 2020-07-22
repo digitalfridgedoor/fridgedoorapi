@@ -114,8 +114,8 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.NotNil(t, latest.db)
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
-		assert.Len(t, m.Links, 1)
-		assert.Equal(t, "one", m.Links[0])
+		assert.Len(t, m.RecipeLinks, 1)
+		assert.Equal(t, "one", m.RecipeLinks[0].URL)
 	})
 
 	// Act
@@ -132,14 +132,14 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.NotNil(t, latest.db)
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
-		assert.Len(t, m.Links, 2)
-		assert.Equal(t, "one", m.Links[0])
-		assert.Equal(t, "two", m.Links[1])
+		assert.Len(t, m.RecipeLinks, 2)
+		assert.Equal(t, "one", m.RecipeLinks[0].URL)
+		assert.Equal(t, "two", m.RecipeLinks[1].URL)
 	})
 
 	// Act
 	updates = make(map[string]string)
-	updates["link_update"] = "two_updated"
+	updates["link_update_url"] = "two_updated"
 	updates["link_update_linkidx"] = "1"
 	r, err = editable.UpdateMetadata(ctx, updates)
 
@@ -152,11 +152,31 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.NotNil(t, latest.db)
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
-		assert.Len(t, m.Links, 2)
-		assert.Equal(t, "one", m.Links[0])
-		assert.Equal(t, "two_updated", m.Links[1])
+		assert.Len(t, m.RecipeLinks, 2)
+		assert.Equal(t, "one", m.RecipeLinks[0].URL)
+		assert.Equal(t, "two_updated", m.RecipeLinks[1].URL)
 	})
 
+	// Act
+	updates = make(map[string]string)
+	updates["link_update_name"] = "name_for_one"
+	updates["link_update_linkidx"] = "0"
+	r, err = editable.UpdateMetadata(ctx, updates)
+
+	// Assert
+	assert.Nil(t, err)
+	assert.NotNil(t, r)
+
+	latest, err = findOneViewable(ctx, recipe.ID, user)
+	assert.Nil(t, err)
+	assert.NotNil(t, latest.db)
+
+	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
+		assert.Len(t, m.RecipeLinks, 2)
+		assert.Equal(t, "name_for_one", m.RecipeLinks[0].Name)
+		assert.Equal(t, "one", m.RecipeLinks[0].URL)
+		assert.Equal(t, "two_updated", m.RecipeLinks[1].URL)
+	})
 	// Act
 	updates = make(map[string]string)
 	updates["link_remove"] = "one"
@@ -171,8 +191,8 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	assert.NotNil(t, latest.db)
 
 	assertForBoth(&r.Metadata, &latest.db.Metadata, func(m *dfdmodels.RecipeMetadata) {
-		assert.Len(t, m.Links, 1)
-		assert.Equal(t, "two_updated", m.Links[0])
+		assert.Len(t, m.RecipeLinks, 1)
+		assert.Equal(t, "two_updated", m.RecipeLinks[0].URL)
 	})
 }
 
