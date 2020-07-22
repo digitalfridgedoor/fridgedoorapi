@@ -42,10 +42,16 @@ type SubRecipe struct {
 
 // RecipeMetadata contains extra information about the recipe
 type RecipeMetadata struct {
-	Image      bool             `json:"image"`
-	Tags       []string         `json:"tags"`
-	Links      []string         `json:"links"`
-	ViewableBy RecipeViewableBy `json:"viewableBy"`
+	Image       bool             `json:"image"`
+	Tags        []string         `json:"tags"`
+	RecipeLinks []RecipeLink     `json:"recipeLinks"`
+	ViewableBy  RecipeViewableBy `json:"viewableBy"`
+}
+
+// RecipeLink is a link attached to a recipe
+type RecipeLink struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
 }
 
 // RecipeViewableBy describes who can view the recipe as well as the user
