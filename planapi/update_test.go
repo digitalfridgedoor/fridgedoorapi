@@ -83,6 +83,63 @@ func TestUpdate(t *testing.T) {
 	assert.Equal(t, anotherName, plan.Days[18].Meal[1].Name)
 }
 
+func TestCanRemove(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetPlanFindPredicate(func(p *dfdmodels.Plan, m bson.M) bool {
+		month := m["month"].(int)
+		year := m["year"].(int)
+		userid := m["userid"].(primitive.ObjectID)
+
+		return month == p.Month && year == p.Year && userid == p.UserID
+	})
+
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+
+	recipeID, _ := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
+	clippingID, _ := primitive.ObjectIDFromHex("5d8f7300a7888700270f7753")
+
+	name := "Test Recipe"
+
+	request := &UpdateDayPlanRequest{
+		Month:      01,
+		Day:        19,
+		Year:       2020,
+		MealIndex:  0,
+		RecipeID:   &recipeID,
+		RecipeName: name,
+		ClippingID: &clippingID,
+	}
+
+	updated, err := UpdatePlan(context.TODO(), user, request)
+	assert.Nil(t, err)
+
+	plan, err := findOne(context.TODO(), updated.ID)
+	assert.Nil(t, err)
+	assert.NotNil(t, plan)
+	assert.Equal(t, clippingID, *plan.Days[18].Meal[0].ClippingID)
+	assert.Equal(t, name, plan.Days[18].Meal[0].Name)
+	assert.Equal(t, recipeID, *plan.Days[18].Meal[0].RecipeID)
+
+	request = &UpdateDayPlanRequest{
+		Month:     01,
+		Day:       19,
+		Year:      2020,
+		MealIndex: 0,
+	}
+
+	updated, err = UpdatePlan(context.TODO(), user, request)
+	assert.Nil(t, err)
+
+	plan, err = findOne(context.TODO(), updated.ID)
+	assert.Nil(t, err)
+	assert.NotNil(t, plan)
+	assert.Equal(t, (*primitive.ObjectID)(nil), plan.Days[18].Meal[0].ClippingID)
+	assert.Equal(t, "", plan.Days[18].Meal[0].Name)
+	assert.Equal(t, (*primitive.ObjectID)(nil), plan.Days[18].Meal[0].RecipeID)
+
+}
+
 func findOne(ctx context.Context, planID *primitive.ObjectID) (*dfdmodels.Plan, error) {
 
 	ok, coll := database.Plan(ctx)
