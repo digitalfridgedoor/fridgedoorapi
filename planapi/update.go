@@ -34,12 +34,8 @@ func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 	}
 
 	plan.Days[dayIdx].Meal[updateRequest.MealIndex].Name = updateRequest.RecipeName
-
-	if updateRequest.RecipeID != nil {
-		plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipeID = updateRequest.RecipeID
-	} else if updateRequest.ClippingID != nil {
-		plan.Days[dayIdx].Meal[updateRequest.MealIndex].ClippingID = updateRequest.ClippingID
-	}
+	plan.Days[dayIdx].Meal[updateRequest.MealIndex].RecipeID = updateRequest.RecipeID
+	plan.Days[dayIdx].Meal[updateRequest.MealIndex].ClippingID = updateRequest.ClippingID
 
 	return addOrUpdate(ctx, isNew, plan)
 }
