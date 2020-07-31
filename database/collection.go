@@ -26,6 +26,11 @@ func Plan(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "plans")
 }
 
+// PlanningGroup returns an ICollection for the mongodb collection planninggroups
+func PlanningGroup(ctx context.Context) (bool, gomongo.ICollection) {
+	return gomongo.CreateCollection(ctx, "recipeapi", "planninggroups")
+}
+
 // Clipping returns an ICollection for the mongodb collection clipping
 func Clipping(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "clippings")
