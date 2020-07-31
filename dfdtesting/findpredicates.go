@@ -38,7 +38,7 @@ func FindPlanByMonthAndYearForGroupTestPredicate(p *dfdmodels.Plan, m bson.M) bo
 	year := m["year"].(int)
 	planningGroupID := m["planninggroupid"].(primitive.ObjectID)
 
-	if p.UserID == nil {
+	if p.PlanningGroupID == nil {
 		return false
 	}
 
