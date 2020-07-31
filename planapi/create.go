@@ -14,10 +14,25 @@ func create(userID primitive.ObjectID, month int, year int) (bool, *dfdmodels.Pl
 
 	days := make([]dfdmodels.Day, dayLength)
 	return true, &dfdmodels.Plan{
-		UserID: userID,
+		UserID: &userID,
 		Month:  month,
 		Year:   year,
 		Days:   days,
+	}
+}
+
+func createForGroup(planningGroupID primitive.ObjectID, month int, year int) (bool, *dfdmodels.Plan) {
+	ok, dayLength := days(month, year)
+	if !ok {
+		return false, nil
+	}
+
+	days := make([]dfdmodels.Day, dayLength)
+	return true, &dfdmodels.Plan{
+		PlanningGroupID: &planningGroupID,
+		Month:           month,
+		Year:            year,
+		Days:            days,
 	}
 }
 

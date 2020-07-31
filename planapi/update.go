@@ -12,7 +12,7 @@ import (
 // UpdatePlan adds/updates a meal plan for the day
 func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, updateRequest *UpdateDayPlanRequest) (*dfdmodels.Plan, error) {
 
-	plan, isNew, err := getOrCreateOne(ctx, user.ViewID, updateRequest.Month, updateRequest.Year)
+	plan, isNew, err := getOrCreateOneForUpdateRequest(ctx, user, updateRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -38,6 +38,14 @@ func UpdatePlan(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 	plan.Days[dayIdx].Meal[updateRequest.MealIndex].ClippingID = updateRequest.ClippingID
 
 	return addOrUpdate(ctx, isNew, plan)
+}
+
+func getOrCreateOneForUpdateRequest(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, updateRequest *UpdateDayPlanRequest) (*dfdmodels.Plan, bool, error) {
+	if updateRequest.PlanningGroupID != nil {
+		return getOrCreateOneForGroup(ctx, *updateRequest.PlanningGroupID, updateRequest.Month, updateRequest.Year)
+	}
+
+	return getOrCreateOne(ctx, user.ViewID, updateRequest.Month, updateRequest.Year)
 }
 
 func addOrUpdate(ctx context.Context, isNew bool, plan *dfdmodels.Plan) (*dfdmodels.Plan, error) {
