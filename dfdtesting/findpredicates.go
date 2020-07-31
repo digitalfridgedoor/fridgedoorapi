@@ -23,7 +23,7 @@ func FindIngredientByNameTestPredicate(gs *dfdmodels.Ingredient, m primitive.M) 
 func FindPlanByMonthAndYearTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
 	month := m["month"].(int)
 	year := m["year"].(int)
-	userid := m["userID"].(*primitive.ObjectID)
+	userid := m["userid"].(*primitive.ObjectID)
 
 	return month == p.Month && year == p.Year && *userid == *p.UserID
 }
@@ -32,7 +32,7 @@ func FindPlanByMonthAndYearTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
 func FindPlanByMonthAndYearForGroupTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
 	month := m["month"].(int)
 	year := m["year"].(int)
-	planningGroupID := m["planningGroupID"].(*primitive.ObjectID)
+	planningGroupID := m["planninggroupid"].(*primitive.ObjectID)
 
 	return month == p.Month && year == p.Year && *planningGroupID == *p.PlanningGroupID
 }
