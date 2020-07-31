@@ -133,3 +133,23 @@ func findRecipeByTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 
 	return true
 }
+
+// SetPlanningGroupFindByUser sets SetFindFilter to find planning groups for a given user
+func SetPlanningGroupFindByUser() {
+	SetPlanningGroupFindPredicate(findPlanningGroupForUserPredicate)
+}
+
+func findPlanningGroupForUserPredicate(gs *dfdmodels.PlanningGroup, m primitive.M) bool {
+	userids := m["userid"].(bson.M)
+	useridarr := userids["$in"].([]primitive.ObjectID)
+
+	userid := useridarr[0]
+
+	for _, id := range gs.UserIDs {
+		if id == userid {
+			return true
+		}
+	}
+
+	return false
+}
