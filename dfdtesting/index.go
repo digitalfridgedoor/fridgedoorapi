@@ -23,6 +23,7 @@ func setAllIDSetters() {
 	setRecipeIDSetter()
 	setIngredientIDSetter()
 	setPlanIDSetter()
+	setPlanningGroupIDSetter()
 	setClippingIDSetter()
 }
 
@@ -127,6 +128,27 @@ func setClippingIDSetter() {
 	coll := getOrAddTestCollection("recipeapi", "clippings")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.Clipping); ok {
+			u.ID = &id
+		}
+	})
+}
+
+// SetPlanningGroupFindPredicate overrides the logic to get the result for Find
+func SetPlanningGroupFindPredicate(predicate func(*dfdmodels.PlanningGroup, bson.M) bool) bool {
+	fn := func(value interface{}, filter bson.M) bool {
+		uv := value.(*dfdmodels.PlanningGroup)
+		return predicate(uv, filter)
+	}
+
+	coll := getOrAddTestCollection("recipeapi", "planninggroups")
+	coll.SetFindFilter(fn)
+	return true
+}
+
+func setPlanningGroupIDSetter() {
+	coll := getOrAddTestCollection("recipeapi", "planninggroups")
+	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
+		if u, ok := document.(*dfdmodels.PlanningGroup); ok {
 			u.ID = &id
 		}
 	})

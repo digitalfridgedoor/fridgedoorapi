@@ -23,9 +23,18 @@ func FindIngredientByNameTestPredicate(gs *dfdmodels.Ingredient, m primitive.M) 
 func FindPlanByMonthAndYearTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
 	month := m["month"].(int)
 	year := m["year"].(int)
-	userid := m["userid"].(primitive.ObjectID)
+	userid := m["userID"].(*primitive.ObjectID)
 
-	return month == p.Month && year == p.Year && userid == p.UserID
+	return month == p.Month && year == p.Year && *userid == *p.UserID
+}
+
+// FindPlanByMonthAndYearForGroupTestPredicate can be used with SetFindFilter for get or create plan
+func FindPlanByMonthAndYearForGroupTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
+	month := m["month"].(int)
+	year := m["year"].(int)
+	planningGroupID := m["planningGroupID"].(*primitive.ObjectID)
+
+	return month == p.Month && year == p.Year && *planningGroupID == *p.PlanningGroupID
 }
 
 // SetUserViewFindByUsernamePredicate overrides logic for find users by username
