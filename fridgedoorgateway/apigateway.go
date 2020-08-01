@@ -32,7 +32,7 @@ func GetOrCreateAuthenticatedUser(ctx context.Context, request *events.APIGatewa
 	nickname, ok := parseNickname(request)
 	if ok {
 		fmt.Printf("Got nickname: %v\n", nickname)
-
+	} else {
 		editable, err := userviewapi.GetEditableByID(ctx, *view.ID)
 		if err == nil {
 			err = editable.SetNickname(ctx, view, nickname)
