@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateAddAndFind(t *testing.T) {
+func TestFindOne(t *testing.T) {
 
 	ctx := context.Background()
 
@@ -26,21 +26,14 @@ func TestCreateAddAndFind(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, gid)
 
-	err = AddToGroup(ctx, user2, *gid)
+	groupForUser1, err := FindOne(ctx, user1, *gid)
 
 	assert.Nil(t, err)
+	assert.NotNil(t, groupForUser1)
+	assert.Equal(t, groupname, groupForUser1.Name)
 
-	user1groups, err := FindAll(ctx, user1)
+	groupForUser2, err := FindOne(ctx, user2, *gid)
 
-	assert.Nil(t, err)
-	assert.Equal(t, 1, len(user1groups))
-	assert.Equal(t, groupname, user1groups[0].Name)
-	assert.Equal(t, 2, len(user1groups[0].UserIDs))
-
-	user2groups, err := FindAll(ctx, user2)
-
-	assert.Nil(t, err)
-	assert.Equal(t, 1, len(user2groups))
-	assert.Equal(t, groupname, user2groups[0].Name)
-	assert.Equal(t, 2, len(user2groups[0].UserIDs))
+	assert.Equal(t, errNotInGroup, err)
+	assert.Nil(t, groupForUser2)
 }

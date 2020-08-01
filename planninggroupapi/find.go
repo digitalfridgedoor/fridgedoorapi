@@ -1,4 +1,4 @@
-package planningroupapi
+package planninggroupapi
 
 import (
 	"context"
@@ -40,4 +40,32 @@ func FindAll(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser) ([]
 	}
 
 	return results, nil
+}
+
+// FindOne finds a planning group that a user is part of
+func FindOne(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, id primitive.ObjectID) (*dfdmodels.PlanningGroup, error) {
+
+	ok, coll := database.PlanningGroup(ctx)
+	if !ok {
+		return nil, errNotConnected
+	}
+
+	findOptions := options.Find()
+	findOptions.SetLimit(20)
+
+	obj, err := coll.FindByID(ctx, &id, &dfdmodels.PlanningGroup{})
+	if err != nil {
+		return nil, err
+	}
+
+	group := obj.(*dfdmodels.PlanningGroup)
+
+	for _, u := range group.UserIDs {
+		if u == user.ViewID {
+			// user is in group
+			return group, nil
+		}
+	}
+
+	return nil, errNotInGroup
 }
