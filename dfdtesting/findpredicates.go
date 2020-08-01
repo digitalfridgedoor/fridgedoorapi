@@ -140,7 +140,7 @@ func SetPlanningGroupFindByUser() {
 }
 
 func findPlanningGroupForUserPredicate(gs *dfdmodels.PlanningGroup, m primitive.M) bool {
-	userids := m["userid"].(bson.M)
+	userids := m["userids"].(bson.M)
 	useridarr := userids["$in"].([]primitive.ObjectID)
 
 	userid := useridarr[0]
