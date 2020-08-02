@@ -48,7 +48,7 @@ func (editable *EditableView) SetNickname(ctx context.Context, view *dfdmodels.U
 		return nil
 	}
 
-	view.Nickname = nickname
+	editable.db.Nickname = nickname
 
 	ok := editable.save(ctx)
 	if !ok {

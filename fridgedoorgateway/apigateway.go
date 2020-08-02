@@ -66,15 +66,10 @@ func parseNickname(request *events.APIGatewayProxyRequest) (string, bool) {
 		c := claims.(map[string]interface{})
 		nickname, ok := c["nickname"]
 		if ok {
-			fmt.Printf("Got nickname: %v.\n", nickname)
 			return nickname.(string), true
 		}
 
 		fmt.Printf("Could not find nickname.\n")
-
-		for k := range c {
-			fmt.Println("Got Key: " + k)
-		}
 
 		return "", false
 	}
