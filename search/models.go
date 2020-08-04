@@ -8,3 +8,10 @@ type RecipeDescription struct {
 	Name  string              `json:"name"`
 	Image bool                `json:"image"`
 }
+
+// Result is a short view of the recipe
+type Result struct {
+	RecipeID   *primitive.ObjectID `json:"recipeId"`
+	ClippingID *primitive.ObjectID `json:"clippingId"`
+	Name       string              `json:"name"`
+}
