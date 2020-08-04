@@ -47,8 +47,9 @@ func readClippingViewFromChannel(ch <-chan interface{}, userID primitive.ObjectI
 		r := i.(*dfdmodels.Clipping)
 
 		results = append(results, &ClippingDescription{
-			ID:   r.ID,
-			Name: r.Name,
+			ID:       r.ID,
+			Name:     r.Name,
+			RecipeID: r.RecipeID,
 		})
 	}
 
