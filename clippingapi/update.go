@@ -56,6 +56,42 @@ func AddLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, cli
 	})
 }
 
+// UpdateLink updates a link at a given index
+func UpdateLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clippingID *primitive.ObjectID, linkIdx int, updateProperty string, updateValue string) (*dfdmodels.Clipping, error) {
+
+	return update(ctx, clippingID, func(clipping *dfdmodels.Clipping) error {
+
+		if len(clipping.Links) < linkIdx {
+			return errors.New("Out of range")
+		}
+
+		if updateProperty == "name" {
+			clipping.Links[linkIdx].Name = updateValue
+		} else if updateProperty == "url" {
+			clipping.Links[linkIdx].URL = updateValue
+		}
+
+		return nil
+	})
+}
+
+// SwapLinkPosition swaps the links
+func SwapLinkPosition(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clippingID *primitive.ObjectID, linkIdx1 int, linkIdx2 int) (*dfdmodels.Clipping, error) {
+
+	return update(ctx, clippingID, func(clipping *dfdmodels.Clipping) error {
+
+		if len(clipping.Links) < linkIdx1 || len(clipping.Links) < linkIdx2 {
+			return errors.New("Out of range")
+		}
+
+		first := clipping.Links[linkIdx1]
+		clipping.Links[linkIdx1] = clipping.Links[linkIdx2]
+		clipping.Links[linkIdx2] = first
+
+		return nil
+	})
+}
+
 // RemoveLink removes the link at the given index
 func RemoveLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clippingID *primitive.ObjectID, linkIdx int) (*dfdmodels.Clipping, error) {
 
