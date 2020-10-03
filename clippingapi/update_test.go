@@ -47,6 +47,27 @@ func TestCanUpdateClippingName(t *testing.T) {
 	assert.Equal(t, updatedClippingName, meal.Name)
 }
 
+func TestCanUpdateClippingNotes(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+
+	ctx := context.TODO()
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	clippingName := "Clipping Name"
+	clippingNotes := "Clipping notes"
+
+	clippingID, err := Create(ctx, user, clippingName)
+	assert.Nil(t, err)
+
+	updates := make(map[string]string)
+	updates["notes"] = clippingNotes
+
+	clipping, err := Update(ctx, user, clippingID, updates)
+	assert.Nil(t, err)
+
+	assert.Equal(t, clippingNotes, clipping.Notes)
+}
+
 func TestCanAddAndRemoveLink(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
@@ -73,39 +94,75 @@ func TestCanAddAndRemoveLink(t *testing.T) {
 	assert.Equal(t, 0, len(clipping.Links))
 }
 
-func TestCanUpdateLink(t *testing.T) {
+func TestCanUpdateLinkName(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
 	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
-	clippingName := "Meal Name"
 
-	linkName := "Link name"
-
-	clippingID, err := Create(ctx, user, clippingName)
+	clippingID, err := Create(ctx, user, "Clipping Name")
 	assert.Nil(t, err)
 
-	clipping, err := AddLink(ctx, user, clippingID, linkName, "url")
+	clipping, err := AddLink(ctx, user, clippingID, "Link name", "url")
 	assert.Nil(t, err)
 
 	assert.Equal(t, 1, len(clipping.Links))
-	assert.Equal(t, linkName, clipping.Links[0].Name)
+	assert.Equal(t, "Link name", clipping.Links[0].Name)
+
+	name := "new name"
+
+	clipping, err = UpdateLink(ctx, user, clippingID, 0, "name", name)
+	assert.Nil(t, err)
+
+	assert.Equal(t, name, clipping.Links[0].Name)
+}
+func TestCanUpdateLinkUrl(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+
+	ctx := context.TODO()
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+
+	clippingID, err := Create(ctx, user, "Clipping Name")
+	assert.Nil(t, err)
+
+	clipping, err := AddLink(ctx, user, clippingID, "Link name", "url")
+	assert.Nil(t, err)
+
+	assert.Equal(t, 1, len(clipping.Links))
 	assert.Equal(t, "url", clipping.Links[0].URL)
 
-	updatedLinkName := "updatedname"
+	url := "new url"
 
-	clipping, err = UpdateLink(ctx, user, clippingID, 0, "name", updatedLinkName)
+	clipping, err = UpdateLink(ctx, user, clippingID, 0, "url", url)
 	assert.Nil(t, err)
 
-	assert.Equal(t, updatedLinkName, clipping.Links[0].Name)
+	assert.Equal(t, url, clipping.Links[0].URL)
+}
 
-	updatedUrl := "updatedurl"
+func TestCanUpdateLinkNotes(t *testing.T) {
 
-	clipping, err = UpdateLink(ctx, user, clippingID, 0, "url", updatedUrl)
+	dfdtesting.SetTestCollectionOverride()
+
+	ctx := context.TODO()
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+
+	clippingID, err := Create(ctx, user, "Clipping Name")
 	assert.Nil(t, err)
 
-	assert.Equal(t, updatedUrl, clipping.Links[0].URL)
+	clipping, err := AddLink(ctx, user, clippingID, "Link name", "url")
+	assert.Nil(t, err)
+
+	assert.Equal(t, 1, len(clipping.Links))
+	assert.Equal(t, "", clipping.Links[0].Notes)
+
+	notes := "notes"
+
+	clipping, err = UpdateLink(ctx, user, clippingID, 0, "notes", notes)
+	assert.Nil(t, err)
+
+	assert.Equal(t, notes, clipping.Links[0].Notes)
 }
 
 func TestReorderLinks(t *testing.T) {

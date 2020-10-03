@@ -25,6 +25,8 @@ func Update(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, clip
 
 	if update, ok := updates["name"]; ok {
 		meal.Name = update
+	} else if update, ok := updates["notes"]; ok {
+		meal.Notes = update
 	}
 
 	err = coll.UpdateByID(ctx, clippingID, meal)
@@ -69,6 +71,8 @@ func UpdateLink(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, 
 			clipping.Links[linkIdx].Name = updateValue
 		} else if updateProperty == "url" {
 			clipping.Links[linkIdx].URL = updateValue
+		} else if updateProperty == "notes" {
+			clipping.Links[linkIdx].Notes = updateValue
 		}
 
 		return nil
