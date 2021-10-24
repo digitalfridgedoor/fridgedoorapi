@@ -18,6 +18,9 @@ allExitcodes+=$?
 go test ./planapi
 allExitcodes+=$?
 
+go test ./search
+allExitcodes+=$?
+
 go test ./recipeapi
 allExitcodes+=$?
 
