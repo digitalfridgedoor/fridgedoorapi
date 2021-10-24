@@ -3,8 +3,8 @@ package userviewapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/database"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"fridgedoorapi/database"
+	"fridgedoorapi/dfdmodels"
 )
 
 // Create creates a new userview for a user

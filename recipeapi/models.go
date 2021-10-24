@@ -1,8 +1,8 @@
 package recipeapi
 
 import (
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"fridgedoorapi/dfdmodels"
+	"fridgedoorapi/fridgedoorgateway"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

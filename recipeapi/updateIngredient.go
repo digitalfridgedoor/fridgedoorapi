@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"fridgedoorapi/dfdmodels"
+	"fridgedoorapi/ingredients"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -20,7 +20,7 @@ func (editable *EditableRecipe) AddIngredient(ctx context.Context, stepIdx int, 
 		return nil, err
 	}
 
-	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
+	ingredient, err := ingredients.IngredientCollection(ctx)
 	if err != nil {
 		return nil, err
 	}

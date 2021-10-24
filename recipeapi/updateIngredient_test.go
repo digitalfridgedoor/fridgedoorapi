@@ -2,10 +2,10 @@ package recipeapi
 
 import (
 	"context"
+	"fridgedoorapi"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -45,14 +45,14 @@ func connectToS3() (*s3.S3, error) {
 func createRequest(svc *s3.S3, verb string, key string) (*request.Request, error) {
 	if verb == "put" {
 		req, _ := svc.PutObjectRequest(&s3.PutObjectInput{
-			Bucket: aws.String("digitalfridgedoorphotos"),
+			Bucket: aws.String("photos"),
 			Key:    aws.String(key),
 		})
 
 		return req, nil
 	} else if verb == "get" {
 		req, _ := svc.GetObjectRequest(&s3.GetObjectInput{
-			Bucket: aws.String("digitalfridgedoorphotos"),
+			Bucket: aws.String("photos"),
 			Key:    aws.String(key),
 		})
 
