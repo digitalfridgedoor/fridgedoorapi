@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +17,7 @@ func TestFindByMonthAndYear(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetPlanFindPredicate(dfdtesting.FindPlanByMonthAndYearTestPredicate)
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	r, err := FindOne(context.Background(), user, 1, 2020)
 

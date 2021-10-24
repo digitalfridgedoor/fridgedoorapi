@@ -2,10 +2,11 @@ package recipeapi
 
 import (
 	"context"
-	"fridgedoorapi"
 	"testing"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
+	"fridgedoorapi/ingredients"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,9 +17,9 @@ func TestUpdateIngredient(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
-	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
+	ingredient, err := ingredients.IngredientCollection(ctx)
 	assert.Nil(t, err)
 
 	ingname := "test ingredient"

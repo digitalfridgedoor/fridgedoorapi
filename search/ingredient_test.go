@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"fridgedoorapi"
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/ingredients"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +16,7 @@ func TestSearchIngredient(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetIngredientFindPredicate(dfdtesting.FindIngredientByNameTestPredicate)
 
-	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
+	ingredient, err := ingredients.IngredientCollection(context.TODO())
 	assert.Nil(t, err)
 	ingredient.Create(context.TODO(), "test")
 	ingredient.Create(context.TODO(), "one")

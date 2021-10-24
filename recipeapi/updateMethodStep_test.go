@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -15,7 +16,7 @@ func TestUpdateMethodStep(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)

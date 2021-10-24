@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 	"fridgedoorapi/recipeapi"
 
 	"github.com/stretchr/testify/assert"
@@ -16,7 +17,7 @@ func TestFindStartingWith(t *testing.T) {
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 	dfdtesting.SetRecipeFindByNamePredicate()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipeapi.CreateRecipe(context.TODO(), user, "fi_recipe")
 

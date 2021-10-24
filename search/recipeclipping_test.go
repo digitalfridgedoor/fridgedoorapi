@@ -7,6 +7,7 @@ import (
 	"fridgedoorapi/clippingapi"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 	"fridgedoorapi/recipeapi"
 
 	"github.com/stretchr/testify/assert"
@@ -19,7 +20,7 @@ func TestFindRecipeOrClippingStartingWith(t *testing.T) {
 	dfdtesting.SetRecipeFindByNamePredicate()
 	dfdtesting.SetClippingByNamePredicate()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	cid, err := clippingapi.Create(context.TODO(), user, "fi_clipping")
 	assert.Nil(t, err)

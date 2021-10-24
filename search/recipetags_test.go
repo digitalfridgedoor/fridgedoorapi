@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 	"fridgedoorapi/recipeapi"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,7 +20,7 @@ func TestTags(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
@@ -58,7 +59,7 @@ func TestNinTags(t *testing.T) {
 
 	ctx := context.Background()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
@@ -100,7 +101,7 @@ func TestIncludeAndNinTags(t *testing.T) {
 
 	ctx := context.Background()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "new recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)

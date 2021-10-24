@@ -6,6 +6,7 @@ import (
 
 	"fridgedoorapi/dfdmodels"
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +17,7 @@ func TestRename(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)
@@ -44,7 +45,7 @@ func TestUpdateMetadataViewableBy(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)
@@ -93,7 +94,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipe, err := CreateRecipe(ctx, user, "recipe")
 	assert.Nil(t, err)

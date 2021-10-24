@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -13,7 +14,7 @@ func TestAddSubRecipe(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	ctx := context.Background()
 
