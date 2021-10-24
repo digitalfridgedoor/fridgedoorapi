@@ -3,8 +3,8 @@ package clippingapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/database"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"fridgedoorapi/database"
+	"fridgedoorapi/dfdmodels"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

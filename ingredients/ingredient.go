@@ -1,10 +1,11 @@
-package fridgedoorapi
+package ingredients
 
 import (
 	"context"
 	"time"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"fridgedoorapi/dfdmodels"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

@@ -1,7 +1,7 @@
 package linkeduserapi
 
 import (
-	"github.com/digitalfridgedoor/fridgedoorapi/search"
+	"fridgedoorapi/search"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

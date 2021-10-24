@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -16,7 +17,7 @@ func TestClippingDoesNotExistCannotUpdate(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	clippingID := primitive.NewObjectID()
 	updates := make(map[string]string)
@@ -31,7 +32,7 @@ func TestCanUpdateClippingName(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	clippingName := "Clipping Name"
 	updatedClippingName := "Updated Clipping Name"
 
@@ -52,7 +53,7 @@ func TestCanUpdateClippingNotes(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	clippingName := "Clipping Name"
 	clippingNotes := "Clipping notes"
 
@@ -73,7 +74,7 @@ func TestCanAddAndRemoveLink(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	clippingName := "Meal Name"
 
 	linkName := "Link name"
@@ -99,7 +100,7 @@ func TestCanUpdateLinkName(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	clippingID, err := Create(ctx, user, "Clipping Name")
 	assert.Nil(t, err)
@@ -122,7 +123,7 @@ func TestCanUpdateLinkUrl(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	clippingID, err := Create(ctx, user, "Clipping Name")
 	assert.Nil(t, err)
@@ -146,7 +147,7 @@ func TestCanUpdateLinkNotes(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	clippingID, err := Create(ctx, user, "Clipping Name")
 	assert.Nil(t, err)
@@ -170,7 +171,7 @@ func TestReorderLinks(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 
 	ctx := context.TODO()
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	clippingName := "Meal Name"
 
 	linkName1 := "Link name 1"

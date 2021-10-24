@@ -6,7 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 )
 
 func TestSearch(t *testing.T) {
@@ -14,7 +15,7 @@ func TestSearch(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetClippingByNamePredicate()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	ctx := context.TODO()
 	clippingname := "testname"

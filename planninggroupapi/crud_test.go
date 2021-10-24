@@ -4,7 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -17,8 +18,8 @@ func TestCreateAddAndFind(t *testing.T) {
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 	dfdtesting.SetPlanningGroupFindByUser()
 
-	user1 := dfdtesting.CreateTestAuthenticatedUser("User1")
-	user2 := dfdtesting.CreateTestAuthenticatedUser("User2")
+	user1 := dfdtestingapi.CreateTestAuthenticatedUser("User1")
+	user2 := dfdtestingapi.CreateTestAuthenticatedUser("User2")
 	groupname := "Planning group"
 
 	gid, err := Create(ctx, user1, groupname)

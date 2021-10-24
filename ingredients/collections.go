@@ -1,9 +1,10 @@
-package fridgedoorapi
+package ingredients
 
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"fridgedoorapi/database"
+
 	"github.com/maisiesadler/gomongo"
 )
 

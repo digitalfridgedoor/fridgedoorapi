@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"fridgedoorapi/dfdmodels"
+	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/userviewapi"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"

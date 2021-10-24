@@ -3,9 +3,9 @@ package planapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/database"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"fridgedoorapi/database"
+	"fridgedoorapi/dfdmodels"
+	"fridgedoorapi/fridgedoorgateway"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

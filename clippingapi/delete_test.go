@@ -6,7 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 )
 
 func TestCanDelete(t *testing.T) {
@@ -14,7 +15,7 @@ func TestCanDelete(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	id, err := Create(ctx, user, "Test Meal")
 	assert.Nil(t, err)

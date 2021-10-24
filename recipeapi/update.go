@@ -3,7 +3,7 @@ package recipeapi
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"fridgedoorapi/userviewapi"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

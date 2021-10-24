@@ -4,9 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/database"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/database"
+	"fridgedoorapi/dfdmodels"
+	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -40,7 +41,7 @@ func TestUpdate(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetPlanFindPredicate(dfdtesting.FindPlanByMonthAndYearTestPredicate)
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipeID, _ := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
 
@@ -81,7 +82,7 @@ func TestUpdateForGroup(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetPlanFindPredicate(dfdtesting.FindPlanByMonthAndYearForGroupTestPredicate)
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	planningGroupID := primitive.NewObjectID()
 	recipeID := primitive.NewObjectID()
@@ -124,7 +125,7 @@ func TestCanRemove(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetPlanFindPredicate(dfdtesting.FindPlanByMonthAndYearTestPredicate)
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	recipeID, _ := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
 	clippingID, _ := primitive.ObjectIDFromHex("5d8f7300a7888700270f7753")

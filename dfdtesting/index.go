@@ -1,16 +1,15 @@
 package dfdtesting
 
 import (
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
-	"github.com/maisiesadler/gomongo/gomongotesting"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"fridgedoorapi/dfdmodels"
 
 	"github.com/maisiesadler/gomongo"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var overrides = make(map[string]*gomongotesting.TestCollection)
+var overrides = make(map[string]*TestCollection)
 
 // SetTestCollectionOverride sets a the database package to use a TestCollection
 func SetTestCollectionOverride() {
@@ -154,15 +153,27 @@ func setPlanningGroupIDSetter() {
 	})
 }
 
+// SetTestFindPredicate shows an example of how to override find functionality
+func SetTestFindPredicate(predicate func(*dfdmodels.UserView, bson.M) bool) bool {
+	fn := func(value interface{}, filter bson.M) bool {
+		uv := value.(*dfdmodels.UserView)
+		return predicate(uv, filter)
+	}
+
+	coll := getOrAddTestCollection("_database", "_collection")
+	coll.findPredicate = fn
+	return true
+}
+
 func overrideDb(database string, collection string) gomongo.ICollection {
 	return getOrAddTestCollection(database, collection)
 }
 
-func getOrAddTestCollection(database string, collection string) *gomongotesting.TestCollection {
+func getOrAddTestCollection(database string, collection string) *TestCollection {
 	key := database + "_" + collection
 	if val, ok := overrides[key]; ok {
 		return val
 	}
-	overrides[key] = gomongotesting.CreateTestCollection()
+	overrides[key] = CreateTestCollection()
 	return overrides[key]
 }

@@ -1,10 +1,10 @@
-package fridgedoorapi
+package ingredients
 
 import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )

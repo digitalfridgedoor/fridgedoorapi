@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"fridgedoorapi/dfdmodels"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

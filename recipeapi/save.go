@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"fridgedoorapi/database"
 )
 
 func (editable *EditableRecipe) save(ctx context.Context) bool {
