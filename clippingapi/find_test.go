@@ -7,13 +7,14 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
 )
 
 func TestFind(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
 	ctx := context.TODO()
 	clippingname := "testname"

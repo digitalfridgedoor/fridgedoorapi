@@ -3,11 +3,10 @@ package dfdtesting
 import (
 	"fridgedoorapi/dfdmodels"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
-
 	"github.com/maisiesadler/gomongo"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var overrides = make(map[string]*TestCollection)

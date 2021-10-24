@@ -1,4 +1,4 @@
-package dfdtesting
+package dfdtestingapi
 
 import (
 	"context"
