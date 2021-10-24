@@ -1,4 +1,4 @@
-module fridgedoorapi
+module github.com/digitalfridgedoor/fridgedoorapi
 
 go 1.16
 
