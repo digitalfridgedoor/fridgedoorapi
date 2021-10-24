@@ -8,8 +8,6 @@ github.com/cpuguy83/go-md2man/v2 v2.0.0/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsr
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/digitalfridgedoor/fridgedoorapi v0.0.0-20201003083519-4cb9d1064261 h1:VkHV7GQQTkdcn4z0JSGoqUhBqr+UbIELxtUgaeOieNI=
-github.com/digitalfridgedoor/fridgedoorapi v0.0.0-20201003083519-4cb9d1064261/go.mod h1:1xM3AH484gJA4EPsMQqLv+4qzlEqb1vO7yWTARUijVw=
 github.com/digitalfridgedoor/fridgedoordatabase v0.0.0-20200505190218-22afa2586633 h1:9DYPH+xnrDmAv9yQud6PskOeg34zjA/cqe9pcfE3QLE=
 github.com/digitalfridgedoor/fridgedoordatabase v0.0.0-20200505190218-22afa2586633/go.mod h1:6d+tnu3njZ0JvmcCblb0qU0lkwy5NiTqT3G5k3jvnl4=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
@@ -61,8 +59,8 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/maisiesadler/gomongo v0.0.0-20200719114939-0e3d766ebb9c h1:n6D4uCLJN2vtLmamx/ZqYKVK1zN1zbaR91Y2+cVZyJs=
-github.com/maisiesadler/gomongo v0.0.0-20200719114939-0e3d766ebb9c/go.mod h1:nRGCNYvJJJFc9fBw3/M8X2nNdHPPx0cXMM/uNWqHWSw=
+github.com/maisiesadler/gomongo v1.0.0-rc1 h1:7FLnHoGlrGssy7dSXNT0eUDLEm8FxqeEbp9qxJi6d1Y=
+github.com/maisiesadler/gomongo v1.0.0-rc1/go.mod h1:07lCatxTuHAn1ODkcQYQOdMLYXs07kHrWI+C0CIEYrk=
 github.com/markbates/oncer v0.0.0-20181203154359-bf2de49a0be2/go.mod h1:Ld9puTsIW75CHf65OeIOkyKbteujpZVXDpWK6YGZbxE=
 github.com/markbates/safe v1.0.1/go.mod h1:nAqgmRi7cY2nqMc92/bSEeQA+R4OheNU2T1kNSCBdG0=
 github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe/go.mod h1:wL8QJuTMNUDYhXwkmfOly8iTdp5TEcJFWZD2D7SIkUc=
