@@ -6,6 +6,8 @@ import (
 
 	"fridgedoorapi/dfdmodels"
 	"fridgedoorapi/dfdtesting"
+	"fridgedoorapi/dfdtestingapi"
+	"fridgedoorapi/ingredients"
 	"fridgedoorapi/recipeapi"
 
 	"github.com/stretchr/testify/assert"
@@ -18,7 +20,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
 	recipeName := "test-recipe"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	testUser := dfdtestingapi.CreateTestAuthenticatedUser(username)
 
 	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 
@@ -28,7 +30,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Method), 0)
 	assert.Equal(t, len(r.Recipes), 0)
 
-	ingredientcoll, err := IngredientCollection(context.TODO())
+	ingredientcoll, err := ingredients.IngredientCollection(context.TODO())
 	assert.Nil(t, err)
 	ingredient, err := ingredientcoll.Create(context.TODO(), "one")
 	assert.Nil(t, err)
@@ -53,7 +55,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	dfdtesting.DeleteTestUser(ctx, testUser)
+	dfdtestingapi.DeleteTestUser(ctx, testUser)
 }
 
 func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
@@ -63,7 +65,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	ctx := context.Background()
 	username := "TestUser"
 	recipeName := "test-recipe"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(username)
+	testUser := dfdtestingapi.CreateTestAuthenticatedUser(username)
 	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 
 	assert.Nil(t, err)
@@ -72,7 +74,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Equal(t, len(r.Method), 0)
 	assert.Equal(t, len(r.Recipes), 0)
 
-	ingredientcoll, err := IngredientCollection(context.TODO())
+	ingredientcoll, err := ingredients.IngredientCollection(context.TODO())
 	assert.Nil(t, err)
 	ingredient, err := ingredientcoll.Create(context.TODO(), "one")
 	assert.Nil(t, err)
@@ -111,7 +113,7 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Nil(t, err)
-	dfdtesting.DeleteTestUser(ctx, testUser)
+	dfdtestingapi.DeleteTestUser(ctx, testUser)
 }
 
 func contains(t *testing.T, ingredients []dfdmodels.RecipeIngredient, expected []string) {
