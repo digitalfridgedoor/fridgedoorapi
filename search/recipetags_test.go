@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"fridgedoorapi/dfdtesting"
-	"fridgedoorapi/dfdtestingapi"
-	"fridgedoorapi/recipeapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 

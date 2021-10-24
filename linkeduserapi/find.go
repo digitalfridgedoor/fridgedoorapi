@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/fridgedoorgateway"
-	"fridgedoorapi/search"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoorapi/search"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

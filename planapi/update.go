@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 )
 
 // UpdatePlan adds/updates a meal plan for the day

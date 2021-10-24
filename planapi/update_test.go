@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/dfdtesting"
-	"fridgedoorapi/dfdtestingapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"

@@ -1,7 +1,7 @@
 package dfdtesting
 
 import (
-	"fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 
 	"github.com/maisiesadler/gomongo"
 

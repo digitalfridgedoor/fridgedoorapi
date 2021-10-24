@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )

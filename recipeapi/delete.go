@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

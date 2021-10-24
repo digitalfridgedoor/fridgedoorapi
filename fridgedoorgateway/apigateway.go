@@ -7,7 +7,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 
-	"fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 )
 
 var errNotLoggedIn = errors.New("No user logged in")

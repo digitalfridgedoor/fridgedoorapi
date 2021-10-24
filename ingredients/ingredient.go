@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

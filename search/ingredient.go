@@ -3,8 +3,8 @@ package search
 import (
 	"context"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

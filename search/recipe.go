@@ -3,9 +3,9 @@ package search
 import (
 	"context"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/recipeapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

@@ -3,7 +3,7 @@ package search
 import (
 	"context"
 
-	"fridgedoorapi/clippingapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/clippingapi"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

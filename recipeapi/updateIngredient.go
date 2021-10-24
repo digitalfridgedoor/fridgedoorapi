@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/ingredients"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/ingredients"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

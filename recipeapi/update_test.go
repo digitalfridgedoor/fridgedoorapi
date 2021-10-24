@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/dfdtesting"
-	"fridgedoorapi/dfdtestingapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -3,7 +3,7 @@ package userviewapi
 import (
 	"context"
 
-	"fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
 )
 
 func delete(ctx context.Context, username string) error {

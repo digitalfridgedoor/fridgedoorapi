@@ -5,9 +5,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"fridgedoorapi/database"
-	"fridgedoorapi/dfdmodels"
-	"fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoorapi/database"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 )
 
 // FindOne finds a recipe by id

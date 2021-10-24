@@ -6,8 +6,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"fridgedoorapi/dfdtesting"
-	"fridgedoorapi/dfdtestingapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
