@@ -15,9 +15,6 @@ allExitcodes+=$?
 go test ./linkeduserapi
 allExitcodes+=$?
 
-go test ./planapi
-allExitcodes+=$?
-
 go test ./search
 allExitcodes+=$?
 

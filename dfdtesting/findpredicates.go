@@ -20,32 +20,6 @@ func FindIngredientByNameTestPredicate(gs *dfdmodels.Ingredient, m primitive.M) 
 	return r.MatchString(gs.Name)
 }
 
-// FindPlanByMonthAndYearTestPredicate can be used with SetFindFilter for get or create plan
-func FindPlanByMonthAndYearTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
-	month := m["month"].(int)
-	year := m["year"].(int)
-	userid := m["userid"].(primitive.ObjectID)
-
-	if p.UserID == nil {
-		return false
-	}
-
-	return month == p.Month && year == p.Year && userid == *p.UserID
-}
-
-// FindPlanByMonthAndYearForGroupTestPredicate can be used with SetFindFilter for get or create plan
-func FindPlanByMonthAndYearForGroupTestPredicate(p *dfdmodels.Plan, m bson.M) bool {
-	month := m["month"].(int)
-	year := m["year"].(int)
-	planningGroupID := m["planninggroupid"].(primitive.ObjectID)
-
-	if p.PlanningGroupID == nil {
-		return false
-	}
-
-	return month == p.Month && year == p.Year && planningGroupID == *p.PlanningGroupID
-}
-
 // SetUserViewFindByUsernamePredicate overrides logic for find users by username
 func SetUserViewFindByUsernamePredicate() {
 	SetUserViewFindPredicate(func(uv *dfdmodels.UserView, m primitive.M) bool {
@@ -133,26 +107,6 @@ func findRecipeByTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 	}
 
 	return true
-}
-
-// SetPlanningGroupFindByUser sets SetFindFilter to find planning groups for a given user
-func SetPlanningGroupFindByUser() {
-	SetPlanningGroupFindPredicate(findPlanningGroupForUserPredicate)
-}
-
-func findPlanningGroupForUserPredicate(gs *dfdmodels.PlanningGroup, m primitive.M) bool {
-	userids := m["userids"].(bson.M)
-	useridarr := userids["$in"].([]primitive.ObjectID)
-
-	userid := useridarr[0]
-
-	for _, id := range gs.UserIDs {
-		if id == userid {
-			return true
-		}
-	}
-
-	return false
 }
 
 // SetClippingByNamePredicate overrides logic for find clipping in search method
