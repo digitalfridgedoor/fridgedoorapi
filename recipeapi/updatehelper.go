@@ -117,14 +117,16 @@ func updateLinkURL(current []dfdmodels.RecipeLink, updateIdx string, updateURL s
 	return current
 }
 
-func removeLink(current []dfdmodels.RecipeLink, removeURL string) []dfdmodels.RecipeLink {
-	filtered := []dfdmodels.RecipeLink{}
-
-	for _, v := range current {
-		if v.URL != removeURL {
-			filtered = append(filtered, v)
+func removeLink(current []dfdmodels.RecipeLink, removeIdx string) []dfdmodels.RecipeLink {
+	if removeIdxInt, err := strconv.Atoi(removeIdx); err == nil {
+		filtered := []dfdmodels.RecipeLink{}
+		for idx, v := range current {
+			if idx != removeIdxInt {
+				filtered = append(filtered, v)
+			}
 		}
+		return filtered
+	} else {
+		return current
 	}
-
-	return filtered
 }
