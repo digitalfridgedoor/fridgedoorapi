@@ -83,6 +83,7 @@ func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *R
 		CanEdit:     canEdit,
 		OwnedByUser: ownedByUser,
 		Method:      r.Method,
+		Notes:       r.Notes,
 		Recipes:     r.Recipes,
 		ParentIds:   r.ParentIds,
 		Metadata:    r.Metadata,

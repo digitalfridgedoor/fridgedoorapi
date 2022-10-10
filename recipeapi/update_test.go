@@ -39,6 +39,34 @@ func TestRename(t *testing.T) {
 	assert.Equal(t, newRecipeName, latest.db.Name)
 }
 
+func TestUpdateDescription(t *testing.T) {
+
+	// Arrange
+	dfdtesting.SetTestCollectionOverride()
+
+	ctx := context.TODO()
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
+
+	recipe, err := CreateRecipe(ctx, user, "recipe")
+	assert.Nil(t, err)
+
+	editable, err := FindOneEditable(ctx, recipe.ID, user)
+	recipeNotes := "this one is so good"
+
+	// Act
+	r, err := editable.UpdateNotes(ctx, recipeNotes)
+
+	// Assert
+	assert.Nil(t, err)
+	assert.NotNil(t, r)
+	assert.Equal(t, recipeNotes, r.Notes)
+
+	latest, err := findOneViewable(ctx, recipe.ID, user)
+	assert.Nil(t, err)
+	assert.NotNil(t, latest.db)
+	assert.Equal(t, recipeNotes, latest.db.Notes)
+}
+
 func TestUpdateMetadataViewableBy(t *testing.T) {
 
 	// Arrange

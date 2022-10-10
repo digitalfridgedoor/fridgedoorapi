@@ -22,6 +22,7 @@ type editableMethodStep struct {
 type Recipe struct {
 	ID          *primitive.ObjectID      `json:"id" bson:"_id,omitempty"`
 	Name        string                   `json:"name"`
+	Notes       string                   `json:"notes"`
 	OwnedByUser bool                     `json:"ownedByUser"`
 	CanEdit     bool                     `json:"canEdit"`
 	Method      []dfdmodels.MethodStep   `json:"method"`

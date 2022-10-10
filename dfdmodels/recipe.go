@@ -10,6 +10,7 @@ import (
 type Recipe struct {
 	ID        *primitive.ObjectID  `json:"id" bson:"_id,omitempty"`
 	Name      string               `json:"name"`
+	Notes     string               `json:"notes"`
 	AddedOn   time.Time            `json:"addedOn"`
 	AddedBy   primitive.ObjectID   `json:"addedBy"`
 	Ingredients []*RecipeIngredient `json:"ingredients"`

@@ -16,6 +16,14 @@ func (editable *EditableRecipe) Rename(ctx context.Context, name string) (*Recip
 	return editable.saveAndGetDto(ctx)
 }
 
+// UpdateNotes updates the notes of the recipe
+func (editable *EditableRecipe) UpdateNotes(ctx context.Context, notes string) (*Recipe, error) {
+
+	editable.db.Notes = notes
+
+	return editable.saveAndGetDto(ctx)
+}
+
 // UpdateMetadata updates the recipes metadata property
 func (editable *EditableRecipe) UpdateMetadata(ctx context.Context, updates map[string]string) (*Recipe, error) {
 
