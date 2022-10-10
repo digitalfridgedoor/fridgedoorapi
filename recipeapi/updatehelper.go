@@ -117,6 +117,16 @@ func updateLinkURL(current []dfdmodels.RecipeLink, updateIdx string, updateURL s
 	return current
 }
 
+func updateLinkNotes(current []dfdmodels.RecipeLink, updateIdx string, updateNotes string) []dfdmodels.RecipeLink {
+	if linkIdxInt, err := strconv.Atoi(updateIdx); err == nil {
+		if linkIdxInt < len(current) {
+			current[linkIdxInt].Notes = updateNotes
+		}
+	}
+
+	return current
+}
+
 func removeLink(current []dfdmodels.RecipeLink, removeIdx string) []dfdmodels.RecipeLink {
 	if removeIdxInt, err := strconv.Atoi(removeIdx); err == nil {
 		filtered := []dfdmodels.RecipeLink{}
