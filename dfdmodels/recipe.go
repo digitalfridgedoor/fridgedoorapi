@@ -12,6 +12,7 @@ type Recipe struct {
 	Name      string               `json:"name"`
 	AddedOn   time.Time            `json:"addedOn"`
 	AddedBy   primitive.ObjectID   `json:"addedBy"`
+	Ingredients []*RecipeIngredient `json:"ingredients"`
 	Method    []MethodStep         `json:"method"`
 	Recipes   []SubRecipe          `json:"recipes"`
 	ParentIds []primitive.ObjectID `json:"parentIds"`
@@ -52,6 +53,7 @@ type RecipeMetadata struct {
 type RecipeLink struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
+	Notes         string                `json:"notes"`
 }
 
 // RecipeViewableBy describes who can view the recipe as well as the user

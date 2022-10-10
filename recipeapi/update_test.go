@@ -180,7 +180,7 @@ func TestUpdateMetadataLinks(t *testing.T) {
 	})
 	// Act
 	updates = make(map[string]string)
-	updates["link_remove"] = "one"
+	updates["link_remove"] = "0"
 	r, err = editable.UpdateMetadata(ctx, updates)
 
 	// Assert

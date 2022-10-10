@@ -8,11 +8,9 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 )
 
-// AddMethodStep adds a new method step to a recipe
-func (editable *EditableRecipe) AddMethodStep(ctx context.Context, action string) (*Recipe, error) {
-	methodStep := dfdmodels.MethodStep{
-		Action: action,
-	}
+// AddMethodStep adds a new empty method step to a recipe
+func (editable *EditableRecipe) AddMethodStep(ctx context.Context) (*Recipe, error) {
+	methodStep := dfdmodels.MethodStep{}
 
 	editable.db.Method = append(editable.db.Method, methodStep)
 

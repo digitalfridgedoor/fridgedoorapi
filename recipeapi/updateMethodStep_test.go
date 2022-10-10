@@ -23,14 +23,12 @@ func TestUpdateMethodStep(t *testing.T) {
 
 	editable, err := FindOneEditable(ctx, recipe.ID, user)
 
-	action := "Test Action"
-
 	// Act
-	r, err := editable.AddMethodStep(ctx, action)
+	r, err := editable.AddMethodStep(ctx)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 	assert.Equal(t, 1, len(r.Method))
-	assert.Equal(t, action, r.Method[0].Action)
+	assert.Equal(t, "", r.Method[0].Action)
 	assert.Equal(t, "", r.Method[0].Description)
 	assert.Equal(t, "", r.Method[0].Time)
 
