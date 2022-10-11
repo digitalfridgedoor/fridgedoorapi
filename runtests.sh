@@ -6,9 +6,6 @@ allExitcodes+=$?
 go test ./fridgedoorgateway
 allExitcodes+=$?
 
-go test ./clippingapi
-allExitcodes+=$?
-
 go test ./imageapi
 allExitcodes+=$?
 
