@@ -48,6 +48,27 @@ func TestFindByTags(t *testing.T) {
 	assert.Equal(t, 1, len(results))
 }
 
+// func TestFindByTagsAndName(t *testing.T) {
+// 	ctx := context.TODO()
+
+// 	dfdtesting.SetTestCollectionOverride()
+// 	dfdtesting.SetUserViewFindByUsernamePredicate()
+// 	dfdtesting.SetRecipeFindByTagsPredicate()
+
+// 	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
+
+// 	addRecipeWithTags(user, "recipe 123", []string{"hello"})
+// 	addRecipeWithTags(user, "recipe 456", []string{"goodbye"})
+// 	addRecipeWithTags(user, "potatoe", []string{"goodbye"})
+
+// 	results, err := FindRecipe(ctx, user.ViewID, "recipe", []string{"goodbye"}, []string{},  10)
+
+// 	assert.Nil(t, err)
+// 	assert.NotNil(t, results)
+// 	assert.Equal(t, 1, len(results))
+// 	assert.Equal(t, "recipe 456", results[0].Name)
+// }
+
 func addRecipeWithTags(user *fridgedoorgateway.AuthenticatedUser, name string, tags []string) {
 	ctx := context.TODO()
 

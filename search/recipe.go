@@ -34,18 +34,23 @@ func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.O
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
 
-	regex := bson.M{"$regex": primitive.Regex{Pattern: "\\b" + startsWith, Options: "i"}}
-	startsWithBson := bson.M{"name": regex}
 	addedByBson := bson.M{"addedby": userID}
-	andBson := bson.M{"$and": []bson.M{startsWithBson, addedByBson}}
+	andBson := []bson.M{addedByBson}
+	andBson = appendStartsWithBson(andBson, startsWith)
 
-	ch, err := coll.Find(ctx, andBson, findOptions, &dfdmodels.Recipe{})
+	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
 	if err != nil {
 		return []*RecipeDescription{}, err
 	}
 
 	results := readRecipeDescriptionFromChannel(ch, userID)
 	return results, nil
+}
+
+func appendStartsWithBson(andBson []primitive.M, startsWith string) ([]primitive.M) {
+	regex := bson.M{"$regex": primitive.Regex{Pattern: "\\b" + startsWith, Options: "i"}}
+	startsWithBson := bson.M{"name": regex}
+	return append(andBson, startsWithBson)
 }
 
 // FindRecipeByTags finds recipes with the given tags

@@ -41,12 +41,12 @@ func findRecipeByNameTestPredicate(gs *dfdmodels.Recipe, m primitive.M) bool {
 
 	andval := m["$and"].([]bson.M)
 
-	addedby := andval[1]["addedby"].(primitive.ObjectID)
+	addedby := andval[0]["addedby"].(primitive.ObjectID)
 	if addedby != gs.AddedBy {
 		return false
 	}
 
-	nameval := andval[0]["name"].(bson.M)
+	nameval := andval[1]["name"].(bson.M)
 	regexval := nameval["$regex"].(primitive.Regex)
 
 	r := regexp.MustCompile(regexval.Pattern)
