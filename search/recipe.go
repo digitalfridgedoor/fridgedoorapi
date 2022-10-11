@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"errors"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/database"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
@@ -11,6 +12,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+// FindRecipe finds recipes by name or tags
+func FindRecipe(ctx context.Context, userID primitive.ObjectID, startsWith string, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
+  // { $and: [ {"name": {$regex: "\\bF"}}, {"metadata.tags": { $all: ["weeknight"] }} ] }
+  return nil, errors.New("")
+}
 
 // FindRecipeByName finds recipes starting with the given letter
 func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
@@ -58,7 +65,8 @@ func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []str
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
 
-	// { $and: [ {tags: { $all: ["tag"] } }, { tags: { $nin: ["anothertag"] } } ] }
+	// { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
+	// { $and: [ {"metadata.tags": { $all: ["weeknight"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
 
 	addedByBson := bson.M{"addedby": userID}
 	andBson := []bson.M{addedByBson}
