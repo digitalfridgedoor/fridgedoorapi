@@ -16,7 +16,7 @@ func TestFindStartingWith(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
-	dfdtesting.SetRecipeFindByNamePredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
@@ -35,7 +35,7 @@ func TestFindByTags(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
-	dfdtesting.SetRecipeFindByTagsPredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
@@ -53,7 +53,7 @@ func TestFindByTags(t *testing.T) {
 
 // 	dfdtesting.SetTestCollectionOverride()
 // 	dfdtesting.SetUserViewFindByUsernamePredicate()
-// 	dfdtesting.SetRecipeFindByTagsPredicate()
+// 	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 // 	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 

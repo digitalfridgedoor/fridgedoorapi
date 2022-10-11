@@ -27,13 +27,8 @@ func SetUserViewFindByUsernamePredicate() {
 	})
 }
 
-// SetRecipeFindByNamePredicate overrides logic for find recipe in FindByName method
-func SetRecipeFindByNamePredicate() {
-	SetRecipeFindPredicate(findRecipeByNameOrTagsTestPredicate)
-}
-
-// SetRecipeFindByTagsPredicate overrides logic for find recipe in FindByTags method
-func SetRecipeFindByTagsPredicate() {
+// SetRecipeFindByNameOrTagsPredicate overrides logic for find recipe
+func SetRecipeFindByNameOrTagsPredicate() {
 	SetRecipeFindPredicate(findRecipeByNameOrTagsTestPredicate)
 }
 

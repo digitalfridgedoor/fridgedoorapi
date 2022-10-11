@@ -16,7 +16,7 @@ import (
 func TestTags(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetRecipeFindByTagsPredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	ctx := context.TODO()
 
@@ -55,7 +55,7 @@ func TestTags(t *testing.T) {
 func TestNinTags(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetRecipeFindByTagsPredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	ctx := context.Background()
 
@@ -97,7 +97,7 @@ func TestNinTags(t *testing.T) {
 func TestIncludeAndNinTags(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetRecipeFindByTagsPredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	ctx := context.Background()
 
