@@ -48,31 +48,31 @@ func TestFindByTags(t *testing.T) {
 	assert.Equal(t, 1, len(results))
 }
 
-// func TestFindByTagsAndName(t *testing.T) {
-// 	ctx := context.TODO()
+func TestFindByTagsAndName(t *testing.T) {
+	ctx := context.TODO()
 
-// 	dfdtesting.SetTestCollectionOverride()
-// 	dfdtesting.SetUserViewFindByUsernamePredicate()
-// 	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
-// 	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 
-// 	addRecipeWithTags(user, "recipe 123", []string{"hello"})
-// 	addRecipeWithTags(user, "recipe 456", []string{"goodbye"})
-// 	addRecipeWithTags(user, "potatoe", []string{"goodbye"})
+	addRecipeWithTags(user, "recipe 123", []string{"hello"})
+	addRecipeWithTags(user, "recipe 456", []string{"goodbye"})
+	addRecipeWithTags(user, "potatoe", []string{"goodbye"})
 
-// 	results, err := FindRecipe(ctx, user.ViewID, "recipe", []string{"goodbye"}, []string{},  10)
+	results, err := FindRecipe(ctx, user.ViewID, "recipe", []string{"goodbye"}, []string{},  10)
 
-// 	assert.Nil(t, err)
-// 	assert.NotNil(t, results)
-// 	assert.Equal(t, 1, len(results))
-// 	assert.Equal(t, "recipe 456", results[0].Name)
-// }
+	assert.Nil(t, err)
+	assert.NotNil(t, results)
+	assert.Equal(t, 1, len(results))
+	assert.Equal(t, "recipe 456", results[0].Name)
+}
 
 func addRecipeWithTags(user *fridgedoorgateway.AuthenticatedUser, name string, tags []string) {
 	ctx := context.TODO()
 
-	recipe, _ := recipeapi.CreateRecipe(ctx, user, "fi_recipe")
+	recipe, _ := recipeapi.CreateRecipe(ctx, user, name)
 	editable, _ := recipeapi.FindOneEditable(ctx, recipe.ID, user)
 
 	for _, tag := range tags {

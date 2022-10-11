@@ -2,7 +2,6 @@ package search
 
 import (
 	"context"
-	"errors"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/database"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
@@ -16,7 +15,15 @@ import (
 // FindRecipe finds recipes by name or tags
 func FindRecipe(ctx context.Context, userID primitive.ObjectID, startsWith string, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
   // { $and: [ {"name": {$regex: "\\bF"}}, {"metadata.tags": { $all: ["weeknight"] }} ] }
-  return nil, errors.New("")
+
+  andBson := []bson.M{}
+
+  andBson = appendAddedByBson(andBson, userID)
+  andBson = appendStartsWithBson(andBson, startsWith)
+  andBson = appendTags(andBson, tags)
+  andBson = appendNotTags(andBson, notTags)
+
+  return findAndBson(ctx, andBson, userID, limit)	
 }
 
 // FindRecipeByName finds recipes starting with the given letter

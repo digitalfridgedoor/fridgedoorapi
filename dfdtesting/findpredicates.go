@@ -103,6 +103,7 @@ func findRecipeByNameOrTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 		} else if found, valid := checkForNotTags(location); found {
 			return valid
 		} 
+		fmt.Println("unexpected value found")
 		return false
 	}
 
@@ -115,21 +116,18 @@ func findRecipeByNameOrTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 
 	if len(andval) > 1 {
 		if valid := checkForAnyKnown(andval[1]); !valid {
-			fmt.Println("unexpected value at position 1")
 			return false
 		}
 	}
 
 	if len(andval) > 2 {
 		if valid := checkForAnyKnown(andval[2]); !valid {
-			fmt.Println("unexpected value at position 2")
 			return false
 		}
 	}
 
 	if len(andval) > 3 {
 		if valid := checkForAnyKnown(andval[3]); !valid {
-			fmt.Println("unexpected value at position 3")
 			return false
 		}
 	}
