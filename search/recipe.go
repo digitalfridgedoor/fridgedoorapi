@@ -34,8 +34,8 @@ func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.O
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
 
-	addedByBson := bson.M{"addedby": userID}
-	andBson := []bson.M{addedByBson}
+	andBson := []bson.M{}
+	andBson = appendAddedByBson(andBson, userID)
 	andBson = appendStartsWithBson(andBson, startsWith)
 
 	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
@@ -47,10 +47,35 @@ func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.O
 	return results, nil
 }
 
+func appendAddedByBson(andBson []primitive.M, userID primitive.ObjectID) ([]primitive.M) {
+	addedByBson := bson.M{"addedby": userID}
+	return append(andBson, addedByBson)
+}
+
 func appendStartsWithBson(andBson []primitive.M, startsWith string) ([]primitive.M) {
 	regex := bson.M{"$regex": primitive.Regex{Pattern: "\\b" + startsWith, Options: "i"}}
 	startsWithBson := bson.M{"name": regex}
 	return append(andBson, startsWithBson)
+}
+
+func appendTags(andBson []primitive.M, tags []string) ([]primitive.M) {
+	if tags != nil && len(tags) > 0 {
+		allBson := bson.M{"$all": tags}
+		tagsBson := bson.M{"metadata.tags": allBson}
+		return append(andBson, tagsBson)
+	}
+
+	return andBson
+}
+
+func appendNotTags(andBson []primitive.M, notTags []string) ([]primitive.M) {
+	if notTags != nil && len(notTags) > 0 {
+		ninBson := bson.M{"$nin": notTags}
+		ninTagsBson := bson.M{"metadata.tags": ninBson}
+		return append(andBson, ninTagsBson)
+	}
+
+	return andBson
 }
 
 // FindRecipeByTags finds recipes with the given tags
@@ -71,22 +96,12 @@ func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []str
 	findOptions.SetLimit(limit)
 
 	// { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
-	// { $and: [ {"metadata.tags": { $all: ["weeknight"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
 
-	addedByBson := bson.M{"addedby": userID}
-	andBson := []bson.M{addedByBson}
+	andBson := []bson.M{}
 
-	if tags != nil && len(tags) > 0 {
-		allBson := bson.M{"$all": tags}
-		tagsBson := bson.M{"metadata.tags": allBson}
-		andBson = append(andBson, tagsBson)
-	}
-
-	if notTags != nil && len(notTags) > 0 {
-		ninBson := bson.M{"$nin": notTags}
-		ninTagsBson := bson.M{"metadata.tags": ninBson}
-		andBson = append(andBson, ninTagsBson)
-	}
+	andBson = appendAddedByBson(andBson, userID)
+	andBson = appendTags(andBson, tags)
+	andBson = appendNotTags(andBson, notTags)
 
 	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
 	if err != nil {
