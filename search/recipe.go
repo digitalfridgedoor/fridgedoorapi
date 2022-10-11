@@ -12,9 +12,22 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// FindRecipeByName finds recipes starting with the given letter
+func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
+
+	return FindRecipe(ctx, userID, startsWith, []string{}, []string{}, limit)
+}
+
+// FindRecipeByTags finds recipes with the given tags
+func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
+
+	return FindRecipe(ctx, userID, "", tags, notTags, limit)
+}
+
 // FindRecipe finds recipes by name or tags
 func FindRecipe(ctx context.Context, userID primitive.ObjectID, startsWith string, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
   // { $and: [ {"name": {$regex: "\\bF"}}, {"metadata.tags": { $all: ["weeknight"] }} ] }
+  // { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
 
   andBson := []bson.M{}
 
@@ -24,30 +37,6 @@ func FindRecipe(ctx context.Context, userID primitive.ObjectID, startsWith strin
   andBson = appendNotTags(andBson, notTags)
 
   return findAndBson(ctx, andBson, userID, limit)	
-}
-
-// FindRecipeByName finds recipes starting with the given letter
-func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
-
-	andBson := []bson.M{}
-	andBson = appendAddedByBson(andBson, userID)
-	andBson = appendStartsWithBson(andBson, startsWith)
-
-	return findAndBson(ctx, andBson, userID, limit)	
-}
-
-// FindRecipeByTags finds recipes with the given tags
-func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
-
-	// { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
-
-	andBson := []bson.M{}
-
-	andBson = appendAddedByBson(andBson, userID)
-	andBson = appendTags(andBson, tags)
-	andBson = appendNotTags(andBson, notTags)
-
-	return findAndBson(ctx, andBson, userID, limit)	
 }
 
 // FindPublicRecipes gets a users public recipes
@@ -66,9 +55,12 @@ func appendAddedByBson(andBson []primitive.M, userID primitive.ObjectID) ([]prim
 }
 
 func appendStartsWithBson(andBson []primitive.M, startsWith string) ([]primitive.M) {
-	regex := bson.M{"$regex": primitive.Regex{Pattern: "\\b" + startsWith, Options: "i"}}
-	startsWithBson := bson.M{"name": regex}
-	return append(andBson, startsWithBson)
+	if len(startsWith) > 0 {
+		regex := bson.M{"$regex": primitive.Regex{Pattern: "\\b" + startsWith, Options: "i"}}
+		startsWithBson := bson.M{"name": regex}
+		return append(andBson, startsWithBson)
+	}
+	return andBson
 }
 
 func appendTags(andBson []primitive.M, tags []string) ([]primitive.M) {
