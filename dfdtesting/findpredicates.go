@@ -134,25 +134,3 @@ func findRecipeByNameOrTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 
 	return true
 }
-
-// SetClippingByNamePredicate overrides logic for find clipping in search method
-func SetClippingByNamePredicate() {
-	SetClippingFindPredicate(findClippingByNameTestPredicate)
-}
-
-func findClippingByNameTestPredicate(gs *dfdmodels.Clipping, m primitive.M) bool {
-
-	andval := m["$and"].([]bson.M)
-
-	userid := andval[1]["userid"].(primitive.ObjectID)
-	if userid != gs.UserID {
-		return false
-	}
-
-	nameval := andval[0]["name"].(bson.M)
-	regexval := nameval["$regex"].(primitive.Regex)
-
-	r := regexp.MustCompile(regexval.Pattern)
-
-	return r.MatchString(gs.Name)
-}

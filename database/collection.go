@@ -20,8 +20,3 @@ func Recipe(ctx context.Context) (bool, gomongo.ICollection) {
 func Ingredient(ctx context.Context) (bool, gomongo.ICollection) {
 	return gomongo.CreateCollection(ctx, "recipeapi", "ingredients")
 }
-
-// Clipping returns an ICollection for the mongodb collection clipping
-func Clipping(ctx context.Context) (bool, gomongo.ICollection) {
-	return gomongo.CreateCollection(ctx, "recipeapi", "clippings")
-}

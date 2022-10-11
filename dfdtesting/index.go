@@ -21,7 +21,6 @@ func setAllIDSetters() {
 	setUserViewIDSetter()
 	setRecipeIDSetter()
 	setIngredientIDSetter()
-	setClippingIDSetter()
 }
 
 // SetUserViewFindPredicate overrides the logic to get the result for Find
@@ -83,27 +82,6 @@ func setIngredientIDSetter() {
 	coll := getOrAddTestCollection("recipeapi", "ingredients")
 	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
 		if u, ok := document.(*dfdmodels.Ingredient); ok {
-			u.ID = &id
-		}
-	})
-}
-
-// SetClippingFindPredicate overrides the logic to get the result for Find
-func SetClippingFindPredicate(predicate func(*dfdmodels.Clipping, bson.M) bool) bool {
-	fn := func(value interface{}, filter bson.M) bool {
-		uv := value.(*dfdmodels.Clipping)
-		return predicate(uv, filter)
-	}
-
-	coll := getOrAddTestCollection("recipeapi", "clippings")
-	coll.SetFindFilter(fn)
-	return true
-}
-
-func setClippingIDSetter() {
-	coll := getOrAddTestCollection("recipeapi", "clippings")
-	coll.SetIDSetter(func(document interface{}, id primitive.ObjectID) {
-		if u, ok := document.(*dfdmodels.Clipping); ok {
 			u.ID = &id
 		}
 	})
