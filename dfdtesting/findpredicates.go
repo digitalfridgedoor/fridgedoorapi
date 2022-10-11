@@ -27,34 +27,12 @@ func SetUserViewFindByUsernamePredicate() {
 	})
 }
 
-// SetRecipeFindByNamePredicate overrides logic for find recipe in FindByName method
-func SetRecipeFindByNamePredicate() {
-	SetRecipeFindPredicate(findRecipeByNameTestPredicate)
+// SetRecipeFindByNameOrTagsPredicate overrides logic for find recipe
+func SetRecipeFindByNameOrTagsPredicate() {
+	SetRecipeFindPredicate(findRecipeByNameOrTagsTestPredicate)
 }
 
-// SetRecipeFindByTagsPredicate overrides logic for find recipe in FindByTags method
-func SetRecipeFindByTagsPredicate() {
-	SetRecipeFindPredicate(findRecipeByTagsTestPredicate)
-}
-
-func findRecipeByNameTestPredicate(gs *dfdmodels.Recipe, m primitive.M) bool {
-
-	andval := m["$and"].([]bson.M)
-
-	addedby := andval[1]["addedby"].(primitive.ObjectID)
-	if addedby != gs.AddedBy {
-		return false
-	}
-
-	nameval := andval[0]["name"].(bson.M)
-	regexval := nameval["$regex"].(primitive.Regex)
-
-	r := regexp.MustCompile(regexval.Pattern)
-
-	return r.MatchString(gs.Name)
-}
-
-func findRecipeByTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
+func findRecipeByNameOrTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 
 	contains := func(tags []string, tag string) bool {
 		for _, t := range tags {
@@ -62,6 +40,70 @@ func findRecipeByTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 				return true
 			}
 		}
+		return false
+	}
+
+	// first is found second is valid
+	checkForAllTags := func(location bson.M) (bool, bool) {
+		if t, foundTags := location["metadata.tags"]; foundTags {
+			if all, ok := t.(bson.M)["$all"]; ok {
+				tags := all.([]string)
+				for _, t := range tags {
+					if !contains(r.Metadata.Tags, t) {
+						return true, false
+					}
+				}
+
+				return true, true
+			}
+		}
+
+		return false, false
+	}
+
+	// first is found second is valid
+	checkForNotTags := func(location bson.M) (bool, bool) {
+		if t, foundTags := location["metadata.tags"]; foundTags {
+			if all, ok := t.(bson.M)["$nin"]; ok {
+				tags := all.([]string)
+				for _, t := range tags {
+					if contains(r.Metadata.Tags, t) {
+						return true, false
+					}
+				}
+
+				return true, true
+			}
+		}
+
+		return false, false
+	}
+
+	// first is found second is valid
+	checkForNameRegex := func(location bson.M) (bool, bool) {
+		if name, foundName := location["name"]; foundName {
+		
+			nameval := name.(bson.M)
+			regexval := nameval["$regex"].(primitive.Regex)
+
+			reg := regexp.MustCompile(regexval.Pattern)
+
+			match := reg.MatchString(r.Name)
+			return true, match
+		}
+		return false, false
+	}
+
+	// true if found and valid, false if not found or not valid
+	checkForAnyKnown := func(location bson.M) (bool) {
+		if found, valid := checkForNameRegex(location); found {
+			return valid
+		} else if found, valid := checkForAllTags(location); found {
+			return valid
+		} else if found, valid := checkForNotTags(location); found {
+			return valid
+		} 
+		fmt.Println("unexpected value found")
 		return false
 	}
 
@@ -73,36 +115,20 @@ func findRecipeByTagsTestPredicate(r *dfdmodels.Recipe, m bson.M) bool {
 	}
 
 	if len(andval) > 1 {
-		t := andval[1]["metadata.tags"].(bson.M)
-		if all, ok := t["$all"]; ok {
-			tags := all.([]string)
-			for _, t := range tags {
-				if !contains(r.Metadata.Tags, t) {
-					return false
-				}
-			}
-		} else if all, ok := t["$nin"]; ok {
-			tags := all.([]string)
-			for _, t := range tags {
-				if contains(r.Metadata.Tags, t) {
-					return false
-				}
-			}
-		} else {
-			fmt.Println("unexpected value")
+		if valid := checkForAnyKnown(andval[1]); !valid {
 			return false
 		}
 	}
 
 	if len(andval) > 2 {
-		t := andval[2]["metadata.tags"].(bson.M)
-		if all, ok := t["$nin"]; ok {
-			tags := all.([]string)
-			for _, t := range tags {
-				if contains(r.Metadata.Tags, t) {
-					return false
-				}
-			}
+		if valid := checkForAnyKnown(andval[2]); !valid {
+			return false
+		}
+	}
+
+	if len(andval) > 3 {
+		if valid := checkForAnyKnown(andval[3]); !valid {
+			return false
 		}
 	}
 

@@ -15,7 +15,7 @@ import (
 func TestFindForUser(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetRecipeFindByTagsPredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	ctx := context.Background()
 	username := "TestUser"
@@ -45,7 +45,7 @@ func TestFindByNameForUser(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
-	dfdtesting.SetRecipeFindByNamePredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	ctx := context.Background()
 	username := "TestUser"
