@@ -22,29 +22,35 @@ func FindRecipe(ctx context.Context, userID primitive.ObjectID, startsWith strin
 // FindRecipeByName finds recipes starting with the given letter
 func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
 
-	ok, coll := database.Recipe(ctx)
-	if !ok {
-		return nil, errNotConnected
-	}
-
-	if limit > 20 {
-		limit = 20
-	}
-
-	findOptions := options.Find()
-	findOptions.SetLimit(limit)
-
 	andBson := []bson.M{}
 	andBson = appendAddedByBson(andBson, userID)
 	andBson = appendStartsWithBson(andBson, startsWith)
 
-	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
-	if err != nil {
-		return []*RecipeDescription{}, err
-	}
+	return findAndBson(ctx, andBson, userID, limit)	
+}
 
-	results := readRecipeDescriptionFromChannel(ch, userID)
-	return results, nil
+// FindRecipeByTags finds recipes with the given tags
+func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
+
+	// { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
+
+	andBson := []bson.M{}
+
+	andBson = appendAddedByBson(andBson, userID)
+	andBson = appendTags(andBson, tags)
+	andBson = appendNotTags(andBson, notTags)
+
+	return findAndBson(ctx, andBson, userID, limit)	
+}
+
+// FindPublicRecipes gets a users public recipes
+func FindPublicRecipes(ctx context.Context, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
+
+	addedByBson := bson.M{"addedby": userID}
+	viewableByEveryone := bson.M{"metadata.viewableby.everyone": true}
+	andBson := []bson.M{addedByBson, viewableByEveryone}
+
+	return findAndBson(ctx, andBson, userID, limit)	
 }
 
 func appendAddedByBson(andBson []primitive.M, userID primitive.ObjectID) ([]primitive.M) {
@@ -59,6 +65,8 @@ func appendStartsWithBson(andBson []primitive.M, startsWith string) ([]primitive
 }
 
 func appendTags(andBson []primitive.M, tags []string) ([]primitive.M) {
+	// https://stackoverflow.com/questions/6940503/mongodb-get-documents-by-tags
+
 	if tags != nil && len(tags) > 0 {
 		allBson := bson.M{"$all": tags}
 		tagsBson := bson.M{"metadata.tags": allBson}
@@ -78,10 +86,7 @@ func appendNotTags(andBson []primitive.M, notTags []string) ([]primitive.M) {
 	return andBson
 }
 
-// FindRecipeByTags finds recipes with the given tags
-func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
-
-	// https://stackoverflow.com/questions/6940503/mongodb-get-documents-by-tags
+func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
 
 	ok, coll := database.Recipe(ctx)
 	if !ok {
@@ -94,46 +99,10 @@ func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []str
 
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
-
-	// { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
-
-	andBson := []bson.M{}
-
-	andBson = appendAddedByBson(andBson, userID)
-	andBson = appendTags(andBson, tags)
-	andBson = appendNotTags(andBson, notTags)
 
 	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
 	if err != nil {
 		return []*RecipeDescription{}, err
-	}
-
-	results := readRecipeDescriptionFromChannel(ch, userID)
-	return results, nil
-}
-
-// FindPublicRecipes gets a users public recipes
-func FindPublicRecipes(ctx context.Context, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
-
-	ok, coll := database.Recipe(ctx)
-	if !ok {
-		return nil, errNotConnected
-	}
-
-	if limit > 20 {
-		limit = 20
-	}
-
-	findOptions := options.Find()
-	findOptions.SetLimit(limit)
-
-	addedByBson := bson.M{"addedby": userID}
-	viewableByEveryone := bson.M{"metadata.viewableby.everyone": true}
-	andBson := []bson.M{addedByBson, viewableByEveryone}
-
-	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
-	if err != nil {
-		return make([]*RecipeDescription, 0), err
 	}
 
 	results := readRecipeDescriptionFromChannel(ch, userID)
