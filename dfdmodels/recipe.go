@@ -48,13 +48,14 @@ type RecipeMetadata struct {
 	Tags        []string         `json:"tags"`
 	RecipeLinks []RecipeLink     `json:"recipeLinks"`
 	ViewableBy  RecipeViewableBy `json:"viewableBy"`
+	LastViewed  time.Time        `json:"lastViewed"`
 }
 
 // RecipeLink is a link attached to a recipe
 type RecipeLink struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
-	Notes         string                `json:"notes"`
+	Name   string `json:"name"`
+	URL    string `json:"url"`
+	Notes  string `json:"notes"`
 }
 
 // RecipeViewableBy describes who can view the recipe as well as the user

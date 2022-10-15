@@ -12,6 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestSubstring(t *testing.T) {
+	sort := "-name"
+
+	assert.Equal(t, "name", sort[1:])
+}
+
 func TestFindStartingWith(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
@@ -23,7 +29,11 @@ func TestFindStartingWith(t *testing.T) {
 	recipeapi.CreateRecipe(context.TODO(), user, "fi_recipe")
 	recipeapi.CreateRecipe(context.TODO(), user, "potatoes and chips")
 
-	results, err := FindRecipeByName(context.Background(), "fi", user.ViewID, 10)
+	request := &FindRecipeRequest {
+		StartsWith: "fi",
+	}
+
+	results, err := FindRecipe(context.Background(), user.ViewID, *request)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, results)
@@ -61,7 +71,12 @@ func TestFindByTagsAndName(t *testing.T) {
 	addRecipeWithTags(user, "recipe 456", []string{"goodbye"})
 	addRecipeWithTags(user, "potatoe", []string{"goodbye"})
 
-	results, err := FindRecipe(ctx, user.ViewID, "recipe", []string{"goodbye"}, []string{},  10)
+	request := &FindRecipeRequest {
+		StartsWith: "recipe",
+		Tags: []string{"goodbye"},
+	}
+
+	results, err := FindRecipe(ctx, user.ViewID, *request)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, results)

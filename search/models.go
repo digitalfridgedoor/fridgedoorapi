@@ -8,3 +8,11 @@ type RecipeDescription struct {
 	Name  string              `json:"name"`
 	Image bool                `json:"image"`
 }
+
+// FindRecipeRequest is the request used to find a recipe
+type FindRecipeRequest struct {
+	StartsWith string
+	Tags []string
+	NotTags []string
+	Limit int64	
+}

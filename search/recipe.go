@@ -12,31 +12,30 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// FindRecipeByName finds recipes starting with the given letter
-func FindRecipeByName(ctx context.Context, startsWith string, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
-
-	return FindRecipe(ctx, userID, startsWith, []string{}, []string{}, limit)
-}
-
 // FindRecipeByTags finds recipes with the given tags
 func FindRecipeByTags(ctx context.Context, userID primitive.ObjectID, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
 
-	return FindRecipe(ctx, userID, "", tags, notTags, limit)
+	request := &FindRecipeRequest {
+		Tags: tags,
+		NotTags: notTags,
+		Limit: limit,
+	}
+	return FindRecipe(ctx, userID, *request)
 }
 
 // FindRecipe finds recipes by name or tags
-func FindRecipe(ctx context.Context, userID primitive.ObjectID, startsWith string, tags []string, notTags []string, limit int64) ([]*RecipeDescription, error) {
+func FindRecipe(ctx context.Context, userID primitive.ObjectID, findRecipeRequest FindRecipeRequest) ([]*RecipeDescription, error) {
   // { $and: [ {"name": {$regex: "\\bF"}}, {"metadata.tags": { $all: ["weeknight"] }} ] }
   // { $and: [ {"metadata.tags": { $all: ["tag"] } }, { "metadata.tags": { $nin: ["anothertag"] } } ] }
 
   andBson := []bson.M{}
 
   andBson = appendAddedByBson(andBson, userID)
-  andBson = appendStartsWithBson(andBson, startsWith)
-  andBson = appendTags(andBson, tags)
-  andBson = appendNotTags(andBson, notTags)
+  andBson = appendStartsWithBson(andBson, findRecipeRequest.StartsWith)
+  andBson = appendTags(andBson, findRecipeRequest.Tags)
+  andBson = appendNotTags(andBson, findRecipeRequest.NotTags)
 
-  return findAndBson(ctx, andBson, userID, limit)	
+  return findAndBson(ctx, andBson, userID, "", findRecipeRequest.Limit)
 }
 
 // FindPublicRecipes gets a users public recipes
@@ -46,7 +45,7 @@ func FindPublicRecipes(ctx context.Context, userID primitive.ObjectID, limit int
 	viewableByEveryone := bson.M{"metadata.viewableby.everyone": true}
 	andBson := []bson.M{addedByBson, viewableByEveryone}
 
-	return findAndBson(ctx, andBson, userID, limit)	
+	return findAndBson(ctx, andBson, userID, "", limit)	
 }
 
 func appendAddedByBson(andBson []primitive.M, userID primitive.ObjectID) ([]primitive.M) {
@@ -85,19 +84,25 @@ func appendNotTags(andBson []primitive.M, notTags []string) ([]primitive.M) {
 	return andBson
 }
 
-func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectID, limit int64) ([]*RecipeDescription, error) {
+func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectID, sort string, limit int64) ([]*RecipeDescription, error) {
 
 	ok, coll := database.Recipe(ctx)
 	if !ok {
 		return nil, errNotConnected
 	}
 
-	if limit > 20 {
+	if (limit == 0 || limit > 20) {
 		limit = 20
 	}
 
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
+	if (sort == "name" || sort == "addedon") {
+		findOptions.SetSort(bson.D{{Key: sort,Value: 1}})
+	}
+	if (sort == "-name" || sort == "-addedon") {
+		findOptions.SetSort(bson.D{{Key: sort[1:],Value: -1}})
+	}
 
 	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})
 	if err != nil {

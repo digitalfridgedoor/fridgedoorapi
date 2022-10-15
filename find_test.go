@@ -56,7 +56,11 @@ func TestFindByNameForUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
-	recipes, err := search.FindRecipeByName(ctx, "test", testUser.ViewID, 20)
+	request := &search.FindRecipeRequest {
+		StartsWith: "test",
+	}
+
+	recipes, err := search.FindRecipe(ctx, testUser.ViewID, *request)
 	assert.Nil(t, err)
 	assert.NotNil(t, recipes)
 	assert.Equal(t, 1, len(recipes))
