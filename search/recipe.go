@@ -35,7 +35,7 @@ func FindRecipe(ctx context.Context, userID primitive.ObjectID, findRecipeReques
   andBson = appendTags(andBson, findRecipeRequest.Tags)
   andBson = appendNotTags(andBson, findRecipeRequest.NotTags)
 
-  return findAndBson(ctx, andBson, userID, "", findRecipeRequest.Limit)
+  return findAndBson(ctx, andBson, userID, findRecipeRequest.Sort, findRecipeRequest.SortAsc, findRecipeRequest.Limit)
 }
 
 // FindPublicRecipes gets a users public recipes
@@ -45,7 +45,7 @@ func FindPublicRecipes(ctx context.Context, userID primitive.ObjectID, limit int
 	viewableByEveryone := bson.M{"metadata.viewableby.everyone": true}
 	andBson := []bson.M{addedByBson, viewableByEveryone}
 
-	return findAndBson(ctx, andBson, userID, "", limit)	
+	return findAndBson(ctx, andBson, userID, "", false, limit)	
 }
 
 func appendAddedByBson(andBson []primitive.M, userID primitive.ObjectID) ([]primitive.M) {
@@ -84,7 +84,7 @@ func appendNotTags(andBson []primitive.M, notTags []string) ([]primitive.M) {
 	return andBson
 }
 
-func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectID, sort string, limit int64) ([]*RecipeDescription, error) {
+func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectID, sort string, sortAsc bool, limit int64) ([]*RecipeDescription, error) {
 
 	ok, coll := database.Recipe(ctx)
 	if !ok {
@@ -98,10 +98,11 @@ func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectI
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
 	if (sort == "name" || sort == "addedon") {
-		findOptions.SetSort(bson.D{{Key: sort,Value: 1}})
-	}
-	if (sort == "-name" || sort == "-addedon") {
-		findOptions.SetSort(bson.D{{Key: sort[1:],Value: -1}})
+		value := -1
+		if sortAsc {
+			value = 1
+		}
+		findOptions.SetSort(bson.D{{Key: sort,Value: value}})
 	}
 
 	ch, err := coll.Find(ctx, bson.M{"$and": andBson}, findOptions, &dfdmodels.Recipe{})

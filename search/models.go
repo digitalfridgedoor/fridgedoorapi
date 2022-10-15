@@ -15,4 +15,6 @@ type FindRecipeRequest struct {
 	Tags []string
 	NotTags []string
 	Limit int64	
+	Sort string
+	SortAsc bool
 }
