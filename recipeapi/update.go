@@ -2,6 +2,7 @@ package recipeapi
 
 import (
 	"context"
+	"time"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
@@ -48,6 +49,9 @@ func (editable *EditableRecipe) updateRecipeMetadata(ctx context.Context, update
 
 	if update, ok := updates["image"]; ok {
 		editable.db.Metadata.Image = update == "true"
+	}
+	if _, ok := updates["set_last_viewed"]; ok {
+		editable.db.Metadata.LastViewed = time.Now()
 	}
 	if update, ok := updates["tag_add"]; ok {
 		editable.db.Metadata.Tags = appendString(editable.db.Metadata.Tags, update)
