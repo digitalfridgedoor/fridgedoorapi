@@ -91,7 +91,7 @@ func findOne(ctx context.Context, id *primitive.ObjectID) (*dfdmodels.Recipe, er
 }
 
 func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
-	canEdit := canEdit(r, user.ViewID)
+	canEdit := user != nil && canEdit(r, user.ViewID)
 	ownedByUser := user != nil && r.AddedBy == user.ViewID
 	return &Recipe{
 		ID:          r.ID,
