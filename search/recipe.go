@@ -97,7 +97,7 @@ func findAndBson(ctx context.Context, andBson []bson.M, userID primitive.ObjectI
 
 	findOptions := options.Find()
 	findOptions.SetLimit(limit)
-	if (sort == "name" || sort == "addedon" || sort == "metadata.lastViewed") {
+	if (sort == "name" || sort == "addedon" || sort == "metadata.lastviewed") {
 		value := -1
 		if sortAsc {
 			value = 1
