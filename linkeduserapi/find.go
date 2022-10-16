@@ -2,6 +2,7 @@ package linkeduserapi
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/database"
@@ -24,6 +25,7 @@ func GetPublicRecipes(ctx context.Context) ([]*LinkedUser, error) {
 	populated := make([]*LinkedUser, len(userViews))
 	for idx, uv := range userViews {
 		linkedUser, err := populatePublicUser(ctx, uv)
+		fmt.Printf("Got public recipes for %v\n", linkedUser.Nickname)
 		if err == nil {
 			populated[idx] = linkedUser
 		}
@@ -76,6 +78,7 @@ func getLinkedUserViews(ctx context.Context) ([]*dfdmodels.UserView, error) {
 	for i := range ch {
 		results = append(results, i.(*dfdmodels.UserView))
 	}
+	fmt.Printf("Error got %v users\n", len(results))
 	return results, nil
 }
 

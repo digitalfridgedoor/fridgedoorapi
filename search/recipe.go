@@ -45,7 +45,7 @@ func FindPublicRecipes(ctx context.Context, userID primitive.ObjectID, limit int
 	viewableByEveryone := bson.M{"metadata.viewableby.everyone": true}
 	andBson := []bson.M{addedByBson, viewableByEveryone}
 
-	return findAndBson(ctx, andBson, userID, "", false, limit)	
+	return findAndBson(ctx, andBson, userID, "", true, limit)	
 }
 
 func appendAddedByBson(andBson []primitive.M, userID primitive.ObjectID) ([]primitive.M) {
