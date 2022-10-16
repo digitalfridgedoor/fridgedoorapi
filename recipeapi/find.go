@@ -2,6 +2,7 @@ package recipeapi
 
 import (
 	"context"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
@@ -35,6 +36,21 @@ func FindOneEditable(ctx context.Context, id *primitive.ObjectID, user *fridgedo
 	}
 
 	return nil, errAuth
+}
+
+// FindOnePublic finds a recipe by id, or nil if recipe is not public
+func FindOnePublic(ctx context.Context, recipeID *primitive.ObjectID) (*Recipe, error) {
+
+	r, err := findOne(ctx, recipeID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !r.Metadata.ViewableBy.Everyone {
+		return nil, errors.New("Recipe cannot be viewed")
+	}
+
+	return mapToDto(r, nil), nil
 }
 
 func findOneViewable(ctx context.Context, id *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*ViewableRecipe, error) {
@@ -76,7 +92,7 @@ func findOne(ctx context.Context, id *primitive.ObjectID) (*dfdmodels.Recipe, er
 
 func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
 	canEdit := canEdit(r, user.ViewID)
-	ownedByUser := r.AddedBy == user.ViewID
+	ownedByUser := user != nil && r.AddedBy == user.ViewID
 	return &Recipe{
 		ID:          r.ID,
 		Name:        r.Name,
