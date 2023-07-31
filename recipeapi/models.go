@@ -27,6 +27,7 @@ type Recipe struct {
 	CanEdit     bool                     `json:"canEdit"`
 	Method      []dfdmodels.MethodStep   `json:"method"`
 	Recipes     []dfdmodels.SubRecipe    `json:"recipes"`
+	Ingredients     []dfdmodels.RecipeIngredient    `json:"ingredients"`
 	ParentIds   []primitive.ObjectID     `json:"parentIds"`
 	Metadata    dfdmodels.RecipeMetadata `json:"metadata"`
 }

@@ -13,7 +13,7 @@ type Recipe struct {
 	Notes     string               `json:"notes"`
 	AddedOn   time.Time            `json:"addedOn"`
 	AddedBy   primitive.ObjectID   `json:"addedBy"`
-	Ingredients []*RecipeIngredient `json:"ingredients"`
+	Ingredients []RecipeIngredient `json:"ingredients"`
 	Method    []MethodStep         `json:"method"`
 	Recipes   []SubRecipe          `json:"recipes"`
 	ParentIds []primitive.ObjectID `json:"parentIds"`

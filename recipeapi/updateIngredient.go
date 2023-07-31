@@ -3,7 +3,6 @@ package recipeapi
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoorapi/ingredients"
@@ -11,14 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// AddIngredient adds an ingredient to a recipe
-func (editable *EditableRecipe) AddIngredient(ctx context.Context, stepIdx int, ingredientID *primitive.ObjectID) (*Recipe, error) {
-
-	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
-	if err != nil {
-		fmt.Printf("Error retreiving method step, %v.\n", err)
-		return nil, err
-	}
+// AddIngredient adds a recipe scoped ingredient 
+func (editable *EditableRecipe) AddIngredient(ctx context.Context, ingredientID *primitive.ObjectID) (*Recipe, error) {
 
 	ingredient, err := ingredients.IngredientCollection(ctx)
 	if err != nil {
@@ -30,7 +23,7 @@ func (editable *EditableRecipe) AddIngredient(ctx context.Context, stepIdx int, 
 		return nil, err
 	}
 
-	if editableMethodStep.containsIngredient(ingredientID.Hex()) {
+	if editable.containsIngredient(ingredientID.Hex()) {
 		return nil, errors.New("Duplicate")
 	}
 
@@ -39,48 +32,33 @@ func (editable *EditableRecipe) AddIngredient(ctx context.Context, stepIdx int, 
 		IngredientID: ingredientID.Hex(),
 	}
 
-	editableMethodStep.step.Ingredients = append(editableMethodStep.step.Ingredients, recipeIng)
-	editable.db.Method[stepIdx] = *editableMethodStep.step
+	editable.db.Ingredients = append(editable.db.Ingredients, recipeIng)
 
 	return editable.saveAndGetDto(ctx)
 }
 
-// UpdateIngredient removes an ingredient to a recipe
-func (editable *EditableRecipe) UpdateIngredient(ctx context.Context, stepIdx int, ingredientID string, updates map[string]string) (*Recipe, error) {
+// UpdateIngredient updates a recipe scoped ingredient 
+func (editable *EditableRecipe) UpdateIngredient(ctx context.Context, ingredientID string, updates map[string]string) (*Recipe, error) {
 
-	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
-	if err != nil {
-		fmt.Printf("Error retreiving method step, %v.\n", err)
-		return nil, err
-	}
-
-	editableMethodStep.updateIngredientByID(ingredientID, updates)
-	editable.db.Method[stepIdx] = *editableMethodStep.step
+	editable.updateIngredientByID(ingredientID, updates)
 
 	return editable.saveAndGetDto(ctx)
 }
 
-// RemoveIngredient removes an ingredient to a recipe
-func (editable *EditableRecipe) RemoveIngredient(ctx context.Context, stepIdx int, ingredientID string) (*Recipe, error) {
-
-	editableMethodStep, err := editable.getMethodStepByIdx(ctx, stepIdx)
-	if err != nil {
-		fmt.Printf("Error retreiving method step, %v.\n", err)
-		return nil, err
-	}
+// RemoveIngredient removes a recipe scoped ingredient 
+func (editable *EditableRecipe) RemoveIngredient(ctx context.Context, ingredientID string) (*Recipe, error) {
 
 	filterFn := func(id *dfdmodels.RecipeIngredient) bool {
 		return id.IngredientID != ingredientID
 	}
 
-	editableMethodStep.filterIngredients(filterFn)
-	editable.db.Method[stepIdx] = *editableMethodStep.step
+	editable.filterIngredients(filterFn)
 
 	return editable.saveAndGetDto(ctx)
 }
 
-func (editable *editableMethodStep) containsIngredient(ingredientID string) bool {
-	for _, ing := range editable.step.Ingredients {
+func (editable *EditableRecipe) containsIngredient(ingredientID string) bool {
+	for _, ing := range editable.db.Ingredients {
 		if ing.IngredientID == ingredientID {
 			return true
 		}
@@ -89,22 +67,22 @@ func (editable *editableMethodStep) containsIngredient(ingredientID string) bool
 	return false
 }
 
-func (editable *editableMethodStep) filterIngredients(filterFn func(ing *dfdmodels.RecipeIngredient) bool) {
+func (editable *EditableRecipe) filterIngredients(filterFn func(ing *dfdmodels.RecipeIngredient) bool) {
 	filtered := []dfdmodels.RecipeIngredient{}
 
-	for _, ing := range editable.step.Ingredients {
+	for _, ing := range editable.db.Ingredients {
 		if filterFn(&ing) {
 			filtered = append(filtered, ing)
 		}
 	}
 
-	editable.step.Ingredients = filtered
+	editable.db.Ingredients = filtered
 }
 
-func (editable *editableMethodStep) updateIngredientByID(ingredientID string, updates map[string]string) {
-	updated := make([]dfdmodels.RecipeIngredient, len(editable.step.Ingredients))
+func (editable *EditableRecipe) updateIngredientByID(ingredientID string, updates map[string]string) {
+	updated := make([]dfdmodels.RecipeIngredient, len(editable.db.Ingredients))
 
-	for index, ing := range editable.step.Ingredients {
+	for index, ing := range editable.db.Ingredients {
 		if ing.IngredientID == ingredientID {
 			if update, ok := updates["name"]; ok {
 				ing.Name = update
@@ -119,5 +97,5 @@ func (editable *editableMethodStep) updateIngredientByID(ingredientID string, up
 		updated[index] = ing
 	}
 
-	editable.step.Ingredients = updated
+	editable.db.Ingredients = updated
 }

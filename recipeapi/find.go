@@ -90,6 +90,17 @@ func findOne(ctx context.Context, id *primitive.ObjectID) (*dfdmodels.Recipe, er
 	return re, err
 }
 
+func findNickname(ctx context.Context, r *dfdmodels.Recipe) string {
+	ok, coll := database.UserView(ctx)
+	if ok {
+		if user, err := coll.FindByID(ctx, &r.AddedBy, &dfdmodels.UserView{}); err == nil {
+			return user.(*dfdmodels.UserView).Nickname
+		}
+	}
+
+	return ""
+}
+
 func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *Recipe {
 	canEdit := user != nil && canEdit(r, user.ViewID)
 	ownedByUser := user != nil && r.AddedBy == user.ViewID
@@ -101,6 +112,7 @@ func mapToDto(r *dfdmodels.Recipe, user *fridgedoorgateway.AuthenticatedUser) *R
 		Method:      r.Method,
 		Notes:       r.Notes,
 		Recipes:     r.Recipes,
+		Ingredients:     r.Ingredients,
 		ParentIds:   r.ParentIds,
 		Metadata:    r.Metadata,
 	}

@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateAndAddIngredient(t *testing.T) {
+func TestCreateAndAddStepIngredient(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 
@@ -42,7 +42,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
-	rv, err = editable.AddIngredient(ctx, 0, ingredient.ID)
+	rv, err = editable.AddStepIngredient(ctx, 0, ingredient.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method := rv.Method[0]
@@ -58,7 +58,7 @@ func TestCreateAndAddIngredient(t *testing.T) {
 	dfdtestingapi.DeleteTestUser(ctx, testUser)
 }
 
-func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
+func TestCreateAndAddThenRemoveStepIngredient(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
 
@@ -88,25 +88,115 @@ func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, rv)
 
-	rv, err = editable.AddIngredient(ctx, 0, ingredient.ID)
+	rv, err = editable.AddStepIngredient(ctx, 0, ingredient.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method := rv.Method[0]
 	assert.Equal(t, len(method.Ingredients), 1)
 	contains(t, method.Ingredients, []string{"one"})
 
-	rv, err = editable.AddIngredient(ctx, 0, anotherIngredient.ID)
+	rv, err = editable.AddStepIngredient(ctx, 0, anotherIngredient.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, len(rv.Method), 1)
 	method = rv.Method[0]
 	assert.Equal(t, 2, len(method.Ingredients))
 	contains(t, method.Ingredients, []string{"one", "two"})
 
-	rv, err = editable.RemoveIngredient(ctx, 0, anotherIngredient.ID.Hex())
+	rv, err = editable.RemoveStepIngredient(ctx, 0, anotherIngredient.ID.Hex())
 	assert.Nil(t, err)
 	method = rv.Method[0]
 	assert.Equal(t, 1, len(method.Ingredients))
 	contains(t, method.Ingredients, []string{"one"})
+
+	// Cleanup
+	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
+	assert.Nil(t, err)
+
+	assert.Nil(t, err)
+	dfdtestingapi.DeleteTestUser(ctx, testUser)
+}
+
+func TestCreateAndAddIngredient(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+
+	ctx := context.Background()
+	username := "TestUser"
+	recipeName := "test-recipe"
+	testUser := dfdtestingapi.CreateTestAuthenticatedUser(username)
+
+	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, r)
+	assert.Equal(t, recipeName, r.Name)
+	assert.Equal(t, len(r.Ingredients), 0)
+	assert.Equal(t, len(r.Method), 0)
+	assert.Equal(t, len(r.Recipes), 0)
+
+	ingredientcoll, err := ingredients.IngredientCollection(context.TODO())
+	assert.Nil(t, err)
+	ingredient, err := ingredientcoll.Create(context.TODO(), "one")
+	assert.Nil(t, err)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, testUser)
+	assert.Nil(t, err)
+
+	rv, err := editable.AddIngredient(ctx, ingredient.ID)
+	assert.Nil(t, err)
+	assert.Equal(t, len(rv.Ingredients), 1)
+	ing := rv.Ingredients[0]
+	assert.Equal(t, "one", ing.Name)
+
+	// Cleanup
+	err = recipeapi.DeleteRecipe(ctx, testUser, rv.ID)
+	assert.Nil(t, err)
+
+	assert.Nil(t, err)
+	dfdtestingapi.DeleteTestUser(ctx, testUser)
+}
+
+func TestCreateAndAddThenRemoveIngredient(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+
+	ctx := context.Background()
+	username := "TestUser"
+	recipeName := "test-recipe"
+	testUser := dfdtestingapi.CreateTestAuthenticatedUser(username)
+	r, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, r)
+	assert.Equal(t, recipeName, r.Name)
+	assert.Equal(t, len(r.Method), 0)
+	assert.Equal(t, len(r.Recipes), 0)
+	assert.Equal(t, len(r.Ingredients), 0)
+
+	ingredientcoll, err := ingredients.IngredientCollection(context.TODO())
+	assert.Nil(t, err)
+	ingredient, err := ingredientcoll.Create(context.TODO(), "one")
+	assert.Nil(t, err)
+	anotherIngredient, err := ingredientcoll.Create(context.TODO(), "two")
+	assert.Nil(t, err)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, testUser)
+	assert.Nil(t, err)
+
+	rv, err := editable.AddIngredient(ctx, ingredient.ID)
+	assert.Nil(t, err)
+	assert.Equal(t, len(rv.Ingredients), 1)
+	contains(t, rv.Ingredients, []string{"one"})
+
+	rv, err = editable.AddIngredient(ctx, anotherIngredient.ID)
+	assert.Nil(t, err)
+	assert.Equal(t, len(rv.Ingredients), 2)
+	contains(t, rv.Ingredients, []string{"one", "two"})
+
+	rv, err = editable.RemoveIngredient(ctx, anotherIngredient.ID.Hex())
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(rv.Ingredients))
+	contains(t, rv.Ingredients, []string{"one"})
 
 	// Cleanup
 	err = recipeapi.DeleteRecipe(ctx, testUser, r.ID)
